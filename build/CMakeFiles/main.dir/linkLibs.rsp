@@ -1,1 +1,1 @@
- D:/OpenGLStuff/lib/libglfw3.a -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
+ D:/3D_solar_system_emulation_using_openGL/lib/libglfw3.a -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

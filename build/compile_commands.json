@@ -1,20 +1,20 @@
 [
 {
-  "directory": "D:/OpenGLStuff/build",
-  "command": "D:\\mingw64\\bin\\g++.exe  @CMakeFiles/main.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\main.dir\\src\\main.cpp.obj -c D:\\OpenGLStuff\\src\\main.cpp",
-  "file": "D:/OpenGLStuff/src/main.cpp",
+  "directory": "D:/3D_solar_system_emulation_using_openGL/build",
+  "command": "D:\\mingw64\\bin\\g++.exe  @CMakeFiles/main.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\main.dir\\src\\main.cpp.obj -c D:\\3D_solar_system_emulation_using_openGL\\src\\main.cpp",
+  "file": "D:/3D_solar_system_emulation_using_openGL/src/main.cpp",
   "output": "CMakeFiles/main.dir/src/main.cpp.obj"
 },
 {
-  "directory": "D:/OpenGLStuff/build",
-  "command": "D:\\mingw64\\bin\\gcc.exe  @CMakeFiles/main.dir/includes_C.rsp -g -o CMakeFiles\\main.dir\\src\\glad.c.obj -c D:\\OpenGLStuff\\src\\glad.c",
-  "file": "D:/OpenGLStuff/src/glad.c",
+  "directory": "D:/3D_solar_system_emulation_using_openGL/build",
+  "command": "D:\\mingw64\\bin\\gcc.exe  @CMakeFiles/main.dir/includes_C.rsp -g -o CMakeFiles\\main.dir\\src\\glad.c.obj -c D:\\3D_solar_system_emulation_using_openGL\\src\\glad.c",
+  "file": "D:/3D_solar_system_emulation_using_openGL/src/glad.c",
   "output": "CMakeFiles/main.dir/src/glad.c.obj"
 },
 {
-  "directory": "D:/OpenGLStuff/build",
-  "command": "D:\\mingw64\\bin\\g++.exe  @CMakeFiles/main.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\main.dir\\src\\Sphere.cpp.obj -c D:\\OpenGLStuff\\src\\Sphere.cpp",
-  "file": "D:/OpenGLStuff/src/Sphere.cpp",
+  "directory": "D:/3D_solar_system_emulation_using_openGL/build",
+  "command": "D:\\mingw64\\bin\\g++.exe  @CMakeFiles/main.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\main.dir\\src\\Sphere.cpp.obj -c D:\\3D_solar_system_emulation_using_openGL\\src\\Sphere.cpp",
+  "file": "D:/3D_solar_system_emulation_using_openGL/src/Sphere.cpp",
   "output": "CMakeFiles/main.dir/src/Sphere.cpp.obj"
 }
 ]

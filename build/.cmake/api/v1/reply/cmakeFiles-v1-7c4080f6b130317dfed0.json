@@ -209,8 +209,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "D:/OpenGLStuff/build",
-		"source" : "D:/OpenGLStuff"
+		"build" : "D:/3D_solar_system_emulation_using_openGL/build",
+		"source" : "D:/3D_solar_system_emulation_using_openGL"
 	},
 	"version" : 
 	{

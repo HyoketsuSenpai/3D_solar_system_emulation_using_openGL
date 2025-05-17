@@ -56,10 +56,10 @@ RM = D:\CMake\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\OpenGLStuff
+CMAKE_SOURCE_DIR = D:\3D_solar_system_emulation_using_openGL
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\OpenGLStuff\build
+CMAKE_BINARY_DIR = D:\3D_solar_system_emulation_using_openGL\build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\OpenGLStuff\build\CMakeFiles D:\OpenGLStuff\build\\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\3D_solar_system_emulation_using_openGL\build\CMakeFiles D:\3D_solar_system_emulation_using_openGL\build\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\OpenGLStuff\build\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\3D_solar_system_emulation_using_openGL\build\CMakeFiles 0
 .PHONY : all
 
 # The main clean target

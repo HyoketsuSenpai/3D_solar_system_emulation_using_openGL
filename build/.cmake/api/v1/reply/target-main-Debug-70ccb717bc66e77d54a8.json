@@ -59,7 +59,7 @@
 			[
 				{
 					"backtrace" : 3,
-					"path" : "D:/OpenGLStuff/include"
+					"path" : "D:/3D_solar_system_emulation_using_openGL/include"
 				}
 			],
 			"language" : "CXX",
@@ -88,7 +88,7 @@
 			[
 				{
 					"backtrace" : 3,
-					"path" : "D:/OpenGLStuff/include"
+					"path" : "D:/3D_solar_system_emulation_using_openGL/include"
 				}
 			],
 			"language" : "C",
@@ -109,7 +109,7 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "D:\\OpenGLStuff\\lib\\libglfw3.a",
+				"fragment" : "D:\\3D_solar_system_emulation_using_openGL\\lib\\libglfw3.a",
 				"role" : "libraries"
 			},
 			{

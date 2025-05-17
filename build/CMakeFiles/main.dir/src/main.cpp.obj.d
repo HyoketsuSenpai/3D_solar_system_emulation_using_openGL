@@ -1,4 +1,5 @@
-CMakeFiles/main.dir/src/main.cpp.obj: D:\OpenGLStuff\src\main.cpp \
+CMakeFiles/main.dir/src/main.cpp.obj: \
+ D:\3D_solar_system_emulation_using_openGL\src\main.cpp \
  D:/mingw64/include/c++/14.2.0/iostream \
  D:/mingw64/include/c++/14.2.0/bits/requires_hosted.h \
  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -160,10 +161,11 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:\OpenGLStuff\src\main.cpp \
  D:/mingw64/include/c++/14.2.0/backward/auto_ptr.h \
  D:/mingw64/include/c++/14.2.0/pstl/glue_memory_defs.h \
  D:/mingw64/include/c++/14.2.0/pstl/execution_defs.h \
- D:/OpenGLStuff/include/glad/glad.h \
- D:/OpenGLStuff/include/KHR/khrplatform.h \
- D:/OpenGLStuff/include/GLFW/glfw3.h D:/OpenGLStuff/include/glm/glm.hpp \
- D:/OpenGLStuff/include/glm/detail/_fixes.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glad/glad.h \
+ D:/3D_solar_system_emulation_using_openGL/include/KHR/khrplatform.h \
+ D:/3D_solar_system_emulation_using_openGL/include/GLFW/glfw3.h \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/glm.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/_fixes.hpp \
  D:/mingw64/include/c++/14.2.0/cmath \
  D:/mingw64/x86_64-w64-mingw32/include/math.h \
  D:/mingw64/include/c++/14.2.0/bits/specfun.h \
@@ -180,149 +182,150 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:\OpenGLStuff\src\main.cpp \
  D:/mingw64/include/c++/14.2.0/tr1/poly_hermite.tcc \
  D:/mingw64/include/c++/14.2.0/tr1/poly_laguerre.tcc \
  D:/mingw64/include/c++/14.2.0/tr1/riemann_zeta.tcc \
- D:/OpenGLStuff/include/glm/detail/setup.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/setup.hpp \
  D:/mingw64/include/c++/14.2.0/cassert \
  D:/mingw64/x86_64-w64-mingw32/include/assert.h \
- D:/OpenGLStuff/include/glm/simd/platform.h \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/simd/platform.h \
  D:/mingw64/include/c++/14.2.0/cstdint \
  D:/mingw64/include/c++/14.2.0/climits \
  D:/mingw64/include/c++/14.2.0/cfloat \
  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/float.h \
  D:/mingw64/x86_64-w64-mingw32/include/float.h \
- D:/OpenGLStuff/include/glm/fwd.hpp \
- D:/OpenGLStuff/include/glm/detail/qualifier.hpp \
- D:/OpenGLStuff/include/glm/detail/setup.hpp \
- D:/OpenGLStuff/include/glm/vec2.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_bool2.hpp \
- D:/OpenGLStuff/include/glm/detail/type_vec2.hpp \
- D:/OpenGLStuff/include/glm/detail/type_vec2.inl \
- D:/OpenGLStuff/include/glm/detail/compute_vector_relational.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_bool2_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_float2.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_float2_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_double2.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_double2_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_int2.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_int2_sized.hpp \
- D:/OpenGLStuff/include/glm/ext/scalar_int_sized.hpp \
- D:/OpenGLStuff/include/glm/detail/setup.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_uint2.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_uint2_sized.hpp \
- D:/OpenGLStuff/include/glm/ext/scalar_uint_sized.hpp \
- D:/OpenGLStuff/include/glm/vec3.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_bool3.hpp \
- D:/OpenGLStuff/include/glm/detail/type_vec3.hpp \
- D:/OpenGLStuff/include/glm/detail/type_vec3.inl \
- D:/OpenGLStuff/include/glm/ext/vector_bool3_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_float3.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_float3_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_double3.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_double3_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_int3.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_int3_sized.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_uint3.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_uint3_sized.hpp \
- D:/OpenGLStuff/include/glm/vec4.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_bool4.hpp \
- D:/OpenGLStuff/include/glm/detail/type_vec4.hpp \
- D:/OpenGLStuff/include/glm/detail/type_vec4.inl \
- D:/OpenGLStuff/include/glm/ext/vector_bool4_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_float4.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_float4_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_double4.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_double4_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_int4.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_int4_sized.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_uint4.hpp \
- D:/OpenGLStuff/include/glm/ext/vector_uint4_sized.hpp \
- D:/OpenGLStuff/include/glm/mat2x2.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_double2x2.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat2x2.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat2x2.inl \
- D:/OpenGLStuff/include/glm/matrix.hpp \
- D:/OpenGLStuff/include/glm/mat2x3.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_double2x3.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat2x3.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat2x3.inl \
- D:/OpenGLStuff/include/glm/ext/matrix_double2x3_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float2x3.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float2x3_precision.hpp \
- D:/OpenGLStuff/include/glm/mat2x4.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_double2x4.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat2x4.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat2x4.inl \
- D:/OpenGLStuff/include/glm/ext/matrix_double2x4_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float2x4.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float2x4_precision.hpp \
- D:/OpenGLStuff/include/glm/mat3x2.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_double3x2.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat3x2.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat3x2.inl \
- D:/OpenGLStuff/include/glm/ext/matrix_double3x2_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float3x2.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float3x2_precision.hpp \
- D:/OpenGLStuff/include/glm/mat3x3.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_double3x3.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat3x3.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat3x3.inl \
- D:/OpenGLStuff/include/glm/ext/matrix_double3x3_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float3x3.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float3x3_precision.hpp \
- D:/OpenGLStuff/include/glm/mat3x4.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_double3x4.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat3x4.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat3x4.inl \
- D:/OpenGLStuff/include/glm/ext/matrix_double3x4_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float3x4.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float3x4_precision.hpp \
- D:/OpenGLStuff/include/glm/mat4x2.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_double4x2.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat4x2.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat4x2.inl \
- D:/OpenGLStuff/include/glm/ext/matrix_double4x2_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float4x2.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float4x2_precision.hpp \
- D:/OpenGLStuff/include/glm/mat4x3.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_double4x3.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat4x3.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat4x3.inl \
- D:/OpenGLStuff/include/glm/ext/matrix_double4x3_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float4x3.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float4x3_precision.hpp \
- D:/OpenGLStuff/include/glm/mat4x4.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_double4x4.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat4x4.hpp \
- D:/OpenGLStuff/include/glm/detail/type_mat4x4.inl \
- D:/OpenGLStuff/include/glm/ext/matrix_double4x4_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float4x4.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float4x4_precision.hpp \
- D:/OpenGLStuff/include/glm/detail/func_matrix.inl \
- D:/OpenGLStuff/include/glm/geometric.hpp \
- D:/OpenGLStuff/include/glm/detail/func_geometric.inl \
- D:/OpenGLStuff/include/glm/exponential.hpp \
- D:/OpenGLStuff/include/glm/detail/type_vec1.hpp \
- D:/OpenGLStuff/include/glm/detail/type_vec1.inl \
- D:/OpenGLStuff/include/glm/detail/func_exponential.inl \
- D:/OpenGLStuff/include/glm/vector_relational.hpp \
- D:/OpenGLStuff/include/glm/detail/func_vector_relational.inl \
- D:/OpenGLStuff/include/glm/detail/_vectorize.hpp \
- D:/OpenGLStuff/include/glm/common.hpp \
- D:/OpenGLStuff/include/glm/detail/func_common.inl \
- D:/OpenGLStuff/include/glm/detail/compute_common.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_double2x2_precision.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float2x2.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_float2x2_precision.hpp \
- D:/OpenGLStuff/include/glm/trigonometric.hpp \
- D:/OpenGLStuff/include/glm/detail/func_trigonometric.inl \
- D:/OpenGLStuff/include/glm/packing.hpp \
- D:/OpenGLStuff/include/glm/detail/func_packing.inl \
- D:/OpenGLStuff/include/glm/detail/type_half.hpp \
- D:/OpenGLStuff/include/glm/detail/type_half.inl \
- D:/OpenGLStuff/include/glm/integer.hpp \
- D:/OpenGLStuff/include/glm/detail/func_integer.inl \
- D:/OpenGLStuff/include/shader_s_shader.h D:\OpenGLStuff\src\shader_s.h \
- D:/OpenGLStuff/include/glm/gtx/matrix_operation.hpp \
- D:/OpenGLStuff/include/glm/gtx/matrix_operation.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/fwd.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/qualifier.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/setup.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/vec2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_vec2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_vec2.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/compute_vector_relational.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool2_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float2_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double2_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int2_sized.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/scalar_int_sized.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/setup.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint2_sized.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/scalar_uint_sized.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/vec3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_vec3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_vec3.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool3_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float3_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double3_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int3_sized.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint3_sized.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/vec4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_vec4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_vec4.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool4_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float4_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double4_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int4_sized.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint4_sized.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/mat2x2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double2x2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat2x2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat2x2.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/matrix.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/mat2x3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double2x3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat2x3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat2x3.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double2x3_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float2x3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float2x3_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/mat2x4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double2x4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat2x4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat2x4.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double2x4_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float2x4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float2x4_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/mat3x2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double3x2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat3x2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat3x2.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double3x2_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float3x2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float3x2_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/mat3x3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double3x3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat3x3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat3x3.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double3x3_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float3x3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float3x3_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/mat3x4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double3x4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat3x4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat3x4.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double3x4_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float3x4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float3x4_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/mat4x2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double4x2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat4x2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat4x2.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double4x2_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float4x2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float4x2_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/mat4x3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double4x3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat4x3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat4x3.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double4x3_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float4x3.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float4x3_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/mat4x4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double4x4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat4x4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat4x4.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double4x4_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float4x4.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float4x4_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/func_matrix.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/geometric.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/func_geometric.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/exponential.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_vec1.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_vec1.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/func_exponential.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/vector_relational.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/func_vector_relational.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/_vectorize.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/common.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/func_common.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/compute_common.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double2x2_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float2x2.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_float2x2_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/trigonometric.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/func_trigonometric.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/packing.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/func_packing.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_half.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_half.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/integer.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/func_integer.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/shader_s_shader.h \
+ D:\3D_solar_system_emulation_using_openGL\src\shader_s.h \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtx/matrix_operation.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtx/matrix_operation.inl \
  D:/mingw64/include/c++/14.2.0/fstream \
  D:/mingw64/include/c++/14.2.0/bits/codecvt.h \
  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/basic_file.h \
@@ -330,20 +333,20 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:\OpenGLStuff\src\main.cpp \
  D:/mingw64/include/c++/14.2.0/bits/fstream.tcc \
  D:/mingw64/include/c++/14.2.0/sstream \
  D:/mingw64/include/c++/14.2.0/bits/sstream.tcc \
- D:/OpenGLStuff/include/glm/gtc/matrix_transform.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_projection.hpp \
- D:/OpenGLStuff/include/glm/gtc/constants.hpp \
- D:/OpenGLStuff/include/glm/ext/scalar_constants.hpp \
- D:/OpenGLStuff/include/glm/ext/scalar_constants.inl \
- D:/OpenGLStuff/include/glm/gtc/constants.inl \
- D:/OpenGLStuff/include/glm/ext/matrix_projection.inl \
- D:/OpenGLStuff/include/glm/ext/matrix_clip_space.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_clip_space.inl \
- D:/OpenGLStuff/include/glm/ext/matrix_transform.hpp \
- D:/OpenGLStuff/include/glm/ext/matrix_transform.inl \
- D:/OpenGLStuff/include/glm/gtc/matrix_transform.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/matrix_transform.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_projection.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/constants.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/scalar_constants.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/scalar_constants.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/constants.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_projection.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_clip_space.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_clip_space.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_transform.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_transform.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/matrix_transform.inl \
  D:/mingw64/include/c++/14.2.0/vector \
  D:/mingw64/include/c++/14.2.0/bits/stl_vector.h \
  D:/mingw64/include/c++/14.2.0/bits/stl_bvector.h \
  D:/mingw64/include/c++/14.2.0/bits/vector.tcc \
- D:\OpenGLStuff\src\Sphere.h
+ D:\3D_solar_system_emulation_using_openGL\src\Sphere.h

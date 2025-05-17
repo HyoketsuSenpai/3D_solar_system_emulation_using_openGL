@@ -7,6 +7,11 @@ set(CMAKE_DEPENDS_GENERATOR "MinGW Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
+  "D:/3D_solar_system_emulation_using_openGL/CMakeLists.txt"
+  "CMakeFiles/4.0.0/CMakeCCompiler.cmake"
+  "CMakeFiles/4.0.0/CMakeCXXCompiler.cmake"
+  "CMakeFiles/4.0.0/CMakeRCCompiler.cmake"
+  "CMakeFiles/4.0.0/CMakeSystem.cmake"
   "D:/CMake/share/cmake-4.0/Modules/CMakeCInformation.cmake"
   "D:/CMake/share/cmake-4.0/Modules/CMakeCXXInformation.cmake"
   "D:/CMake/share/cmake-4.0/Modules/CMakeCommonLanguageInclude.cmake"
@@ -38,11 +43,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "D:/CMake/share/cmake-4.0/Modules/Platform/Windows-windres.cmake"
   "D:/CMake/share/cmake-4.0/Modules/Platform/Windows.cmake"
   "D:/CMake/share/cmake-4.0/Modules/Platform/WindowsPaths.cmake"
-  "D:/OpenGLStuff/CMakeLists.txt"
-  "CMakeFiles/4.0.0/CMakeCCompiler.cmake"
-  "CMakeFiles/4.0.0/CMakeCXXCompiler.cmake"
-  "CMakeFiles/4.0.0/CMakeRCCompiler.cmake"
-  "CMakeFiles/4.0.0/CMakeSystem.cmake"
   )
 
 # The corresponding makefile is:
