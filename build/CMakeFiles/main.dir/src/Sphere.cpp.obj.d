@@ -1,5 +1,5 @@
-CMakeFiles/main.dir/src/main.cpp.obj: D:\OpenGLStuff\src\main.cpp \
- D:/mingw64/include/c++/14.2.0/iostream \
+CMakeFiles/main.dir/src/Sphere.cpp.obj: D:\OpenGLStuff\src\Sphere.cpp \
+ D:\OpenGLStuff\src\Sphere.h D:/mingw64/include/c++/14.2.0/iostream \
  D:/mingw64/include/c++/14.2.0/bits/requires_hosted.h \
  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/os_defines.h \
@@ -141,27 +141,10 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:\OpenGLStuff\src\main.cpp \
  D:/mingw64/include/c++/14.2.0/bits/ostream.tcc \
  D:/mingw64/include/c++/14.2.0/istream \
  D:/mingw64/include/c++/14.2.0/bits/istream.tcc \
- D:/mingw64/include/c++/14.2.0/memory \
- D:/mingw64/include/c++/14.2.0/bits/stl_tempbuf.h \
- D:/mingw64/include/c++/14.2.0/bits/stl_uninitialized.h \
- D:/mingw64/include/c++/14.2.0/bits/stl_raw_storage_iter.h \
- D:/mingw64/include/c++/14.2.0/bits/align.h \
- D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
- D:/mingw64/x86_64-w64-mingw32/include/stdint.h \
- D:/mingw64/include/c++/14.2.0/bits/unique_ptr.h \
- D:/mingw64/include/c++/14.2.0/bits/shared_ptr.h \
- D:/mingw64/include/c++/14.2.0/bits/shared_ptr_base.h \
- D:/mingw64/include/c++/14.2.0/bits/allocated_ptr.h \
- D:/mingw64/include/c++/14.2.0/ext/aligned_buffer.h \
- D:/mingw64/include/c++/14.2.0/ext/concurrence.h \
- D:/mingw64/include/c++/14.2.0/bits/shared_ptr_atomic.h \
- D:/mingw64/include/c++/14.2.0/bits/atomic_base.h \
- D:/mingw64/include/c++/14.2.0/bits/atomic_lockfree_defines.h \
- D:/mingw64/include/c++/14.2.0/backward/auto_ptr.h \
- D:/mingw64/include/c++/14.2.0/pstl/glue_memory_defs.h \
- D:/mingw64/include/c++/14.2.0/pstl/execution_defs.h \
  D:/OpenGLStuff/include/glad/glad.h \
  D:/OpenGLStuff/include/KHR/khrplatform.h \
+ D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
+ D:/mingw64/x86_64-w64-mingw32/include/stdint.h \
  D:/OpenGLStuff/include/GLFW/glfw3.h D:/OpenGLStuff/include/glm/glm.hpp \
  D:/OpenGLStuff/include/glm/detail/_fixes.hpp \
  D:/mingw64/include/c++/14.2.0/cmath \
@@ -342,8 +325,24 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:\OpenGLStuff\src\main.cpp \
  D:/OpenGLStuff/include/glm/ext/matrix_transform.hpp \
  D:/OpenGLStuff/include/glm/ext/matrix_transform.inl \
  D:/OpenGLStuff/include/glm/gtc/matrix_transform.inl \
+ D:/mingw64/include/c++/14.2.0/memory \
+ D:/mingw64/include/c++/14.2.0/bits/stl_tempbuf.h \
+ D:/mingw64/include/c++/14.2.0/bits/stl_uninitialized.h \
+ D:/mingw64/include/c++/14.2.0/bits/stl_raw_storage_iter.h \
+ D:/mingw64/include/c++/14.2.0/bits/align.h \
+ D:/mingw64/include/c++/14.2.0/bits/unique_ptr.h \
+ D:/mingw64/include/c++/14.2.0/bits/shared_ptr.h \
+ D:/mingw64/include/c++/14.2.0/bits/shared_ptr_base.h \
+ D:/mingw64/include/c++/14.2.0/bits/allocated_ptr.h \
+ D:/mingw64/include/c++/14.2.0/ext/aligned_buffer.h \
+ D:/mingw64/include/c++/14.2.0/ext/concurrence.h \
+ D:/mingw64/include/c++/14.2.0/bits/shared_ptr_atomic.h \
+ D:/mingw64/include/c++/14.2.0/bits/atomic_base.h \
+ D:/mingw64/include/c++/14.2.0/bits/atomic_lockfree_defines.h \
+ D:/mingw64/include/c++/14.2.0/backward/auto_ptr.h \
+ D:/mingw64/include/c++/14.2.0/pstl/glue_memory_defs.h \
+ D:/mingw64/include/c++/14.2.0/pstl/execution_defs.h \
  D:/mingw64/include/c++/14.2.0/vector \
  D:/mingw64/include/c++/14.2.0/bits/stl_vector.h \
  D:/mingw64/include/c++/14.2.0/bits/stl_bvector.h \
- D:/mingw64/include/c++/14.2.0/bits/vector.tcc \
- D:\OpenGLStuff\src\Sphere.h
+ D:/mingw64/include/c++/14.2.0/bits/vector.tcc

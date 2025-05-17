@@ -10,5 +10,11 @@
   "command": "D:\\mingw64\\bin\\gcc.exe  @CMakeFiles/main.dir/includes_C.rsp -g -o CMakeFiles\\main.dir\\src\\glad.c.obj -c D:\\OpenGLStuff\\src\\glad.c",
   "file": "D:/OpenGLStuff/src/glad.c",
   "output": "CMakeFiles/main.dir/src/glad.c.obj"
+},
+{
+  "directory": "D:/OpenGLStuff/build",
+  "command": "D:\\mingw64\\bin\\g++.exe  @CMakeFiles/main.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\main.dir\\src\\Sphere.cpp.obj -c D:\\OpenGLStuff\\src\\Sphere.cpp",
+  "file": "D:/OpenGLStuff/src/Sphere.cpp",
+  "output": "CMakeFiles/main.dir/src/Sphere.cpp.obj"
 }
 ]

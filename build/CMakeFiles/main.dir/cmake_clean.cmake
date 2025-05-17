@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/main.dir/src/Sphere.cpp.obj"
+  "CMakeFiles/main.dir/src/Sphere.cpp.obj.d"
   "CMakeFiles/main.dir/src/glad.c.obj"
   "CMakeFiles/main.dir/src/glad.c.obj.d"
   "CMakeFiles/main.dir/src/main.cpp.obj"

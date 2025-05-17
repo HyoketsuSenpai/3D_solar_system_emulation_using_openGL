@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(main
     src/main.cpp
     src/glad.c
+    src/Sphere.cpp
 )
 
 # Make sure we tell CMake about BOTH include/glad and include/GLFW
