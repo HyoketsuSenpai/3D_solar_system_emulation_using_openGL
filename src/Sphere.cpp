@@ -27,6 +27,15 @@ Sphere::~Sphere()
 {
 }
 
+/**
+ * @brief Generates vertex positions and normals for a sphere mesh with specified resolution and radius.
+ *
+ * Divides the sphere into latitude (rows) and longitude (columns) segments, computes vertex positions and normals using spherical coordinates, and stores them in the interleaved `vertices` vector for rendering.
+ *
+ * @param numRows Number of subdivisions along the latitude (vertical) direction.
+ * @param numCols Number of subdivisions along the longitude (horizontal) direction.
+ * @param radius Radius of the sphere.
+ */
 void Sphere::initBuffer(int numRows, int numCols, float radius){
 
     int numVerticesTopStrip = 3 * numCols * 2;
@@ -118,6 +127,16 @@ void Sphere::render(){
     glBindVertexArray(0);
 }
 
+/**
+ * @brief Appends a vertex position and normal to the sphere mesh using spherical coordinates.
+ *
+ * Converts the given pitch and heading angles to Cartesian coordinates on the sphere's surface,
+ * computes the corresponding normal vector, and stores both in the vertex buffer.
+ *
+ * @param radius The radius of the sphere.
+ * @param pitch The latitude angle in degrees.
+ * @param heading The longitude angle in degrees.
+ */
 void Sphere::initBySphericalCoords(float radius, float pitch, float heading){
     x = radius * cosf(glm::radians(pitch)) * sinf(glm::radians(heading)); 
     y = -radius * sinf(glm::radians(pitch)); 
