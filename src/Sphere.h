@@ -24,7 +24,6 @@ private:
     unsigned int m_IBO;
     int m_numVertices;
 
-    glm::mat4 model;
     glm::mat4 view;
     glm::mat4 projection;
 
@@ -34,6 +33,7 @@ private:
     float x, y, z;
 
 public:
+    glm::mat4 model;
     Shader m_Shader;
     
     Sphere(const float r, const char* vsFile, const char* fsFile, glm::mat4 model, glm::mat4 view, glm::mat4 projection);

@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "d:/OpenGLStuff/build"
+			"value" : "d:/3D_solar_system_emulation_using_openGL/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -587,7 +587,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/OpenGLStuff/build/CMakeFiles/pkgRedirects"
+			"value" : "D:/3D_solar_system_emulation_using_openGL/build/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -659,7 +659,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "D:/OpenGLStuff"
+			"value" : "D:/3D_solar_system_emulation_using_openGL"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1307,7 +1307,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/OpenGLStuff/build"
+			"value" : "D:/3D_solar_system_emulation_using_openGL/build"
 		},
 		{
 			"name" : "OpenGLProject_IS_TOP_LEVEL",
@@ -1331,7 +1331,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/OpenGLStuff"
+			"value" : "D:/3D_solar_system_emulation_using_openGL"
 		}
 	],
 	"kind" : "cache",

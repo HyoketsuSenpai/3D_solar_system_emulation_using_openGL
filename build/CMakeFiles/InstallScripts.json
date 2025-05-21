@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"D:/OpenGLStuff/build/cmake_install.cmake"
+		"D:/3D_solar_system_emulation_using_openGL/build/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

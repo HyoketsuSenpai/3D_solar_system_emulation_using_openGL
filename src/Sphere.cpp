@@ -81,11 +81,15 @@ void Sphere::initBuffer(int numRows, int numCols, float radius){
     
     pitch = 0.0f;
 
+    apex.x = x;
+    apex.y = y;
+    apex.z = z;
+
     for (float heading = 0.0f; heading < 360.0f; heading+=headAngle)
     {
-        // x = apex.x;
-        // y = -apex.y;
-        // z = apex.z;
+        x = apex.x;
+        y = apex.y;
+        z = apex.z;
 
         vertices.push_back(x);
         vertices.push_back(y);
@@ -117,7 +121,7 @@ void Sphere::render(){
 void Sphere::initBySphericalCoords(float radius, float pitch, float heading){
     x = radius * cosf(glm::radians(pitch)) * sinf(glm::radians(heading)); 
     y = -radius * sinf(glm::radians(pitch)); 
-    z = radius * cosf(glm::radians(pitch)) * sinf(glm::radians(heading)); 
+    z = radius * cosf(glm::radians(pitch)) * cosf(glm::radians(heading)); 
 
     float nx = x / radius;
     float ny = y / radius;

@@ -52,10 +52,10 @@ RM = D:\CMake\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\OpenGLStuff
+CMAKE_SOURCE_DIR = D:\3D_solar_system_emulation_using_openGL
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\OpenGLStuff\build
+CMAKE_BINARY_DIR = D:\3D_solar_system_emulation_using_openGL\build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/main.dir/depend.make
@@ -73,48 +73,48 @@ CMakeFiles/main.dir/codegen:
 
 CMakeFiles/main.dir/src/main.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/main.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/src/main.cpp.obj: D:/OpenGLStuff/src/main.cpp
+CMakeFiles/main.dir/src/main.cpp.obj: D:/3D_solar_system_emulation_using_openGL/src/main.cpp
 CMakeFiles/main.dir/src/main.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\OpenGLStuff\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/main.dir/src/main.cpp.obj"
-	D:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/main.cpp.obj -MF CMakeFiles\main.dir\src\main.cpp.obj.d -o CMakeFiles\main.dir\src\main.cpp.obj -c D:\OpenGLStuff\src\main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\3D_solar_system_emulation_using_openGL\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/main.dir/src/main.cpp.obj"
+	D:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/main.cpp.obj -MF CMakeFiles\main.dir\src\main.cpp.obj.d -o CMakeFiles\main.dir\src\main.cpp.obj -c D:\3D_solar_system_emulation_using_openGL\src\main.cpp
 
 CMakeFiles/main.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/main.cpp.i"
-	D:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\OpenGLStuff\src\main.cpp > CMakeFiles\main.dir\src\main.cpp.i
+	D:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\3D_solar_system_emulation_using_openGL\src\main.cpp > CMakeFiles\main.dir\src\main.cpp.i
 
 CMakeFiles/main.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/main.cpp.s"
-	D:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\OpenGLStuff\src\main.cpp -o CMakeFiles\main.dir\src\main.cpp.s
+	D:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\3D_solar_system_emulation_using_openGL\src\main.cpp -o CMakeFiles\main.dir\src\main.cpp.s
 
 CMakeFiles/main.dir/src/glad.c.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/glad.c.obj: CMakeFiles/main.dir/includes_C.rsp
-CMakeFiles/main.dir/src/glad.c.obj: D:/OpenGLStuff/src/glad.c
+CMakeFiles/main.dir/src/glad.c.obj: D:/3D_solar_system_emulation_using_openGL/src/glad.c
 CMakeFiles/main.dir/src/glad.c.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\OpenGLStuff\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/main.dir/src/glad.c.obj"
-	D:\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/main.dir/src/glad.c.obj -MF CMakeFiles\main.dir\src\glad.c.obj.d -o CMakeFiles\main.dir\src\glad.c.obj -c D:\OpenGLStuff\src\glad.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\3D_solar_system_emulation_using_openGL\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/main.dir/src/glad.c.obj"
+	D:\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/main.dir/src/glad.c.obj -MF CMakeFiles\main.dir\src\glad.c.obj.d -o CMakeFiles\main.dir\src\glad.c.obj -c D:\3D_solar_system_emulation_using_openGL\src\glad.c
 
 CMakeFiles/main.dir/src/glad.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/main.dir/src/glad.c.i"
-	D:\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E D:\OpenGLStuff\src\glad.c > CMakeFiles\main.dir\src\glad.c.i
+	D:\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E D:\3D_solar_system_emulation_using_openGL\src\glad.c > CMakeFiles\main.dir\src\glad.c.i
 
 CMakeFiles/main.dir/src/glad.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/main.dir/src/glad.c.s"
-	D:\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S D:\OpenGLStuff\src\glad.c -o CMakeFiles\main.dir\src\glad.c.s
+	D:\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S D:\3D_solar_system_emulation_using_openGL\src\glad.c -o CMakeFiles\main.dir\src\glad.c.s
 
 CMakeFiles/main.dir/src/Sphere.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/Sphere.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/src/Sphere.cpp.obj: D:/OpenGLStuff/src/Sphere.cpp
+CMakeFiles/main.dir/src/Sphere.cpp.obj: D:/3D_solar_system_emulation_using_openGL/src/Sphere.cpp
 CMakeFiles/main.dir/src/Sphere.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\OpenGLStuff\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/src/Sphere.cpp.obj"
-	D:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/Sphere.cpp.obj -MF CMakeFiles\main.dir\src\Sphere.cpp.obj.d -o CMakeFiles\main.dir\src\Sphere.cpp.obj -c D:\OpenGLStuff\src\Sphere.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\3D_solar_system_emulation_using_openGL\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/src/Sphere.cpp.obj"
+	D:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/Sphere.cpp.obj -MF CMakeFiles\main.dir\src\Sphere.cpp.obj.d -o CMakeFiles\main.dir\src\Sphere.cpp.obj -c D:\3D_solar_system_emulation_using_openGL\src\Sphere.cpp
 
 CMakeFiles/main.dir/src/Sphere.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/Sphere.cpp.i"
-	D:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\OpenGLStuff\src\Sphere.cpp > CMakeFiles\main.dir\src\Sphere.cpp.i
+	D:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\3D_solar_system_emulation_using_openGL\src\Sphere.cpp > CMakeFiles\main.dir\src\Sphere.cpp.i
 
 CMakeFiles/main.dir/src/Sphere.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/Sphere.cpp.s"
-	D:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\OpenGLStuff\src\Sphere.cpp -o CMakeFiles\main.dir\src\Sphere.cpp.s
+	D:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\3D_solar_system_emulation_using_openGL\src\Sphere.cpp -o CMakeFiles\main.dir\src\Sphere.cpp.s
 
 # Object files for target main
 main_OBJECTS = \
@@ -129,11 +129,11 @@ main.exe: CMakeFiles/main.dir/src/main.cpp.obj
 main.exe: CMakeFiles/main.dir/src/glad.c.obj
 main.exe: CMakeFiles/main.dir/src/Sphere.cpp.obj
 main.exe: CMakeFiles/main.dir/build.make
-main.exe: D:/OpenGLStuff/lib/libglfw3.a
+main.exe: D:/3D_solar_system_emulation_using_openGL/lib/libglfw3.a
 main.exe: CMakeFiles/main.dir/linkLibs.rsp
 main.exe: CMakeFiles/main.dir/objects1.rsp
 main.exe: CMakeFiles/main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\OpenGLStuff\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable main.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\3D_solar_system_emulation_using_openGL\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable main.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\main.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -145,6 +145,6 @@ CMakeFiles/main.dir/clean:
 .PHONY : CMakeFiles/main.dir/clean
 
 CMakeFiles/main.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" D:\OpenGLStuff D:\OpenGLStuff D:\OpenGLStuff\build D:\OpenGLStuff\build D:\OpenGLStuff\build\CMakeFiles\main.dir\DependInfo.cmake "--color=$(COLOR)"
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" D:\3D_solar_system_emulation_using_openGL D:\3D_solar_system_emulation_using_openGL D:\3D_solar_system_emulation_using_openGL\build D:\3D_solar_system_emulation_using_openGL\build D:\3D_solar_system_emulation_using_openGL\build\CMakeFiles\main.dir\DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/main.dir/depend
 

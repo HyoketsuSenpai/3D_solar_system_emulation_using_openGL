@@ -1,4 +1,5 @@
-CMakeFiles/main.dir/src/glad.c.obj: D:\OpenGLStuff\src\glad.c \
+CMakeFiles/main.dir/src/glad.c.obj: \
+ D:\3D_solar_system_emulation_using_openGL\src\glad.c \
  D:/mingw64/x86_64-w64-mingw32/include/stdio.h \
  D:/mingw64/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
  D:/mingw64/x86_64-w64-mingw32/include/corecrt.h \
@@ -22,8 +23,8 @@ CMakeFiles/main.dir/src/glad.c.obj: D:\OpenGLStuff\src\glad.c \
  D:/mingw64/x86_64-w64-mingw32/include/errno.h \
  D:/mingw64/x86_64-w64-mingw32/include/string.h \
  D:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h \
- D:/OpenGLStuff/include/glad/glad.h \
- D:/OpenGLStuff/include/KHR/khrplatform.h \
+ D:/3D_solar_system_emulation_using_openGL/include/glad/glad.h \
+ D:/3D_solar_system_emulation_using_openGL/include/KHR/khrplatform.h \
  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
  D:/mingw64/x86_64-w64-mingw32/include/stdint.h \
  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stddef.h \
