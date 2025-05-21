@@ -24,6 +24,13 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 const unsigned int noOfPlanets = 9;
 
+/**
+ * @brief Entry point for the OpenGL solar system simulation.
+ *
+ * Initializes the OpenGL context and window, sets up camera and projection matrices, and creates a sun and multiple orbiting planet spheres. Runs the main render loop, animating planets in circular orbits around the sun with dynamic lighting, and handles user input and window events. Cleans up and terminates the application on exit.
+ *
+ * @return int Returns 0 on successful execution, or -1 if initialization fails.
+ */
 int main() {
 
 glfwInit();
