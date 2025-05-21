@@ -22,6 +22,7 @@ void processInput(GLFWwindow *window);
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+const unsigned int noOfPlanets = 9;
 
 int main() {
 
@@ -56,10 +57,13 @@ glm::mat4 projection = glm::mat4(1.0f);
 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 glm::mat4 view = glm::mat4(1.0f);
-view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+view = glm::translate(view, glm::vec3(0.0f, -1.0f, -10.0f));
 
-Sphere s = Sphere(1.0f, "sphere_shader.vs", "sphere_shader.fs", model, view, projection);
-Sphere s2 = Sphere(1.0f, "3.3.shader.vs", "3.3.shader.fs", model, view, projection);
+Sphere sun = Sphere(0.1f, "sphere_shader.vs", "sphere_shader.fs", model, view, projection);
+vector<Sphere> planets;
+
+for(int i = 0; i < noOfPlanets; i++)
+    planets.emplace_back(Sphere(0.1f, "3.3.shader.vs", "3.3.shader.fs", model, view, projection));
 
 while (!glfwWindowShouldClose(window))
 {
@@ -69,23 +73,21 @@ while (!glfwWindowShouldClose(window))
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-    // //set mvp
-    // glm::mat4 model = glm::mat4(1.0f);
-    // model = glm::rotate(model, glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+    float t = static_cast<float>(glfwGetTime());
+    for(int i = 0; i < noOfPlanets; i++){
 
-    // glm::mat4 projection = glm::mat4(1.0f);
-    // projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+        glm::vec3 lightPos = glm::vec3(sun.model[3]);
+        glm::vec3 modelTrans = glm::vec3(cosf(t) * (i + 1), 0.0f, sinf(t) * (i + 1));
+        planets[i].model = glm::translate(glm::mat4(1.0f), modelTrans);
+        planets[i].m_Shader.use();
+        planets[i].m_Shader.SetUniformVec3f("lightPos", lightPos);
+
+        planets[i].render();
+
+    }
+
+    sun.render();
     
-    // glm::mat4 view = glm::mat4(1.0f);
-    // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-
-    glm::vec3 lightPos = glm::vec3(-3.0f, -2.0f, -1.0f);
-
-    s2.m_Shader.use();
-    s2.m_Shader.SetUniformVec3f("lightPos", lightPos);
-
-    //s.render();
-    s2.render();
 
     
     glfwSwapBuffers(window);
