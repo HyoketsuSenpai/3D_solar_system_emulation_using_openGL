@@ -1,4 +1,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
+#pragma once
+
+#include "stb_image.h"
 
 #include <iostream>
 
@@ -29,21 +32,24 @@ private:
     unsigned int m_IBO;
     int m_numVertices;
 
-    glm::mat4 view;
-    glm::mat4 projection;
-
     std::vector<float> vertices;
     std::vector<float> indices;
 
     float x, y, z;
 
+    unsigned int m_Texture;
+
 public:
     glm::mat4 model;
     Shader m_Shader;
+
+    glm::mat4 view;
+    glm::mat4 projection;
     
-    Sphere(const float r, const char* vsFile, const char* fsFile, glm::mat4 model, glm::mat4 view, glm::mat4 projection);
+    Sphere(const float r, const char* vsFile, const char* fsFile, glm::mat4 model, glm::mat4 view, glm::mat4 projection, std::string texFile);
     ~Sphere();
     void initBuffer(int numRows, int numCols, float radius);
+    void initTexture(std::string texName);
     void render();
     void initBySphericalCoords(float radius, float pitch, float heading);
 };

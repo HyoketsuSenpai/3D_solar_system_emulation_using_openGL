@@ -153,6 +153,7 @@ CMakeFiles/main.dir/src/Sphere.cpp.obj: D:/3D_solar_system_emulation_using_openG
   D:/3D_solar_system_emulation_using_openGL/include/glm/vec4.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/vector_relational.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/shader_s_shader.h \
+  D:/3D_solar_system_emulation_using_openGL/include/stb_image.h \
   D:/mingw64/include/c++/14.2.0/backward/auto_ptr.h \
   D:/mingw64/include/c++/14.2.0/backward/binders.h \
   D:/mingw64/include/c++/14.2.0/bit \
@@ -650,6 +651,7 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:/3D_solar_system_emulation_using_openGL/
   D:/3D_solar_system_emulation_using_openGL/include/glm/detail/func_vector_relational.inl \
   D:/3D_solar_system_emulation_using_openGL/include/glm/detail/qualifier.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/detail/setup.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_float.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_half.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_half.inl \
   D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat2x2.hpp \
@@ -670,6 +672,8 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:/3D_solar_system_emulation_using_openGL/
   D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat4x3.inl \
   D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat4x4.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat4x4.inl \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_quat.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_quat.inl \
   D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_vec1.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_vec1.inl \
   D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_vec2.hpp \
@@ -721,34 +725,60 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:/3D_solar_system_emulation_using_openGL/
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_projection.inl \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_transform.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_transform.inl \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_common.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_common.inl \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_double.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_double_precision.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_float.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_float_precision.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_geometric.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_geometric.inl \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_relational.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_relational.inl \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_transform.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_transform.inl \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_trigonometric.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_trigonometric.inl \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/scalar_constants.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/scalar_constants.inl \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/scalar_int_sized.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/scalar_uint_sized.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool1.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool1_precision.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool2.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool2_precision.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool3.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool3_precision.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool4.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool4_precision.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double1.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double1_precision.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double2.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double2_precision.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double3.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double3_precision.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double4.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double4_precision.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float1.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float1_precision.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float2.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float2_precision.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float3.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float3_precision.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float4.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float4_precision.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int1.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int1_sized.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int2.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int2_sized.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int3.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int3_sized.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int4.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int4_sized.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_relational.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_relational.inl \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint1.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint1_sized.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint2.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint2_sized.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint3.hpp \
@@ -760,8 +790,15 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:/3D_solar_system_emulation_using_openGL/
   D:/3D_solar_system_emulation_using_openGL/include/glm/glm.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/constants.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/constants.inl \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/epsilon.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/epsilon.inl \
   D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/matrix_transform.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/matrix_transform.inl \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/quaternion.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/quaternion.inl \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/type_ptr.hpp \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/type_ptr.inl \
+  D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/vec1.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/gtx/matrix_operation.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/gtx/matrix_operation.inl \
   D:/3D_solar_system_emulation_using_openGL/include/glm/integer.hpp \
@@ -783,6 +820,7 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:/3D_solar_system_emulation_using_openGL/
   D:/3D_solar_system_emulation_using_openGL/include/glm/vec4.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/glm/vector_relational.hpp \
   D:/3D_solar_system_emulation_using_openGL/include/shader_s_shader.h \
+  D:/3D_solar_system_emulation_using_openGL/include/stb_image.h \
   D:/mingw64/include/c++/14.2.0/backward/auto_ptr.h \
   D:/mingw64/include/c++/14.2.0/backward/binders.h \
   D:/mingw64/include/c++/14.2.0/bit \
@@ -871,6 +909,7 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:/3D_solar_system_emulation_using_openGL/
   D:/mingw64/include/c++/14.2.0/cstdint \
   D:/mingw64/include/c++/14.2.0/cstdio \
   D:/mingw64/include/c++/14.2.0/cstdlib \
+  D:/mingw64/include/c++/14.2.0/cstring \
   D:/mingw64/include/c++/14.2.0/cwchar \
   D:/mingw64/include/c++/14.2.0/cwctype \
   D:/mingw64/include/c++/14.2.0/debug/assertions.h \
@@ -938,6 +977,7 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:/3D_solar_system_emulation_using_openGL/
   D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stddef.h \
   D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
   D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/syslimits.h \
+  D:/mingw64/x86_64-w64-mingw32/include/GL/gl.h \
   D:/mingw64/x86_64-w64-mingw32/include/_mingw.h \
   D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h \
   D:/mingw64/x86_64-w64-mingw32/include/_mingw_off_t.h \
@@ -966,6 +1006,7 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:/3D_solar_system_emulation_using_openGL/
   D:/mingw64/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
   D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
   D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
+  D:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h \
   D:/mingw64/x86_64-w64-mingw32/include/sec_api/sys/timeb_s.h \
   D:/mingw64/x86_64-w64-mingw32/include/sec_api/wchar_s.h \
   D:/mingw64/x86_64-w64-mingw32/include/signal.h \
@@ -973,6 +1014,7 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:/3D_solar_system_emulation_using_openGL/
   D:/mingw64/x86_64-w64-mingw32/include/stdint.h \
   D:/mingw64/x86_64-w64-mingw32/include/stdio.h \
   D:/mingw64/x86_64-w64-mingw32/include/stdlib.h \
+  D:/mingw64/x86_64-w64-mingw32/include/string.h \
   D:/mingw64/x86_64-w64-mingw32/include/swprintf.inl \
   D:/mingw64/x86_64-w64-mingw32/include/sys/timeb.h \
   D:/mingw64/x86_64-w64-mingw32/include/sys/types.h \
@@ -980,8 +1022,92 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:/3D_solar_system_emulation_using_openGL/
   D:/mingw64/x86_64-w64-mingw32/include/vadefs.h \
   D:/mingw64/x86_64-w64-mingw32/include/wchar.h \
   D:/mingw64/x86_64-w64-mingw32/include/wctype.h \
+  D:/3D_solar_system_emulation_using_openGL/src/Camera.h \
   D:/3D_solar_system_emulation_using_openGL/src/Sphere.h \
   D:/3D_solar_system_emulation_using_openGL/src/shader_s.h
+
+CMakeFiles/main.dir/src/stb_image.cpp.obj: D:/3D_solar_system_emulation_using_openGL/src/stb_image.cpp \
+  D:/3D_solar_system_emulation_using_openGL/include/stb_image.h \
+  D:/mingw64/include/c++/14.2.0/bit \
+  D:/mingw64/include/c++/14.2.0/bits/concept_check.h \
+  D:/mingw64/include/c++/14.2.0/bits/cpp_type_traits.h \
+  D:/mingw64/include/c++/14.2.0/bits/exception_defines.h \
+  D:/mingw64/include/c++/14.2.0/bits/functexcept.h \
+  D:/mingw64/include/c++/14.2.0/bits/move.h \
+  D:/mingw64/include/c++/14.2.0/bits/predefined_ops.h \
+  D:/mingw64/include/c++/14.2.0/bits/ptr_traits.h \
+  D:/mingw64/include/c++/14.2.0/bits/requires_hosted.h \
+  D:/mingw64/include/c++/14.2.0/bits/specfun.h \
+  D:/mingw64/include/c++/14.2.0/bits/std_abs.h \
+  D:/mingw64/include/c++/14.2.0/bits/stl_algobase.h \
+  D:/mingw64/include/c++/14.2.0/bits/stl_iterator.h \
+  D:/mingw64/include/c++/14.2.0/bits/stl_iterator_base_funcs.h \
+  D:/mingw64/include/c++/14.2.0/bits/stl_iterator_base_types.h \
+  D:/mingw64/include/c++/14.2.0/bits/stl_pair.h \
+  D:/mingw64/include/c++/14.2.0/bits/utility.h \
+  D:/mingw64/include/c++/14.2.0/bits/version.h \
+  D:/mingw64/include/c++/14.2.0/cmath \
+  D:/mingw64/include/c++/14.2.0/concepts \
+  D:/mingw64/include/c++/14.2.0/cstdlib \
+  D:/mingw64/include/c++/14.2.0/debug/assertions.h \
+  D:/mingw64/include/c++/14.2.0/debug/debug.h \
+  D:/mingw64/include/c++/14.2.0/ext/numeric_traits.h \
+  D:/mingw64/include/c++/14.2.0/ext/type_traits.h \
+  D:/mingw64/include/c++/14.2.0/limits \
+  D:/mingw64/include/c++/14.2.0/math.h \
+  D:/mingw64/include/c++/14.2.0/pstl/pstl_config.h \
+  D:/mingw64/include/c++/14.2.0/stdlib.h \
+  D:/mingw64/include/c++/14.2.0/tr1/bessel_function.tcc \
+  D:/mingw64/include/c++/14.2.0/tr1/beta_function.tcc \
+  D:/mingw64/include/c++/14.2.0/tr1/ell_integral.tcc \
+  D:/mingw64/include/c++/14.2.0/tr1/exp_integral.tcc \
+  D:/mingw64/include/c++/14.2.0/tr1/gamma.tcc \
+  D:/mingw64/include/c++/14.2.0/tr1/hypergeometric.tcc \
+  D:/mingw64/include/c++/14.2.0/tr1/legendre_function.tcc \
+  D:/mingw64/include/c++/14.2.0/tr1/modified_bessel_func.tcc \
+  D:/mingw64/include/c++/14.2.0/tr1/poly_hermite.tcc \
+  D:/mingw64/include/c++/14.2.0/tr1/poly_laguerre.tcc \
+  D:/mingw64/include/c++/14.2.0/tr1/riemann_zeta.tcc \
+  D:/mingw64/include/c++/14.2.0/tr1/special_function_util.h \
+  D:/mingw64/include/c++/14.2.0/type_traits \
+  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
+  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/cpu_defines.h \
+  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/os_defines.h \
+  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/emmintrin.h \
+  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/limits.h \
+  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mm_malloc.h \
+  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mmintrin.h \
+  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
+  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stddef.h \
+  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
+  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/syslimits.h \
+  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xmmintrin.h \
+  D:/mingw64/x86_64-w64-mingw32/include/_mingw.h \
+  D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h \
+  D:/mingw64/x86_64-w64-mingw32/include/_mingw_off_t.h \
+  D:/mingw64/x86_64-w64-mingw32/include/_mingw_secapi.h \
+  D:/mingw64/x86_64-w64-mingw32/include/_mingw_stdarg.h \
+  D:/mingw64/x86_64-w64-mingw32/include/assert.h \
+  D:/mingw64/x86_64-w64-mingw32/include/corecrt.h \
+  D:/mingw64/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
+  D:/mingw64/x86_64-w64-mingw32/include/corecrt_wstdlib.h \
+  D:/mingw64/x86_64-w64-mingw32/include/crtdefs.h \
+  D:/mingw64/x86_64-w64-mingw32/include/errno.h \
+  D:/mingw64/x86_64-w64-mingw32/include/limits.h \
+  D:/mingw64/x86_64-w64-mingw32/include/malloc.h \
+  D:/mingw64/x86_64-w64-mingw32/include/math.h \
+  D:/mingw64/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
+  D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
+  D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
+  D:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h \
+  D:/mingw64/x86_64-w64-mingw32/include/stdarg.h \
+  D:/mingw64/x86_64-w64-mingw32/include/stddef.h \
+  D:/mingw64/x86_64-w64-mingw32/include/stdint.h \
+  D:/mingw64/x86_64-w64-mingw32/include/stdio.h \
+  D:/mingw64/x86_64-w64-mingw32/include/stdlib.h \
+  D:/mingw64/x86_64-w64-mingw32/include/string.h \
+  D:/mingw64/x86_64-w64-mingw32/include/swprintf.inl \
+  D:/mingw64/x86_64-w64-mingw32/include/vadefs.h
 
 
 D:/mingw64/x86_64-w64-mingw32/include/synchapi.h:
@@ -1104,6 +1230,8 @@ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double3x4.hpp:
 
 D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_mat3x3.inl:
 
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_relational.hpp:
+
 D:/mingw64/x86_64-w64-mingw32/include/threadpoolapiset.h:
 
 D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_vec4.inl:
@@ -1173,6 +1301,8 @@ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_clip_space.inl:
 D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double2x2_precision.hpp:
 
 D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_double2x3_precision.hpp:
+
+D:/mingw64/include/c++/14.2.0/math.h:
 
 D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint4.hpp:
 
@@ -1307,6 +1437,8 @@ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/scalar_constants.inl:
 D:/mingw64/x86_64-w64-mingw32/include/stdlib.h:
 
 D:/3D_solar_system_emulation_using_openGL/include/glm/ext/scalar_int_sized.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_relational.hpp:
 
 D:/3D_solar_system_emulation_using_openGL/include/glm/ext/scalar_uint_sized.hpp:
 
@@ -1490,6 +1622,10 @@ D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vlbwintrin.h:
 
 D:/3D_solar_system_emulation_using_openGL/include/shader_s_shader.h:
 
+D:/mingw64/x86_64-w64-mingw32/include/wtypes.h:
+
+D:/3D_solar_system_emulation_using_openGL/include/stb_image.h:
+
 D:/mingw64/include/c++/14.2.0/ext/atomicity.h:
 
 D:/mingw64/include/c++/14.2.0/backward/binders.h:
@@ -1588,6 +1724,8 @@ D:/mingw64/include/c++/14.2.0/bits/new_allocator.h:
 
 D:/mingw64/include/c++/14.2.0/bits/ostream.tcc:
 
+D:/mingw64/include/c++/14.2.0/cstring:
+
 D:/mingw64/include/c++/14.2.0/bits/ostream_insert.h:
 
 D:/mingw64/include/c++/14.2.0/iostream:
@@ -1603,6 +1741,8 @@ D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxvnniintrin.h:
 D:/mingw64/x86_64-w64-mingw32/include/unknwnbase.h:
 
 D:/mingw64/include/c++/14.2.0/bits/refwrap.h:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint1.hpp:
 
 D:/mingw64/x86_64-w64-mingw32/include/msxml.h:
 
@@ -1641,6 +1781,8 @@ D:/mingw64/x86_64-w64-mingw32/include/pthread_compat.h:
 D:/mingw64/include/c++/14.2.0/bits/utility.h:
 
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vpopcntdqvlintrin.h:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_float_precision.hpp:
 
 D:/mingw64/include/c++/14.2.0/bits/streambuf.tcc:
 
@@ -1754,6 +1896,8 @@ D:/mingw64/include/c++/14.2.0/system_error:
 
 D:/mingw64/include/c++/14.2.0/tr1/gamma.tcc:
 
+D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/epsilon.hpp:
+
 D:/mingw64/include/c++/14.2.0/tr1/hypergeometric.tcc:
 
 D:/mingw64/include/c++/14.2.0/tr1/poly_hermite.tcc:
@@ -1802,6 +1946,8 @@ D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/limits.h:
 
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mm_malloc.h:
 
+D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/vec1.hpp:
+
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stddef.h:
 
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h:
@@ -1844,9 +1990,9 @@ D:/mingw64/x86_64-w64-mingw32/include/fltwinerror.h:
 
 D:/mingw64/x86_64-w64-mingw32/include/locale.h:
 
-D:/mingw64/x86_64-w64-mingw32/include/malloc.h:
-
 D:/mingw64/x86_64-w64-mingw32/include/objidl.h:
+
+D:/mingw64/x86_64-w64-mingw32/include/malloc.h:
 
 D:/mingw64/x86_64-w64-mingw32/include/math.h:
 
@@ -1878,6 +2024,8 @@ D:/mingw64/x86_64-w64-mingw32/include/vadefs.h:
 
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bf16vlintrin.h:
 
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_relational.inl:
+
 D:/mingw64/x86_64-w64-mingw32/include/wctype.h:
 
 D:/mingw64/x86_64-w64-mingw32/include/mcx.h:
@@ -1908,6 +2056,8 @@ D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx5124vnniwintrin.h:
 
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bf16intrin.h:
 
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_geometric.hpp:
+
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bitalgintrin.h:
 
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bwintrin.h:
@@ -1921,6 +2071,8 @@ D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fintrin.h:
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fp16vlintrin.h:
 
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512ifmavlintrin.h:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool1.hpp:
 
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512pfintrin.h:
 
@@ -1942,11 +2094,15 @@ D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/shaintrin.h:
 
 D:/mingw64/x86_64-w64-mingw32/include/heapapi.h:
 
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int1_sized.hpp:
+
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vp2intersectintrin.h:
 
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vpopcntdqintrin.h:
 
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxintrin.h:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/type_ptr.inl:
 
 D:/mingw64/x86_64-w64-mingw32/include/winver.h:
 
@@ -1955,6 +2111,8 @@ D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxneconvertintrin.h:
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/bmi2intrin.h:
 
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/bmiintrin.h:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_trigonometric.inl:
 
 D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/cetintrin.h:
 
@@ -2108,6 +2266,8 @@ D:/mingw64/x86_64-w64-mingw32/include/pshpack1.h:
 
 D:/mingw64/x86_64-w64-mingw32/include/pshpack2.h:
 
+D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_quat.hpp:
+
 D:/mingw64/x86_64-w64-mingw32/include/pshpack8.h:
 
 D:/mingw64/x86_64-w64-mingw32/include/realtimeapiset.h:
@@ -2182,4 +2342,54 @@ D:/mingw64/x86_64-w64-mingw32/include/winuser.h:
 
 D:/mingw64/x86_64-w64-mingw32/include/wow64apiset.h:
 
-D:/mingw64/x86_64-w64-mingw32/include/wtypes.h:
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint1_sized.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_float.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_quat.inl:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_common.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_common.inl:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_double.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_double_precision.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_float.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_geometric.inl:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_relational.inl:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_transform.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_transform.inl:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_trigonometric.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool1_precision.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double1.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double1_precision.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float1.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float1_precision.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int1.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/epsilon.inl:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/quaternion.hpp:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/quaternion.inl:
+
+D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/type_ptr.hpp:
+
+D:/mingw64/x86_64-w64-mingw32/include/GL/gl.h:
+
+D:/3D_solar_system_emulation_using_openGL/src/Camera.h:
+
+D:/3D_solar_system_emulation_using_openGL/src/stb_image.cpp:

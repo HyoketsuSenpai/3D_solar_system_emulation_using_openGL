@@ -16,5 +16,11 @@
   "command": "D:\\mingw64\\bin\\g++.exe  @CMakeFiles/main.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\main.dir\\src\\Sphere.cpp.obj -c D:\\3D_solar_system_emulation_using_openGL\\src\\Sphere.cpp",
   "file": "D:/3D_solar_system_emulation_using_openGL/src/Sphere.cpp",
   "output": "CMakeFiles/main.dir/src/Sphere.cpp.obj"
+},
+{
+  "directory": "D:/3D_solar_system_emulation_using_openGL/build",
+  "command": "D:\\mingw64\\bin\\g++.exe  @CMakeFiles/main.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\main.dir\\src\\stb_image.cpp.obj -c D:\\3D_solar_system_emulation_using_openGL\\src\\stb_image.cpp",
+  "file": "D:/3D_solar_system_emulation_using_openGL/src/stb_image.cpp",
+  "output": "CMakeFiles/main.dir/src/stb_image.cpp.obj"
 }
 ]

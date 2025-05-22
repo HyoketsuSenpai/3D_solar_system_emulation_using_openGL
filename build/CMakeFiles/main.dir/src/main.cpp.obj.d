@@ -349,4 +349,47 @@ CMakeFiles/main.dir/src/main.cpp.obj: \
  D:/mingw64/include/c++/14.2.0/bits/stl_vector.h \
  D:/mingw64/include/c++/14.2.0/bits/stl_bvector.h \
  D:/mingw64/include/c++/14.2.0/bits/vector.tcc \
- D:\3D_solar_system_emulation_using_openGL\src\Sphere.h
+ D:\3D_solar_system_emulation_using_openGL\src\Sphere.h \
+ D:/3D_solar_system_emulation_using_openGL/include/stb_image.h \
+ D:\3D_solar_system_emulation_using_openGL\src\Camera.h \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/type_ptr.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/quaternion.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_relational.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_relational.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_float.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_common.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_geometric.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_geometric.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_common.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_float.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_quat.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_relational.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_relational.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/type_quat.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_float_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_double.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_double_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_trigonometric.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_trigonometric.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_transform.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/quaternion_transform.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/quaternion.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/epsilon.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/detail/setup.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/epsilon.inl \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/vec1.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool1.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_bool1_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float1.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_float1_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double1.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_double1_precision.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int1.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_int1_sized.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint1.hpp \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/ext/vector_uint1_sized.hpp \
+ D:/mingw64/include/c++/14.2.0/cstring \
+ D:/mingw64/x86_64-w64-mingw32/include/string.h \
+ D:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h \
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/type_ptr.inl \
+ D:/mingw64/x86_64-w64-mingw32/include/GL/gl.h

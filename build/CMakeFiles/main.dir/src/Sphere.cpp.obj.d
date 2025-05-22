@@ -1,12 +1,37 @@
 CMakeFiles/main.dir/src/Sphere.cpp.obj: \
  D:\3D_solar_system_emulation_using_openGL\src\Sphere.cpp \
  D:\3D_solar_system_emulation_using_openGL\src\Sphere.h \
- D:/mingw64/include/c++/14.2.0/iostream \
- D:/mingw64/include/c++/14.2.0/bits/requires_hosted.h \
+ D:/3D_solar_system_emulation_using_openGL/include/stb_image.h \
+ D:/mingw64/x86_64-w64-mingw32/include/stdio.h \
+ D:/mingw64/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
+ D:/mingw64/x86_64-w64-mingw32/include/corecrt.h \
+ D:/mingw64/x86_64-w64-mingw32/include/_mingw.h \
+ D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h \
+ D:/mingw64/x86_64-w64-mingw32/include/_mingw_secapi.h \
+ D:/mingw64/x86_64-w64-mingw32/include/vadefs.h \
+ D:/mingw64/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
+ D:/mingw64/x86_64-w64-mingw32/include/_mingw_off_t.h \
+ D:/mingw64/x86_64-w64-mingw32/include/swprintf.inl \
+ D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
+ D:/mingw64/include/c++/14.2.0/stdlib.h \
+ D:/mingw64/include/c++/14.2.0/cstdlib \
  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/os_defines.h \
  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/cpu_defines.h \
  D:/mingw64/include/c++/14.2.0/pstl/pstl_config.h \
+ D:/mingw64/x86_64-w64-mingw32/include/stdlib.h \
+ D:/mingw64/x86_64-w64-mingw32/include/corecrt_wstdlib.h \
+ D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/limits.h \
+ D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/syslimits.h \
+ D:/mingw64/x86_64-w64-mingw32/include/limits.h \
+ D:/mingw64/x86_64-w64-mingw32/include/crtdefs.h \
+ D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
+ D:/mingw64/x86_64-w64-mingw32/include/malloc.h \
+ D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mm_malloc.h \
+ D:/mingw64/x86_64-w64-mingw32/include/errno.h \
+ D:/mingw64/include/c++/14.2.0/bits/std_abs.h \
+ D:/mingw64/include/c++/14.2.0/iostream \
+ D:/mingw64/include/c++/14.2.0/bits/requires_hosted.h \
  D:/mingw64/include/c++/14.2.0/ostream D:/mingw64/include/c++/14.2.0/ios \
  D:/mingw64/include/c++/14.2.0/iosfwd \
  D:/mingw64/include/c++/14.2.0/bits/stringfwd.h \
@@ -14,17 +39,7 @@ CMakeFiles/main.dir/src/Sphere.cpp.obj: \
  D:/mingw64/include/c++/14.2.0/bits/postypes.h \
  D:/mingw64/include/c++/14.2.0/cwchar \
  D:/mingw64/x86_64-w64-mingw32/include/wchar.h \
- D:/mingw64/x86_64-w64-mingw32/include/corecrt.h \
- D:/mingw64/x86_64-w64-mingw32/include/_mingw.h \
- D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h \
- D:/mingw64/x86_64-w64-mingw32/include/_mingw_secapi.h \
- D:/mingw64/x86_64-w64-mingw32/include/vadefs.h \
- D:/mingw64/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
- D:/mingw64/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
- D:/mingw64/x86_64-w64-mingw32/include/corecrt_wstdlib.h \
- D:/mingw64/x86_64-w64-mingw32/include/_mingw_off_t.h \
  D:/mingw64/x86_64-w64-mingw32/include/_mingw_stat64.h \
- D:/mingw64/x86_64-w64-mingw32/include/swprintf.inl \
  D:/mingw64/x86_64-w64-mingw32/include/sec_api/wchar_s.h \
  D:/mingw64/include/c++/14.2.0/exception \
  D:/mingw64/include/c++/14.2.0/bits/exception.h \
@@ -34,7 +49,6 @@ CMakeFiles/main.dir/src/Sphere.cpp.obj: \
  D:/mingw64/include/c++/14.2.0/bits/cxxabi_init_exception.h \
  D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stddef.h \
  D:/mingw64/x86_64-w64-mingw32/include/stddef.h \
- D:/mingw64/x86_64-w64-mingw32/include/crtdefs.h \
  D:/mingw64/include/c++/14.2.0/typeinfo \
  D:/mingw64/include/c++/14.2.0/bits/hash_bytes.h \
  D:/mingw64/include/c++/14.2.0/new \
@@ -46,8 +60,6 @@ CMakeFiles/main.dir/src/Sphere.cpp.obj: \
  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++locale.h \
  D:/mingw64/include/c++/14.2.0/clocale \
  D:/mingw64/x86_64-w64-mingw32/include/locale.h \
- D:/mingw64/x86_64-w64-mingw32/include/stdio.h \
- D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
  D:/mingw64/include/c++/14.2.0/cctype \
  D:/mingw64/x86_64-w64-mingw32/include/ctype.h \
  D:/mingw64/include/c++/14.2.0/bits/ios_base.h \
@@ -55,13 +67,9 @@ CMakeFiles/main.dir/src/Sphere.cpp.obj: \
  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/gthr.h \
  D:/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/gthr-default.h \
  D:/mingw64/x86_64-w64-mingw32/include/pthread.h \
- D:/mingw64/x86_64-w64-mingw32/include/errno.h \
  D:/mingw64/x86_64-w64-mingw32/include/sys/types.h \
  D:/mingw64/x86_64-w64-mingw32/include/process.h \
  D:/mingw64/x86_64-w64-mingw32/include/corecrt_startup.h \
- D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/limits.h \
- D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/syslimits.h \
- D:/mingw64/x86_64-w64-mingw32/include/limits.h \
  D:/mingw64/x86_64-w64-mingw32/include/signal.h \
  D:/mingw64/x86_64-w64-mingw32/include/pthread_signal.h \
  D:/mingw64/x86_64-w64-mingw32/include/time.h \
@@ -109,13 +117,6 @@ CMakeFiles/main.dir/src/Sphere.cpp.obj: \
  D:/mingw64/include/c++/14.2.0/bits/functional_hash.h \
  D:/mingw64/include/c++/14.2.0/bits/string_view.tcc \
  D:/mingw64/include/c++/14.2.0/ext/string_conversions.h \
- D:/mingw64/include/c++/14.2.0/cstdlib \
- D:/mingw64/x86_64-w64-mingw32/include/stdlib.h \
- D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
- D:/mingw64/include/c++/14.2.0/stdlib.h \
- D:/mingw64/x86_64-w64-mingw32/include/malloc.h \
- D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mm_malloc.h \
- D:/mingw64/include/c++/14.2.0/bits/std_abs.h \
  D:/mingw64/include/c++/14.2.0/cstdio \
  D:/mingw64/include/c++/14.2.0/cerrno \
  D:/mingw64/include/c++/14.2.0/bits/charconv.h \
