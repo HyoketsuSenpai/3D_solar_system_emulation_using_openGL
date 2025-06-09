@@ -55,10 +55,11 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
  */
 int main() {
 
-std::vector<float> size = {0.35f, 0.87f, 0.91f, 0.49f, 10.04f, 8.36f, 3.64f, 3.54f, 0.17f};
-std::vector<float> distance = {1.00f, 1.87f, 2.58f, 3.94f, 13.44f, 24.76f, 49.60f, 77.63f, 102.00f};
-std::vector<float> speed = {0.00017f, 0.00004f, 00.1f, 0.0097f , 0.0242f, 0.0223f, 0.0139f, 0.0149f, 0.0016f};
-std::vector<std::string> textures = {"sun.jpg", "mercury.jpg", "venus.jpg", "earth.jpg", "mars.jpg", "jupiter.jpg", "saturn.jpg", "uranus.jpg", "neptune.jpg" , ""};
+std::vector<float> size = {0.35f, 0.87f, 0.91f, 0.49f, 10.04f, 8.36f, 3.64f, 3.54f, 0.91f * 0.27f};
+std::vector<float> distance = {1.00f, 1.87f, 2.58f, 3.94f, 13.44f, 24.76f, 49.60f, 77.63f, 0.1f};
+std::vector<float> speed = {0.00017f, 0.00004f, 00.1f, 0.0097f , 0.0242f, 0.0223f, 0.0139f, 0.0149f, 0.1f * 13.37f};
+std::vector<float> rotationSpeed = {0.1073f * 10.0f, -0.02586f * 10.0f, 6.28319f, 6.123f , 15.200f, 14.157f, -8.747f, 9.359f, 0.23f};
+std::vector<std::string> textures = {"sun.jpg", "mercury.jpg", "venus.jpg", "earth.jpg", "mars.jpg", "jupiter.jpg", "saturn.jpg", "uranus.jpg", "neptune.jpg" , "moon.jpg"};
 
 glfwInit();
 glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -93,6 +94,7 @@ view = glm::translate(view, glm::vec3(0.0f, -1.0f, -10.0f));
 
 Sphere sun = Sphere(0.1f * 100.0f, "sphere_shader.vs", "sphere_shader.fs", model, view, projection, textures[0]);
 std::vector<Sphere> planets;
+Sphere moon = Sphere(0.1f * size[8] , "3.3.shader.vs", "3.3.shader.fs", model, view, projection, textures[9]);
 
 for(int i = 0; i < noOfPlanets; i++)
     planets.emplace_back(Sphere(0.1f * size[i], "3.3.shader.vs", "3.3.shader.fs", model, view, projection, textures[i + 1]));
@@ -132,15 +134,38 @@ while (!glfwWindowShouldClose(window))
     float t = currentFrame;
     for(int i = 0; i < noOfPlanets; i++){
 
+        planets[i].model = glm::mat4(1.0f);
         glm::vec3 modelTransform = glm::vec3(cosf(t * speed[i]) * (distance[i] + 10.0f), 0.0f, sinf(t * speed[i]) * (distance[i] + 10.0f));
         planets[i].model = glm::translate(glm::mat4(1.0f), modelTransform);
+
+        if(i == 2){
+            moon.model = planets[i].model;
+            glm::vec3 moonTransform = glm::vec3(cosf(t * speed[8]) * (distance[8] + 0.2f), 0.0f, sinf(t * speed[8]) * (distance[8] + 0.2f));
+            moon.model = glm::translate(moon.model, moonTransform);
+
+            moon.model = glm::rotate(moon.model, t * (rotationSpeed[8]), glm::vec3(0.0f, 1.0f, 0.0f));
+        }
+
+        planets[i].model = glm::rotate(planets[i].model, t * (rotationSpeed[i] / 10), glm::vec3(0.0f, 1.0f, 0.0f));
+
         planets[i].m_Shader.use();
         planets[i].m_Shader.SetUniformVec3f("lightPos", lightPos);
         planets[i].m_Shader.SetUniformMat4f("view", view);
+        planets[i].m_Shader.SetUniformVec3f("viewPos", view[3]);
 
         planets[i].render();
 
     }
+
+
+    moon.m_Shader.use();
+    moon.m_Shader.SetUniformVec3f("lightPos", lightPos);
+    moon.m_Shader.SetUniformMat4f("view", view);
+    moon.m_Shader.SetUniformVec3f("viewPos", view[3]);
+    moon.render();
+
+    float sunRotationSpeed = 0.2476f;
+    sun.model = glm::rotate(sun.model, t * (sunRotationSpeed / 6000.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
     sun.m_Shader.use();
     sun.m_Shader.SetUniformMat4f("view", view);

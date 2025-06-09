@@ -192,7 +192,7 @@ void Sphere::initBySphericalCoords(float radius, float pitch, float heading){
 void Sphere::initTexture(std::string texFile){
 
     int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true);  
+    //stbi_set_flip_vertically_on_load(true);  
     unsigned char *data = stbi_load(texFile.c_str(), &width, &height, &nrChannels, 0); 
 
     glGenTextures(1, &m_Texture);  
