@@ -18,18 +18,12 @@
 #include <memory>
 #include <vector>
 
-/**
- * @brief Represents and renders a 3D sphere using OpenGL.
- *
- * The Sphere class encapsulates the creation, initialization, and rendering of a 3D sphere mesh. It manages OpenGL resources, transformation matrices, and shader usage for displaying the sphere in a 3D scene.
- */
 class Sphere
 {
 private:
 
     unsigned int m_VAO;
     unsigned int m_VBO;
-    unsigned int m_IBO;
     int m_numVertices;
 
     std::vector<float> vertices;

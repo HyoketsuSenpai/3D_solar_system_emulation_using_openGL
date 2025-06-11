@@ -34,15 +34,6 @@ Sphere::~Sphere()
 {
 }
 
-/**
- * @brief Generates vertex positions and normals for a sphere mesh with specified resolution and radius.
- *
- * Divides the sphere into latitude (rows) and longitude (columns) segments, computes vertex positions and normals using spherical coordinates, and stores them in the interleaved `vertices` vector for rendering.
- *
- * @param numRows Number of subdivisions along the latitude (vertical) direction.
- * @param numCols Number of subdivisions along the longitude (horizontal) direction.
- * @param radius Radius of the sphere.
- */
 void Sphere::initBuffer(int numRows, int numCols, float radius){
 
     int numVerticesTopStrip = 3 * numCols * 2;
@@ -55,7 +46,6 @@ void Sphere::initBuffer(int numRows, int numCols, float radius){
     glm::vec3 apex = glm::vec3(0.0f, radius, 0.0f);
 
     float pitch = -90.0f;
-    // int i = 0;
 
     for (float heading = 0.0f; heading < 360.0f; heading+=headAngle)
     {
@@ -78,7 +68,6 @@ void Sphere::initBuffer(int numRows, int numCols, float radius){
         vertices.push_back(v);
 
 
-
         initBySphericalCoords(radius, pitch + pitchAngle, heading + headAngle);
         initBySphericalCoords(radius, pitch + pitchAngle, heading);
 
@@ -91,7 +80,6 @@ void Sphere::initBuffer(int numRows, int numCols, float radius){
             initBySphericalCoords(radius, pitch, heading);
             initBySphericalCoords(radius, pitch, heading + headAngle);
             initBySphericalCoords(radius, pitch + pitchAngle, heading);
-            //initBySphericalCoords(radius, pitch + pitchAngle, heading + headAngle);
 
             initBySphericalCoords(radius, pitch, heading + headAngle);
             initBySphericalCoords(radius, pitch + pitchAngle, heading + headAngle);
@@ -139,7 +127,6 @@ void Sphere::render(){
     m_Shader.use();
     m_Shader.setInt("ourTexture", 0);
     m_Shader.SetUniformMat4f("model", model);
-//     m_Shader.SetUniformMat4f("view", view);
     m_Shader.SetUniformMat4f("projection", projection);
 
     glBindTexture(GL_TEXTURE_2D, m_Texture);
@@ -155,16 +142,6 @@ void Sphere::render(){
     glBindVertexArray(0);
 }
 
-/**
- * @brief Appends a vertex position and normal to the sphere mesh using spherical coordinates.
- *
- * Converts the given pitch and heading angles to Cartesian coordinates on the sphere's surface,
- * computes the corresponding normal vector, and stores both in the vertex buffer.
- *
- * @param radius The radius of the sphere.
- * @param pitch The latitude angle in degrees.
- * @param heading The longitude angle in degrees.
- */
 void Sphere::initBySphericalCoords(float radius, float pitch, float heading){
     x = radius * cosf(glm::radians(pitch)) * sinf(glm::radians(heading)); 
     y = -radius * sinf(glm::radians(pitch)); 
@@ -181,7 +158,7 @@ void Sphere::initBySphericalCoords(float radius, float pitch, float heading){
     vertices.push_back(ny);
     vertices.push_back(nz);
 
-   float u = heading / 360.0f;
+    float u = heading / 360.0f;
     float v = (90.0f + pitch) / 180.0f;
 
     vertices.push_back(u);
@@ -191,8 +168,7 @@ void Sphere::initBySphericalCoords(float radius, float pitch, float heading){
 
 void Sphere::initTexture(std::string texFile){
 
-    int width, height, nrChannels;
-    //stbi_set_flip_vertically_on_load(true);  
+    int width, height, nrChannels; 
     unsigned char *data = stbi_load(texFile.c_str(), &width, &height, &nrChannels, 0); 
 
     glGenTextures(1, &m_Texture);  
