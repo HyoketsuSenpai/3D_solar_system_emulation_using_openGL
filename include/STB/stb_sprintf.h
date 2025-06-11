@@ -271,6 +271,14 @@ static struct
    "75767778798081828384858687888990919293949596979899"
 };
 
+/**
+ * @brief Sets the characters used for thousands and decimal separators in formatted output.
+ *
+ * @param pcomma Character to use as the thousands separator.
+ * @param pperiod Character to use as the decimal separator.
+ *
+ * This function customizes the separator characters used by all subsequent formatting operations.
+ */
 STBSP__PUBLICDEF void STB_SPRINTF_DECORATE(set_separators)(char pcomma, char pperiod)
 {
    stbsp__period = pperiod;
@@ -291,6 +299,14 @@ STBSP__PUBLICDEF void STB_SPRINTF_DECORATE(set_separators)(char pcomma, char ppe
 #define STBSP__METRIC_1024 2048
 #define STBSP__METRIC_JEDEC 4096
 
+/**
+ * @brief Determines the sign prefix for a formatted number based on flags.
+ *
+ * Sets the sign buffer to indicate whether a negative sign, plus sign, or space should prefix the output, according to the provided formatting flags.
+ *
+ * @param fl Formatting flags indicating sign and prefix options.
+ * @param sign Output buffer; sign[0] is set to 1 if a prefix is present and sign[1] to the corresponding character ('-', '+', or ' ').
+ */
 static void stbsp__lead_sign(stbsp__uint32 fl, char *sign)
 {
    sign[0] = 0;
@@ -306,6 +322,15 @@ static void stbsp__lead_sign(stbsp__uint32 fl, char *sign)
    }
 }
 
+/**
+ * @brief Computes the length of a string up to a specified maximum number of characters.
+ *
+ * Scans the input string for a null terminator, returning the number of characters found or the limit, whichever comes first. May read up to three bytes past the limit for performance, but does not cross memory page boundaries.
+ *
+ * @param s Pointer to the input string.
+ * @param limit Maximum number of characters to scan.
+ * @return Number of characters in the string, up to the specified limit.
+ */
 static STBSP__ASAN stbsp__uint32 stbsp__strlen_limited(char const *s, stbsp__uint32 limit)
 {
    char const * sn = s;
@@ -346,6 +371,20 @@ static STBSP__ASAN stbsp__uint32 stbsp__strlen_limited(char const *s, stbsp__uin
    return (stbsp__uint32)(sn - s);
 }
 
+/**
+ * @brief Formats a string using a printf-style format string and outputs via a callback or buffer.
+ *
+ * Parses the format string and processes each format specifier, supporting all standard C printf features and extensions such as thousands separators, metric suffixes, binary output, and cross-platform 64-bit integer formatting. Output is written incrementally to a buffer, and optionally flushed via a user-provided callback for custom output handling.
+ *
+ * @param callback Optional callback function for incremental output. If NULL, output is written directly to the provided buffer.
+ * @param user User data pointer passed to the callback.
+ * @param buf Output buffer for formatted string data.
+ * @param fmt Format string specifying how to format the arguments.
+ * @param va Argument list containing values to format.
+ * @return int The total number of characters written (excluding the null terminator).
+ *
+ * If a callback is provided, the function flushes the buffer in chunks of at least STB_SPRINTF_MIN bytes. If no callback is provided, the output is null-terminated in the buffer.
+ */
 STBSP__PUBLICDEF int STB_SPRINTF_DECORATE(vsprintfcb)(STBSP_SPRINTFCB *callback, void *user, char *buf, char const *fmt, va_list va)
 {
    static char hex[] = "0123456789abcdefxp";
@@ -1371,7 +1410,15 @@ done:
 #undef stbsp__cb_buf_clamp
 
 // ============================================================================
-//   wrapper functions
+/**
+ * @brief Formats a string and stores the result in a buffer.
+ *
+ * Behaves like the standard C `sprintf`, supporting all standard format specifiers and extensions such as thousands separators and metric suffixes. The output is always null-terminated.
+ *
+ * @param buf Destination buffer for the formatted string.
+ * @param fmt Format string specifying how to format the arguments.
+ * @return The number of characters written, not including the null terminator.
+ */
 
 STBSP__PUBLICDEF int STB_SPRINTF_DECORATE(sprintf)(char *buf, char const *fmt, ...)
 {
@@ -1390,6 +1437,16 @@ typedef struct stbsp__context {
    char tmp[STB_SPRINTF_MIN];
 } stbsp__context;
 
+/**
+ * @brief Callback for clamping formatted output to a fixed-size buffer.
+ *
+ * Copies up to the specified number of characters from the source buffer to the destination buffer managed by the context, updating the context's position and remaining space. Returns a pointer to the next buffer location for further output, or a temporary buffer if the main buffer is full or too small for direct writes.
+ *
+ * @param buf Source buffer containing formatted data.
+ * @param user Pointer to the internal context managing the output buffer.
+ * @param len Number of characters to copy from the source buffer.
+ * @return char* Pointer to the next buffer location for output, or a temporary buffer if the main buffer is exhausted or too small.
+ */
 static char *stbsp__clamp_callback(const char *buf, void *user, int len)
 {
    stbsp__context *c = (stbsp__context *)user;
@@ -1418,6 +1475,16 @@ static char *stbsp__clamp_callback(const char *buf, void *user, int len)
    return (c->count >= STB_SPRINTF_MIN) ? c->buf : c->tmp; // go direct into buffer if you can
 }
 
+/**
+ * @brief Callback that counts the number of characters output and provides a temporary buffer.
+ *
+ * Used internally to accumulate the total output length during formatting operations that require output clamping.
+ *
+ * @param buf Unused pointer to the buffer containing formatted data.
+ * @param user Pointer to the internal context used for tracking output length.
+ * @param len Number of characters produced in the current chunk.
+ * @return Pointer to a temporary buffer for further output.
+ */
 static char * stbsp__count_clamp_callback( const char * buf, void * user, int len )
 {
    stbsp__context * c = (stbsp__context*)user;
@@ -1427,6 +1494,17 @@ static char * stbsp__count_clamp_callback( const char * buf, void * user, int le
    return c->tmp; // go direct into buffer if you can
 }
 
+/**
+ * @brief Formats a string using a format string and a va_list, writing up to a specified number of characters.
+ *
+ * Behaves like the standard C `vsnprintf`, formatting the input according to the format string and arguments, and writing at most `count-1` characters to `buf`, followed by a null terminator. The output is always null-terminated if `count` is greater than zero. Returns the number of characters that would have been written if enough space had been available, not including the null terminator.
+ *
+ * @param buf Destination buffer for the formatted string.
+ * @param count Maximum number of characters to write, including the null terminator.
+ * @param fmt Format string specifying how to format the input.
+ * @param va Argument list containing the values to format.
+ * @return int Number of characters that would have been written, not including the null terminator.
+ */
 STBSP__PUBLICDEF int STB_SPRINTF_DECORATE( vsnprintf )( char * buf, int count, char const * fmt, va_list va )
 {
    stbsp__context c;
@@ -1457,6 +1535,16 @@ STBSP__PUBLICDEF int STB_SPRINTF_DECORATE( vsnprintf )( char * buf, int count, c
    return c.length;
 }
 
+/**
+ * @brief Formats a string and writes it to a buffer with size limit.
+ *
+ * Writes formatted data to the provided buffer using a format string and variadic arguments, ensuring that no more than `count` characters are written (including the null terminator). The output is always null-terminated if `count` is greater than zero.
+ *
+ * @param buf Destination buffer for the formatted string.
+ * @param count Maximum number of characters to write, including the null terminator.
+ * @param fmt Format string specifying how to format the arguments.
+ * @return The number of characters that would have been written if enough space had been available, not counting the null terminator.
+ */
 STBSP__PUBLICDEF int STB_SPRINTF_DECORATE(snprintf)(char *buf, int count, char const *fmt, ...)
 {
    int result;
@@ -1469,6 +1557,16 @@ STBSP__PUBLICDEF int STB_SPRINTF_DECORATE(snprintf)(char *buf, int count, char c
    return result;
 }
 
+/**
+ * @brief Formats a string using a format string and a va_list, writing the result to a buffer.
+ *
+ * Behaves like the standard C `vsprintf`, formatting the provided arguments according to the format string and writing the result to `buf`. The output is always null-terminated.
+ *
+ * @param buf Destination buffer for the formatted string.
+ * @param fmt Format string specifying how to format the arguments.
+ * @param va Argument list to format.
+ * @return The number of characters written, not including the null terminator.
+ */
 STBSP__PUBLICDEF int STB_SPRINTF_DECORATE(vsprintf)(char *buf, char const *fmt, va_list va)
 {
    return STB_SPRINTF_DECORATE(vsprintfcb)(0, 0, buf, fmt, va);
@@ -1487,7 +1585,16 @@ STBSP__PUBLICDEF int STB_SPRINTF_DECORATE(vsprintf)(char *buf, char const *fmt, 
          ((char *)&dest)[cn] = ((char *)&src)[cn]; \
    }
 
-// get float info
+/**
+ * @brief Extracts the mantissa, exponent, and sign from a double-precision floating-point value.
+ *
+ * Decomposes the given double into its IEEE 754 components: the mantissa (lower 52 bits), the unbiased exponent, and the sign bit.
+ *
+ * @param bits Pointer to receive the mantissa bits of the value.
+ * @param expo Pointer to receive the unbiased exponent.
+ * @param value The double-precision floating-point value to decompose.
+ * @return int32 Returns 1 if the value is negative, 0 otherwise.
+ */
 static stbsp__int32 stbsp__real_to_parts(stbsp__int64 *bits, stbsp__int32 *expo, double value)
 {
    double d;
@@ -1635,6 +1742,16 @@ static stbsp__uint64 const stbsp__powten[20] = {
 
 #define stbsp__ddmultlos(oh, ol, xh, yl) ol = ol + (xh * yl);
 
+/**
+ * @brief Multiplies a double by 10 raised to a specified power using double-double precision.
+ *
+ * Computes `d * 10^power` and stores the high and low parts of the result in `*ohi` and `*olo` for extended precision. Handles both positive and negative exponents efficiently using precomputed tables and double-double arithmetic.
+ *
+ * @param ohi Pointer to receive the high part of the result.
+ * @param olo Pointer to receive the low part of the result.
+ * @param d   The input double value to be scaled.
+ * @param power The exponent for the power of ten, in the range [-323, 350].
+ */
 static void stbsp__raise_to_power10(double *ohi, double *olo, double d, stbsp__int32 power) // power can be -323 to +350
 {
    double ph, pl;
@@ -1701,7 +1818,19 @@ static void stbsp__raise_to_power10(double *ohi, double *olo, double d, stbsp__i
 // given a float value, returns the significant bits in bits, and the position of the
 //   decimal point in decimal_pos.  +/-INF and NAN are specified by special values
 //   returned in the decimal_pos parameter.
-// frac_digits is absolute normally, but if you want from first significant digits (got %g and %e), or in 0x80000000
+/**
+ * @brief Converts a double-precision floating-point value to its decimal string representation.
+ *
+ * Converts the given double value to a string, storing the result in the provided buffer and returning information about the string's start, length, and decimal position. Handles special values (NaN, Inf), zero, denormals, and rounds according to the specified number of fractional digits. Removes unnecessary trailing zeros and supports formatting for `%f`, `%e`, and `%g`-style conversions.
+ *
+ * @param start Pointer to receive the start address of the resulting string.
+ * @param len Pointer to receive the length of the resulting string.
+ * @param out Buffer to store the converted string (must be large enough for the result).
+ * @param decimal_pos Pointer to receive the position of the decimal point relative to the start of the string.
+ * @param value The double value to convert.
+ * @param frac_digits Number of fractional digits to include, or a special value for significant digits.
+ * @return 1 if the value is negative, 0 otherwise.
+ */
 static stbsp__int32 stbsp__real_to_str(char const **start, stbsp__uint32 *len, char *out, stbsp__int32 *decimal_pos, double value, stbsp__uint32 frac_digits)
 {
    double d;

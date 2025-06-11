@@ -41,7 +41,14 @@ tm_api * g_tm_api;
   uint64 __rdtsc();
   #define __cycles() __rdtsc()
 
-#else // non msvc
+#else /**
+   * @brief Returns the current CPU cycle count using the RDTSC instruction.
+   *
+   * Provides a high-resolution timestamp for performance profiling on x86/x64 platforms.
+   * The returned value represents the number of CPU cycles since the last reset.
+   *
+   * @return uint64 Current CPU cycle count.
+   */
 
   static inline uint64 __cycles() 
   {
@@ -60,6 +67,14 @@ tm_api * g_tm_api;
 
 #else
 
+  /**
+   * @brief Returns the current value of the ARMv8 virtual counter for high-resolution timing.
+   *
+   * Reads the `cntvct_el0` system register to obtain a precise cycle count on ARM64 architectures.
+   * Useful for profiling and benchmarking code execution.
+   *
+   * @return uint64 Current virtual counter value.
+   */
   static inline uint64 __cycles()
   {
     uint64 tsc;
@@ -102,7 +117,15 @@ int mem_count = 0;
 
 #if TEST_WITH_LIMIT_AT_FRONT
 
-  void * wmalloc(SIZE_T size)
+  /**
+    * @brief Allocates memory using Windows VirtualAlloc with page alignment.
+    *
+    * Allocates a memory block of at least the requested size, rounded up to the nearest page boundary, using VirtualAlloc with read/write access.
+    *
+    * @param size Number of bytes to allocate.
+    * @return Pointer to the allocated memory block, or NULL on failure.
+    */
+   void * wmalloc(SIZE_T size)
   {
      static unsigned int pagesize=0;
      void* p;
@@ -126,6 +149,14 @@ int mem_count = 0;
      return p;
    }
 
+  /**
+   * @brief Frees memory allocated by wmalloc, validating alignment and release.
+   *
+   * Validates that the pointer is page-aligned before releasing the memory using Windows VirtualFree.
+   * Triggers a debug stop if the pointer is not properly aligned or if memory release fails.
+   *
+   * @param ptr Pointer to the memory block to free. No action is taken if NULL.
+   */
   void wfree(void * ptr)
   {
     if (ptr)
@@ -137,6 +168,14 @@ int mem_count = 0;
 
 #else
 
+  /**
+   * @brief Allocates memory with guard pages for debugging.
+   *
+   * Allocates a memory block of the specified size, surrounded by inaccessible guard pages before and after the usable region to help detect buffer overruns and underruns. Stores metadata for validation and freeing. Only available on Windows platforms.
+   *
+   * @param size Number of bytes to allocate.
+   * @return Pointer to the allocated memory block, or NULL on failure.
+   */
   void * wmalloc(SIZE_T size)
   {
      static unsigned int pagesize=0;
@@ -191,6 +230,11 @@ int mem_count = 0;
      return 0;
   }
 
+  /**
+   * @brief Frees memory allocated by wmalloc, validating the pointer.
+   *
+   * Checks that the pointer was allocated by wmalloc using embedded metadata. Triggers a debug break if validation fails. Decrements the global allocation counter and releases the memory using VirtualFree.
+   */
   void wfree(void * ptr)
   {
     if (ptr)
@@ -274,6 +318,13 @@ char const * edgestrs[4] =  { "Clamp", "Reflect", "Zero", "Wrap" };
 char const * fltstrs[5] =   { "Box", "Triangle", "Cubic", "Catmullrom", "Mitchell" };
 
 #ifdef STBIR_PROFILE
+  /**
+   * @brief Emits profiling accumulation zones for each recorded timing entry.
+   *
+   * Iterates through the provided profiling information and emits an accumulation zone for each nonzero timing value using the associated description.
+   *
+   * @param profile Pointer to the profiling information structure containing timing data and descriptions.
+   */
   static void do_acc_zones( STBIR_PROFILE_INFO * profile )
   {
     stbir_uint32 j;
@@ -300,6 +351,14 @@ static int threads_started = 0;
 static HANDLE threads[32];
 static HANDLE starts,stops;
   
+/**
+ * @brief Thread function for parallel image resizing using stbir_resize_split.
+ *
+ * Waits for a start signal, processes a split of the image resizing operation, optionally collects profiling information, and signals completion. Intended for use with Windows threading and semaphore synchronization.
+ *
+ * @param p Unused thread parameter.
+ * @return DWORD Always returns when the thread is terminated externally.
+ */
 static DWORD resize_shim( LPVOID p )
 {
   for(;;)
@@ -323,6 +382,24 @@ static DWORD resize_shim( LPVOID p )
 
 #endif
 
+/**
+ * @brief Resizes an image using the stb_image_resize2 API with specified parameters.
+ *
+ * Initializes and configures a resizing context for the given input and output buffers, dimensions, pixel layouts, edge modes, and filters. Supports both single-threaded and optional multi-threaded execution. Frees any allocated resources after resizing.
+ *
+ * @param o Pointer to the output image buffer.
+ * @param ox Output image width.
+ * @param oy Output image height.
+ * @param op Output image pixel stride (bytes per row).
+ * @param i Pointer to the input image buffer.
+ * @param ix Input image width.
+ * @param iy Input image height.
+ * @param ip Input image pixel stride (bytes per row).
+ * @param buf Index specifying the buffer and pixel layout configuration.
+ * @param type Index specifying the image data type.
+ * @param edg Index specifying the edge handling mode.
+ * @param flt Index specifying the filter type.
+ */
 void nresize( void * o, int ox, int oy, int op, void * i, int ix, int iy, int ip, int buf, int type, int edg, int flt )
 {
   STBIR_RESIZE resize;
@@ -430,6 +507,17 @@ extern void oresize( void * o, int ox, int oy, int op, void * i, int ix, int iy,
 
 
 
+/**
+ * @brief Converts 8-bit unsigned image data to 16-bit unsigned format.
+ *
+ * Each 8-bit pixel value is expanded to 16 bits by replicating the byte into both the high and low bytes of the resulting short.
+ *
+ * @param i Pointer to the input image data (unsigned char).
+ * @param w Image width in pixels.
+ * @param h Image height in pixels.
+ * @param c Number of channels per pixel.
+ * @return Pointer to the newly allocated 16-bit image data (unsigned short). The caller is responsible for freeing the returned buffer.
+ */
 static void * convert8to16( unsigned char * i, int w, int h, int c )
 {
   unsigned short * ret;
@@ -444,6 +532,17 @@ static void * convert8to16( unsigned char * i, int w, int h, int c )
   return ret;
 }
 
+/**
+ * @brief Converts 8-bit unsigned image data to 32-bit floating point format.
+ *
+ * Each input byte is normalized to the range [0, 1] and stored as a float.
+ *
+ * @param i Pointer to the input image data (unsigned char).
+ * @param w Image width in pixels.
+ * @param h Image height in pixels.
+ * @param c Number of channels per pixel.
+ * @return Pointer to a newly allocated float array containing the normalized image data.
+ */
 static void * convert8tof( unsigned char * i, int w, int h, int c )
 {
   float * ret;
@@ -458,6 +557,17 @@ static void * convert8tof( unsigned char * i, int w, int h, int c )
   return ret;
 }
 
+/**
+ * @brief Converts 8-bit unsigned image data to 16-bit half-float format.
+ *
+ * Allocates and returns a buffer containing the input image data, normalized to [0,1] and converted to 16-bit half-float values.
+ *
+ * @param i Pointer to the input image data (unsigned char).
+ * @param w Image width in pixels.
+ * @param h Image height in pixels.
+ * @param c Number of channels per pixel.
+ * @return Pointer to the newly allocated buffer of half-float values. Caller is responsible for freeing the memory.
+ */
 static void * convert8tohf( unsigned char * i, int w, int h, int c )
 {
   stbir__FP16 * ret;
@@ -472,6 +582,17 @@ static void * convert8tohf( unsigned char * i, int w, int h, int c )
   return ret;
 }
 
+/**
+ * @brief Converts 8-bit unsigned image data to float via half-float conversion.
+ *
+ * Converts each 8-bit pixel value to a normalized float in [0,1], then to 16-bit half-float and back to float, storing the result in a new float array.
+ *
+ * @param i Pointer to input image data (unsigned char).
+ * @param w Image width.
+ * @param h Image height.
+ * @param c Number of channels.
+ * @return Pointer to newly allocated float array containing the converted image data.
+ */
 static void * convert8tohff( unsigned char * i, int w, int h, int c )
 {
   float * ret;
@@ -486,6 +607,14 @@ static void * convert8tohff( unsigned char * i, int w, int h, int c )
   return ret;
 }
 
+/**
+ * @brief Determines whether a given integer is a prime number.
+ *
+ * Uses trial division optimized for small divisors and the 6k±1 rule for efficiency.
+ *
+ * @param v The integer to test for primality.
+ * @return 1 if the number is prime, 0 otherwise.
+ */
 static int isprime( int v )
 {
   int i;
@@ -509,6 +638,14 @@ static int isprime( int v )
   return 1;
 }
 
+/**
+ * @brief Finds the nearest prime number to a given integer.
+ *
+ * Searches both downward and upward from the input value to locate the closest prime number. If two primes are equally distant, the smaller one is returned first.
+ *
+ * @param v The integer from which to search for the nearest prime.
+ * @return The nearest prime number to v.
+ */
 static int getprime( int v )
 {
   int i;

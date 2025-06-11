@@ -192,12 +192,32 @@ static char RRperiod='.';
 static char RRcomma=',';
 static char rrdiglookup[201]="00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899";
 
+/**
+ * @brief Sets the characters used for thousands and decimal separators in formatted numbers.
+ *
+ * @param pcomma Character to use as the thousands separator.
+ * @param pperiod Character to use as the decimal separator.
+ *
+ * This function allows customization of the separator characters used in number formatting, such as for locale-specific output.
+ */
 RRPUBLIC_DEF void RR_SPRINTF_DECORATE( setseparators )( char pcomma, char pperiod )
 {
   RRperiod=pperiod;
   RRcomma=pcomma;
 }
 
+/**
+ * @brief Formats a string with variable arguments using a callback for incremental output.
+ *
+ * Parses the format string and variable argument list, supporting all standard C format specifiers and extensions (such as thousands separators, kilo/mega/giga/tera suffixes, and binary formatting). Writes formatted output into a buffer, invoking the provided callback every RR_SPRINTF_MIN characters to allow for incremental or chunked output. Always zero-terminates the output if no callback is provided. Returns the total number of characters written (excluding the terminating null byte).
+ *
+ * @param callback Function to be called with each completed buffer chunk; may be NULL for direct buffer output.
+ * @param user User data passed to the callback.
+ * @param buf Output buffer for formatted data.
+ * @param fmt Format string specifying how to format the arguments.
+ * @param va Variable argument list to format.
+ * @return int Total number of characters written, not including the terminating null byte.
+ */
 RRPUBLIC_DEF int RR_SPRINTF_DECORATE( vsprintfcb )( RRSPRINTFCB * callback, void * user, char * buf, char const * fmt, va_list va )
 {
   static char hex[]="0123456789abcdefxp";
@@ -740,7 +760,13 @@ RRPUBLIC_DEF int RR_SPRINTF_DECORATE( vsprintfcb )( RRSPRINTFCB * callback, void
 #undef cb_buf_clamp
 
 // ============================================================================
-//   wrapper functions
+/**
+ * @brief Formats a string and stores the result in a buffer.
+ *
+ * Behaves like the standard `sprintf`, formatting the input according to the format string and variable arguments, and writing the result to the provided buffer. The output is always zero-terminated.
+ *
+ * @return The number of characters written, not including the terminating null byte.
+ */
 
 RRPUBLIC_DEF int RR_SPRINTF_DECORATE( sprintf )( char * buf, char const * fmt, ... )
 {
@@ -756,6 +782,16 @@ typedef struct RRCCS
   char tmp[ RR_SPRINTF_MIN ];
 } RRCCS;
 
+/**
+ * @brief Callback function for buffer-limited output during formatted printing.
+ *
+ * Copies up to the specified number of characters from the internal buffer to the user buffer, updating buffer pointers and remaining count. Returns a pointer to the next buffer location for further output, or zero if the buffer limit is reached.
+ *
+ * @param buf Source buffer containing formatted output.
+ * @param user Pointer to an RRCCS structure managing the destination buffer and remaining space.
+ * @param len Number of characters to copy.
+ * @return char* Pointer to the next buffer location for output, or zero if no space remains.
+ */
 static char * rrclampcallback( char * buf, void * user, int len )
 {
   RRCCS * c = (RRCCS*)user;
@@ -778,6 +814,17 @@ static char * rrclampcallback( char * buf, void * user, int len )
   return ( c->count >= RR_SPRINTF_MIN ) ? c->buf : c->tmp; // go direct into buffer if you can
 }
 
+/**
+ * @brief Formats a variable argument list into a buffer with size limit, always zero-terminated.
+ *
+ * Formats the input according to the format string and variable argument list, writing at most `count - 1` characters to `buf` and always appending a zero terminator. Supports all standard and extended format specifiers.
+ *
+ * @param buf Output buffer to receive the formatted string.
+ * @param count Maximum number of characters to write, including the zero terminator.
+ * @param fmt Format string specifying how to format the arguments.
+ * @param va Variable argument list to format.
+ * @return Number of characters written to the buffer, not including the zero terminator.
+ */
 RRPUBLIC_DEF int RR_SPRINTF_DECORATE( vsnprintf )( char * buf, int count, char const * fmt, va_list va )
 {
   RRCCS c;
@@ -800,6 +847,16 @@ RRPUBLIC_DEF int RR_SPRINTF_DECORATE( vsnprintf )( char * buf, int count, char c
   return l;
 }
 
+/**
+ * @brief Formats a string and writes it to a buffer with size limit, using variable arguments.
+ *
+ * Writes formatted data to the provided buffer, ensuring that no more than `count` characters are written (including the terminating null byte). The output is always zero-terminated. Supports all standard and extended format specifiers.
+ *
+ * @param buf Destination buffer for the formatted string.
+ * @param count Maximum number of characters to write, including the null terminator.
+ * @param fmt Format string specifying how to format the arguments.
+ * @return The number of characters that would have been written if enough space had been available, not including the terminating null byte.
+ */
 RRPUBLIC_DEF int RR_SPRINTF_DECORATE( snprintf )( char * buf, int count, char const * fmt, ... )
 {
   va_list va;
@@ -808,6 +865,16 @@ RRPUBLIC_DEF int RR_SPRINTF_DECORATE( snprintf )( char * buf, int count, char co
   return RR_SPRINTF_DECORATE( vsnprintf )( buf, count, fmt, va );
 }
 
+/**
+ * @brief Formats a variable argument list into a buffer using a format string.
+ *
+ * Behaves like the standard `vsprintf`, writing formatted output to the provided buffer using the specified format string and argument list. The output is always zero-terminated.
+ *
+ * @param buf Destination buffer for the formatted string.
+ * @param fmt Format string specifying how to format the arguments.
+ * @param va Variable argument list to format.
+ * @return The number of characters written, excluding the terminating null byte.
+ */
 RRPUBLIC_DEF int RR_SPRINTF_DECORATE( vsprintf )( char * buf, char const * fmt, va_list va )
 {
   return RR_SPRINTF_DECORATE( vsprintfcb )( 0, 0, buf, fmt, va );
@@ -821,7 +888,16 @@ RRPUBLIC_DEF int RR_SPRINTF_DECORATE( vsprintf )( char * buf, char const * fmt, 
  // copies d to bits w/ strict aliasing (this compiles to nothing on /Ox)
  #define RRCOPYFP(dest,src) { int cn; for(cn=0;cn<8;cn++) ((char*)&dest)[cn]=((char*)&src)[cn]; }
  
-// get float info
+/**
+ * @brief Extracts the mantissa, exponent, and sign from a double-precision floating-point value.
+ *
+ * Decomposes the given double into its IEEE 754 components: the mantissa (fractional bits), the unbiased exponent, and the sign.
+ *
+ * @param bits Pointer to receive the 52-bit mantissa (fractional part).
+ * @param expo Pointer to receive the unbiased exponent.
+ * @param value The double-precision floating-point value to decompose.
+ * @return The sign of the value: 1 if negative, 0 if positive.
+ */
 static rS32 rrreal_to_parts( rS64 * bits, rS32 * expo, double value )
 {
   double d;
@@ -884,6 +960,16 @@ static rU64 const rrpot[20]={1,10,100,1000, 10000,100000,1000000,10000000, 10000
 #define rrddmultlos(oh,ol,xh,yl) \
   ol = ol + ( xh*yl ); \
 
+/**
+ * @brief Multiplies a double value by 10 raised to the specified power using double-double precision.
+ *
+ * Computes `d * 10^power` and stores the high and low parts of the result in `*ohi` and `*olo`, respectively, for high-precision floating-point formatting.
+ *
+ * @param ohi Pointer to receive the high part of the result.
+ * @param olo Pointer to receive the low part of the result.
+ * @param d   The double value to be scaled.
+ * @param power The exponent for the power of ten (range: -323 to +350).
+ */
 static void rrraise_to_power10( double *ohi, double *olo, double d, rS32 power )  // power can be -323 to +350
 {
   double ph, pl;
@@ -931,7 +1017,19 @@ static void rrraise_to_power10( double *ohi, double *olo, double d, rS32 power )
 // given a float value, returns the significant bits in bits, and the position of the
 //   decimal point in decimal_pos.  +/-INF and NAN are specified by special values
 //   returned in the decimal_pos parameter.
-// frac_digits is absolute normally, but if you want from first significant digits (got %g and %e), or in 0x80000000
+/**
+ * @brief Converts a double-precision floating-point value to its decimal string representation.
+ *
+ * Converts the given double value to a decimal string, storing the result in the provided buffer and returning information about the string's length, starting position, and decimal point location. Handles special values (NaN, Inf, zero, denormals), rounds to the specified number of fractional digits, and removes unnecessary trailing zeros.
+ *
+ * @param start Pointer to receive the start address of the resulting string within the output buffer, or a static string for special values.
+ * @param len Pointer to receive the length of the resulting string.
+ * @param out Buffer to store the converted string (must be large enough to hold the result).
+ * @param decimal_pos Pointer to receive the position of the decimal point relative to the start of the string, or a special value for NaN/Inf.
+ * @param value The double value to convert.
+ * @param frac_digits Number of fractional digits to include, or a special value to indicate significant digits mode.
+ * @return int Returns 1 if the value is negative, 0 otherwise.
+ */
 static rS32 rrreal_to_str( char const * * start, rU32 * len, char *out, rS32 * decimal_pos, double value, rU32 frac_digits )
 {
   double d;

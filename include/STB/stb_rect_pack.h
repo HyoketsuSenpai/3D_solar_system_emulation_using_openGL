@@ -226,6 +226,13 @@ enum
    STBRP__INIT_skyline = 1
 };
 
+/**
+ * @brief Sets the rectangle packing heuristic for the context.
+ *
+ * Selects the heuristic used by the skyline algorithm for packing rectangles. Only valid for contexts initialized with the skyline algorithm. The heuristic determines how rectangle placement is prioritized (e.g., bottom-left or best-fit).
+ *
+ * @param heuristic Packing heuristic to use. Must be one of STBRP_HEURISTIC_Skyline_BL_sortHeight or STBRP_HEURISTIC_Skyline_BF_sortHeight.
+ */
 STBRP_DEF void stbrp_setup_heuristic(stbrp_context *context, int heuristic)
 {
    switch (context->init_mode) {
@@ -238,6 +245,13 @@ STBRP_DEF void stbrp_setup_heuristic(stbrp_context *context, int heuristic)
    }
 }
 
+/**
+ * @brief Configures whether the packing algorithm allows running out of temporary node memory.
+ *
+ * When enabled, disables width quantization for potentially better packing at the risk of memory exhaustion. When disabled, enforces width quantization to guarantee sufficient node memory for all placements.
+ *
+ * @param allow_out_of_mem Non-zero to allow running out of memory (better packing, possible failure); zero to enforce quantization (guaranteed memory, possibly less efficient packing).
+ */
 STBRP_DEF void stbrp_setup_allow_out_of_mem(stbrp_context *context, int allow_out_of_mem)
 {
    if (allow_out_of_mem)
@@ -258,6 +272,16 @@ STBRP_DEF void stbrp_setup_allow_out_of_mem(stbrp_context *context, int allow_ou
    }
 }
 
+/**
+ * @brief Initializes a rectangle packing context for a target area.
+ *
+ * Sets up the packing context to pack rectangles into a specified width and height using the provided node array for temporary storage. This function must be called before packing rectangles and resets the context's internal state and heuristic to defaults.
+ *
+ * @param width Width of the target rectangle area.
+ * @param height Height of the target rectangle area.
+ * @param nodes Array of nodes used for internal skyline management.
+ * @param num_nodes Number of nodes in the provided array.
+ */
 STBRP_DEF void stbrp_init_target(stbrp_context *context, int width, int height, stbrp_node *nodes, int num_nodes)
 {
    int i;
@@ -283,7 +307,17 @@ STBRP_DEF void stbrp_init_target(stbrp_context *context, int width, int height, 
    context->extra[1].next = NULL;
 }
 
-// find minimum y position if it starts at x1
+/**
+ * @brief Calculates the minimum y-coordinate and waste area for placing a rectangle at a given x-position in the skyline.
+ *
+ * Determines the lowest vertical position (`min_y`) where a rectangle of specified width can be placed starting at `x0` in the skyline, and computes the total waste area beneath the rectangle at that position.
+ *
+ * @param first Pointer to the skyline node where the search begins. Must satisfy `first->x <= x0` and `first->next->x > x0`.
+ * @param x0 The starting x-coordinate for placement.
+ * @param width The width of the rectangle to place.
+ * @param pwaste Output pointer to receive the computed waste area beneath the rectangle.
+ * @return The minimum y-coordinate where the rectangle can be placed.
+ */
 static int stbrp__skyline_find_min_y(stbrp_context *c, stbrp_node *first, int x0, int width, int *pwaste)
 {
    stbrp_node *node = first;
@@ -340,6 +374,16 @@ typedef struct
    stbrp_node **prev_link;
 } stbrp__findresult;
 
+/**
+ * @brief Finds the best position in the skyline to place a rectangle.
+ *
+ * Searches the current skyline for the optimal position to fit a rectangle of the given width and height, according to the packing heuristic set in the context. Considers both left-aligned (bottom-left) and right-aligned (best-fit) placements as appropriate. Returns a structure containing the best position and a pointer to the previous node in the skyline linked list for insertion.
+ *
+ * @param c Packing context containing the skyline and configuration.
+ * @param width Width of the rectangle to place.
+ * @param height Height of the rectangle to place.
+ * @return stbrp__findresult Structure with the best found position and insertion point in the skyline.
+ */
 static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context *c, int width, int height)
 {
    int best_waste = (1<<30), best_x, best_y = (1 << 30);
@@ -442,6 +486,16 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context *c, int widt
    return fr;
 }
 
+/**
+ * @brief Attempts to pack a rectangle into the skyline and updates the skyline structure.
+ *
+ * Finds the best position for a rectangle of the given width and height using the current heuristic, inserts a new skyline node at that position, and updates the linked list of skyline nodes and free nodes accordingly. Returns a result structure indicating the placement or failure if the rectangle cannot be packed or if there is insufficient node memory.
+ *
+ * @param context Packing context containing the skyline and node storage.
+ * @param width Width of the rectangle to pack.
+ * @param height Height of the rectangle to pack.
+ * @return stbrp__findresult Structure containing the placement coordinates and a pointer for list insertion, or indicating failure if packing was not possible.
+ */
 static stbrp__findresult stbrp__skyline_pack_rectangle(stbrp_context *context, int width, int height)
 {
    // find best position according to heuristic
@@ -521,6 +575,15 @@ static stbrp__findresult stbrp__skyline_pack_rectangle(stbrp_context *context, i
    return res;
 }
 
+/**
+ * @brief Comparison function for sorting rectangles by height, then width, in descending order.
+ *
+ * Used with `qsort` to order rectangles so that taller and wider rectangles are prioritized for packing.
+ *
+ * @param a Pointer to the first `stbrp_rect`.
+ * @param b Pointer to the second `stbrp_rect`.
+ * @return Negative if `a` should come before `b`, positive if after, zero if equal.
+ */
 static int STBRP__CDECL rect_height_compare(const void *a, const void *b)
 {
    const stbrp_rect *p = (const stbrp_rect *) a;
@@ -532,6 +595,15 @@ static int STBRP__CDECL rect_height_compare(const void *a, const void *b)
    return (p->w > q->w) ? -1 : (p->w < q->w);
 }
 
+/**
+ * @brief Comparison function to sort rectangles by their packing status.
+ *
+ * Used to restore the original order of rectangles after packing by comparing their `was_packed` flags.
+ *
+ * @param a Pointer to the first rectangle.
+ * @param b Pointer to the second rectangle.
+ * @return Negative if `a` was not packed and `b` was packed, positive if `a` was packed and `b` was not, zero otherwise.
+ */
 static int STBRP__CDECL rect_original_order(const void *a, const void *b)
 {
    const stbrp_rect *p = (const stbrp_rect *) a;
@@ -539,6 +611,15 @@ static int STBRP__CDECL rect_original_order(const void *a, const void *b)
    return (p->was_packed < q->was_packed) ? -1 : (p->was_packed > q->was_packed);
 }
 
+/**
+ * @brief Packs an array of rectangles into the target rectangle using the skyline algorithm.
+ *
+ * Attempts to pack each rectangle in the `rects` array into the area defined by the packing context. Rectangles with zero width or height are trivially packed at (0,0). For each rectangle, sets the output coordinates (`x`, `y`) and the `was_packed` flag to indicate success. If a rectangle cannot be packed, its coordinates are set to `STBRP__MAXVAL` and `was_packed` is set to 0.
+ *
+ * @param rects Array of rectangles to pack. The function updates each rectangle's position and packing status.
+ * @param num_rects Number of rectangles in the array.
+ * @return int Returns 1 if all rectangles were successfully packed, 0 otherwise.
+ */
 STBRP_DEF int stbrp_pack_rects(stbrp_context *context, stbrp_rect *rects, int num_rects)
 {
    int i, all_rects_packed = 1;

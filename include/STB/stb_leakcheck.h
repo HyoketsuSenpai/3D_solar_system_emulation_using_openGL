@@ -34,6 +34,16 @@ struct malloc_info
 
 static stb_leakcheck_malloc_info *mi_head;
 
+/**
+ * @brief Allocates memory and tracks allocation metadata for leak detection.
+ *
+ * Allocates a memory block of the specified size and records the source file and line number where the allocation occurred. The allocation is tracked internally for later leak reporting.
+ *
+ * @param sz Number of bytes to allocate.
+ * @param file Source file name where the allocation is made.
+ * @param line Line number in the source file where the allocation is made.
+ * @return Pointer to the allocated memory, or NULL if allocation fails.
+ */
 void *stb_leakcheck_malloc(size_t sz, const char *file, int line)
 {
    stb_leakcheck_malloc_info *mi = (stb_leakcheck_malloc_info *) malloc(sz + sizeof(*mi));
@@ -49,6 +59,11 @@ void *stb_leakcheck_malloc(size_t sz, const char *file, int line)
    return mi+1;
 }
 
+/**
+ * @brief Frees memory previously allocated with the leak-checking allocator.
+ *
+ * Marks the memory block as freed and removes its metadata from the allocation tracking list, unless verbose reporting is enabled. Does nothing if the pointer is NULL.
+ */
 void stb_leakcheck_free(void *ptr)
 {
    if (ptr != NULL) {
@@ -67,6 +82,16 @@ void stb_leakcheck_free(void *ptr)
    }
 }
 
+/**
+ * @brief Resizes a tracked memory allocation, preserving leak tracking metadata.
+ *
+ * Behaves like standard `realloc`, but tracks allocation metadata for leak detection.
+ * If `ptr` is `NULL`, allocates a new block. If `sz` is zero, frees the memory and returns `NULL`.
+ * If the new size is less than or equal to the current allocation, returns the original pointer.
+ * Otherwise, allocates a new block, copies the old data, frees the old block, and returns the new pointer.
+ *
+ * @return Pointer to the resized memory block, or `NULL` if allocation fails or size is zero.
+ */
 void *stb_leakcheck_realloc(void *ptr, size_t sz, const char *file, int line)
 {
    if (ptr == NULL) {
@@ -93,6 +118,14 @@ void *stb_leakcheck_realloc(void *ptr, size_t sz, const char *file, int line)
    }
 }
 
+/**
+ * @brief Prints information about a memory allocation or deallocation event.
+ *
+ * Outputs the reason, source file, line number, allocation size, and memory address for a given allocation record to the configured output stream.
+ *
+ * @param reason Description of the event (e.g., "LEAKED" or "FREED").
+ * @param mi Pointer to the allocation metadata structure.
+ */
 static void stblkck_internal_print(const char *reason, stb_leakcheck_malloc_info *mi)
 {
 #if defined(_MSC_VER) && _MSC_VER < 1900 // 1900=VS 2015
@@ -115,6 +148,11 @@ static void stblkck_internal_print(const char *reason, stb_leakcheck_malloc_info
 #endif
 }
 
+/**
+ * @brief Reports all currently tracked memory allocations and leaks.
+ *
+ * Prints information about all memory blocks that have not been freed. If `STB_LEAKCHECK_SHOWALL` is defined, also prints information about blocks that have been freed. Output includes the allocation's file, line, size, and pointer address.
+ */
 void stb_leakcheck_dumpmem(void)
 {
    stb_leakcheck_malloc_info *mi = mi_head;

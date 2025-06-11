@@ -56,6 +56,13 @@ char *stb_include_file(char *filename, char *inject, char *path_to_includes, cha
 #include <stdlib.h>
 #include <string.h>
 
+/**
+ * @brief Loads the entire contents of a file into a newly allocated, null-terminated buffer.
+ *
+ * @param filename Path to the file to load.
+ * @param plen Optional pointer to receive the length of the file in bytes.
+ * @return Pointer to the allocated buffer containing the file contents, or NULL on failure. The caller is responsible for freeing the returned buffer.
+ */
 static char *stb_include_load_file(char *filename, size_t *plen)
 {
    char *text;
@@ -82,6 +89,19 @@ typedef struct
    int next_line_after;
 } include_info;
 
+/**
+ * @brief Appends a new include or inject directive entry to an array.
+ *
+ * Reallocates the given array of `include_info` structures to add a new entry with the specified offset, end position, filename, and next line number. Returns the updated array pointer.
+ *
+ * @param array Existing array of `include_info` entries, or NULL to allocate a new array.
+ * @param len Current number of entries in the array.
+ * @param offset Start offset of the directive in the source text.
+ * @param end End offset of the directive in the source text.
+ * @param filename Filename for `#include` directives, or NULL for `#inject`.
+ * @param next_line Line number following the directive.
+ * @return Pointer to the reallocated array containing the new entry.
+ */
 static include_info *stb_include_append_include(include_info *array, int len, int offset, int end, char *filename, int next_line)
 {
    include_info *z = (include_info *) realloc(array, sizeof(*z) * (len+1));
@@ -92,6 +112,11 @@ static include_info *stb_include_append_include(include_info *array, int len, in
    return z;
 }
 
+/**
+ * @brief Frees an array of include_info structures and their associated filenames.
+ *
+ * Releases memory allocated for each filename in the array, then frees the array itself.
+ */
 static void stb_include_free_includes(include_info *array, int len)
 {
    int i;
@@ -100,12 +125,28 @@ static void stb_include_free_includes(include_info *array, int len)
    free(array);
 }
 
+/**
+ * @brief Determines if a character is a whitespace character.
+ *
+ * Checks if the given character is a space, tab, carriage return, or newline.
+ *
+ * @param ch Character to check.
+ * @return 1 if the character is whitespace, 0 otherwise.
+ */
 static int stb_include_isspace(int ch)
 {
    return (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n');
 }
 
-// find location of all #include and #inject
+/**
+ * @brief Scans text for `#include` and `#inject` directives and records their locations.
+ *
+ * Parses the input text line by line, identifying all `#include "filename"` and `#inject` directives. For each directive found, records its start and end offsets, associated filename (if any), and the line number following the directive in a dynamically allocated array of `include_info` structures.
+ *
+ * @param text The input text to scan for directives.
+ * @param plist Pointer to a variable that will receive the allocated array of `include_info` entries.
+ * @return The number of directives found and recorded in the array.
+ */
 static int stb_include_find_includes(char *text, include_info **plist)
 {
    int line_count = 1;
@@ -157,7 +198,14 @@ static int stb_include_find_includes(char *text, include_info **plist)
    return inc_count;
 }
 
-// avoid dependency on sprintf()
+/**
+ * @brief Converts an integer to a right-aligned ASCII decimal string.
+ *
+ * Formats the integer @p n as a decimal string, right-aligned and padded with spaces, in an 8-character buffer. The resulting string is null-terminated.
+ *
+ * @param str Output buffer of at least 9 bytes to receive the formatted string.
+ * @param n Integer value to convert.
+ */
 static void stb_include_itoa(char str[9], int n)
 {
    int i;
@@ -173,6 +221,17 @@ static void stb_include_itoa(char str[9], int n)
    }
 }
 
+/**
+ * @brief Appends a specified number of bytes from one string to another, reallocating as needed.
+ *
+ * Expands the destination buffer to accommodate additional data, copies `addlen` bytes from `addstr` to the end of `str`, and updates the current length.
+ *
+ * @param str Pointer to the destination buffer, which may be reallocated.
+ * @param curlen Pointer to the current length of the destination buffer; updated after appending.
+ * @param addstr Pointer to the source data to append.
+ * @param addlen Number of bytes to append from `addstr`.
+ * @return Pointer to the (possibly reallocated) destination buffer containing the appended data.
+ */
 static char *stb_include_append(char *str, size_t *curlen, char *addstr, size_t addlen)
 {
    str = (char *) realloc(str, *curlen + addlen);
@@ -181,6 +240,20 @@ static char *stb_include_append(char *str, size_t *curlen, char *addstr, size_t 
    return str;
 }
 
+/**
+ * @brief Processes a string, replacing `#include` and `#inject` directives with file contents or injected text.
+ *
+ * Scans the input string for `#include "filename"` directives and replaces each with the contents of the specified file from `path_to_includes`, recursively processing any further includes. Lines containing `#inject` are replaced with the provided `inject` string. Optionally inserts `#line` directives for accurate source tracking, depending on compile-time macros. On error (such as a missing include file), writes an error message to the `error` buffer and returns `NULL`.
+ *
+ * The returned string is dynamically allocated and must be freed by the caller.
+ *
+ * @param str The input string to process.
+ * @param inject The string to substitute at each `#inject` directive (may be `NULL`).
+ * @param path_to_includes Directory path to search for included files.
+ * @param filename Name to use in `#line` directives for the original source (may be `NULL`).
+ * @param error Buffer to receive an error message if processing fails (must be at least 256 bytes).
+ * @return Newly allocated string with all includes and injects processed, or `NULL` on error.
+ */
 char *stb_include_string(char *str, char *inject, char *path_to_includes, char *filename, char error[256])
 {
    char temp[4096];
@@ -250,6 +323,19 @@ char *stb_include_string(char *str, char *inject, char *path_to_includes, char *
    return text;
 }
 
+/**
+ * @brief Concatenates multiple strings and processes include and inject directives.
+ *
+ * Combines the provided array of strings into a single string, then processes all `#include` and `#inject` directives using stb_include_string. Returns a newly allocated string with all replacements applied, or NULL on error. The caller is responsible for freeing the returned string.
+ *
+ * @param strs Array of input strings to concatenate and process.
+ * @param count Number of strings in the array.
+ * @param inject String to substitute for each `#inject` directive.
+ * @param path_to_includes Directory path to search for included files.
+ * @param filename Name to use in `#line` directives for the combined input.
+ * @param error Buffer to receive an error message if processing fails (must be at least 256 bytes).
+ * @return Newly allocated processed string, or NULL on error.
+ */
 char *stb_include_strings(char **strs, int count, char *inject, char *path_to_includes, char *filename, char error[256])
 {
    char *text;
@@ -269,6 +355,17 @@ char *stb_include_strings(char **strs, int count, char *inject, char *path_to_in
    return result;
 }
 
+/**
+ * @brief Loads a file and processes its `#include` and `#inject` directives.
+ *
+ * Loads the specified file, replaces any `#include` directives with the contents of referenced files (using `path_to_includes`), and replaces `#inject` directives with the provided `inject` string. Returns a newly allocated string with all replacements applied, or `NULL` on error. The caller is responsible for freeing the returned string.
+ *
+ * @param filename Path to the file to load and process.
+ * @param inject String to substitute at each `#inject` directive.
+ * @param path_to_includes Directory to search for included files.
+ * @param error Buffer to receive an error message if processing fails.
+ * @return char* Newly allocated processed string, or `NULL` on error.
+ */
 char *stb_include_file(char *filename, char *inject, char *path_to_includes, char error[256])
 {
    size_t len;
@@ -286,6 +383,17 @@ char *stb_include_file(char *filename, char *inject, char *path_to_includes, cha
 }
 
 #if 0 // @TODO, GL_ARB_shader_language_include-style system that doesn't touch filesystem
+/**
+ * @brief Processes `#include` and `#inject` directives in a string using preloaded include contents.
+ *
+ * Scans the input string for `#include "filename"` and `#inject` directives, replacing each `#include` with the corresponding content from the `includes` array and each `#inject` with the provided `inject` string. Does not perform any file I/O; all include contents must be supplied in the `includes` array as `{filename, content}` pairs. On error, returns `NULL` and writes an error message to the `error` buffer.
+ *
+ * @param str The input string to process.
+ * @param inject The string to substitute at each `#inject` directive.
+ * @param includes Array of `{filename, content}` pairs for resolving `#include` directives.
+ * @param error Buffer to receive an error message if processing fails.
+ * @return Newly allocated string with all directives processed, or `NULL` on error. Caller must free the returned string.
+ */
 char *stb_include_preloaded(char *str, char *inject, char *includes[][2], char error[256])
 {
 

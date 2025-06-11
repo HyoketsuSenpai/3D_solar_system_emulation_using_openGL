@@ -23,6 +23,24 @@ static int channels[20] = { 1, 2, 3, 4,      4,4,  2,2,  4,4, 2,2,  4,4, 2,2,  4
 static int alphapos[20] = { -1, -1, -1, -1,  3,0,  1,0,   3,0,  1,0,   3,0,  1,0,   3,0,  1,0 }; 
 
 
+/**
+ * @brief Resizes an image buffer using stb_image_resize with profiling and debugging support.
+ *
+ * Maps buffer format, data type, edge handling, and filter parameters to stb_image_resize options, and performs the resizing operation from the input buffer to the output buffer. Triggers a debug trap if resizing fails. Emits detailed profiling zones when enabled.
+ *
+ * @param o Pointer to the output image buffer.
+ * @param ox Output image width in pixels.
+ * @param oy Output image height in pixels.
+ * @param op Output image pixel stride (bytes per row).
+ * @param i Pointer to the input image buffer.
+ * @param ix Input image width in pixels.
+ * @param iy Input image height in pixels.
+ * @param ip Input image pixel stride (bytes per row).
+ * @param buf Buffer format index, selects channel count and alpha position.
+ * @param type Data type index for pixel values.
+ * @param edg Edge handling mode index.
+ * @param flt Filter type index.
+ */
 void oresize( void * o, int ox, int oy, int op, void * i, int ix, int iy, int ip, int buf, int type, int edg, int flt )
 {
   int t = types[type];
