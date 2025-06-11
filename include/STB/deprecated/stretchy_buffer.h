@@ -199,6 +199,17 @@
 
 #include <stdlib.h>
 
+/**
+ * @brief Allocates or grows a stretchy buffer to accommodate additional elements.
+ *
+ * Ensures the buffer has enough capacity for the requested increment, reallocating as needed.
+ * Initializes metadata for new buffers and updates capacity for existing ones.
+ *
+ * @param arr Pointer to the current buffer metadata or NULL for a new buffer.
+ * @param increment Number of additional elements required.
+ * @param itemsize Size in bytes of each element.
+ * @return Pointer to the user-visible array portion of the buffer, or an invalid pointer if allocation fails.
+ */
 static void * stb__sbgrowf(void *arr, int increment, int itemsize)
 {
    int dbl_cur = arr ? 2*stb__sbm(arr) : 0;

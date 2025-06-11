@@ -390,7 +390,15 @@ typedef struct
 //      Mouse input handling
 //
 
-// traverse the layout to locate the nearest character to a display position
+/**
+ * @brief Finds the character index nearest to the given display coordinates.
+ *
+ * Traverses the text layout rows to determine which character is closest to the specified (x, y) position relative to the widget. Handles line boundaries, newlines, and returns the appropriate character index for cursor placement or selection.
+ *
+ * @param x Horizontal coordinate relative to the widget.
+ * @param y Vertical coordinate relative to the widget.
+ * @return int Index of the character nearest to (x, y).
+ */
 static int stb_text_locate_coord(STB_TEXTEDIT_STRING *str, float x, float y)
 {
    StbTexteditRow r;
@@ -450,7 +458,11 @@ static int stb_text_locate_coord(STB_TEXTEDIT_STRING *str, float x, float y)
       return i+r.num_chars;
 }
 
-// API click: on mouse down, move the cursor to the clicked location, and reset the selection
+/**
+ * @brief Moves the cursor to the position closest to the given coordinates and resets the selection.
+ *
+ * On mouse down, updates the cursor to the character nearest to (x, y) and collapses any selection to that point. In single-line mode, the y-coordinate is clamped to the first line.
+ */
 static void stb_textedit_click(STB_TEXTEDIT_STRING *str, STB_TexteditState *state, float x, float y)
 {
    // In single-line mode, just always make y = 0. This lets the drag keep working if the mouse
@@ -468,7 +480,11 @@ static void stb_textedit_click(STB_TEXTEDIT_STRING *str, STB_TexteditState *stat
    state->has_preferred_x = 0;
 }
 
-// API drag: on mouse drag, move the cursor and selection endpoint to the clicked location
+/**
+ * @brief Updates the cursor and selection endpoint during a mouse drag.
+ *
+ * Moves the cursor and selection endpoint to the character nearest the specified (x, y) coordinates, extending or modifying the current selection as appropriate. In single-line mode, the y-coordinate is clamped to the first line to ensure consistent behavior when dragging outside the text bounds.
+ */
 static void stb_textedit_drag(STB_TEXTEDIT_STRING *str, STB_TexteditState *state, float x, float y)
 {
    int p = 0;
@@ -510,7 +526,16 @@ typedef struct
 } StbFindState;
 
 // find the x/y location of a character, and remember info about the previous row in
-// case we get a move-up event (for page up, we'll have to rescan)
+/**
+ * @brief Determines the layout position and metrics of a character index within the text.
+ *
+ * Populates the provided StbFindState structure with the row, x/y position, height, and character range information for the character at index `n` in the text string. Handles both single-line and multi-line modes, and provides information about the previous row for vertical navigation.
+ *
+ * @param find Pointer to the StbFindState structure to be filled with layout information.
+ * @param str Pointer to the text string being edited.
+ * @param n Character index for which to find layout position.
+ * @param single_line Nonzero if the text is single-line; zero for multi-line.
+ */
 static void stb_textedit_find_charpos(StbFindState *find, STB_TEXTEDIT_STRING *str, int n, int single_line)
 {
    StbTexteditRow r;
@@ -569,7 +594,11 @@ static void stb_textedit_find_charpos(StbFindState *find, STB_TEXTEDIT_STRING *s
 
 #define STB_TEXT_HAS_SELECTION(s)   ((s)->select_start != (s)->select_end)
 
-// make the selection/cursor state valid if client altered the string
+/**
+ * @brief Ensures the cursor and selection indices are within the valid range of the string.
+ *
+ * Adjusts the cursor, selection start, and selection end positions to not exceed the current string length. If selection start and end become equal after clamping, the cursor is set to that position.
+ */
 static void stb_textedit_clamp(STB_TEXTEDIT_STRING *str, STB_TexteditState *state)
 {
    int n = STB_TEXTEDIT_STRINGLEN(str);
@@ -583,7 +612,11 @@ static void stb_textedit_clamp(STB_TEXTEDIT_STRING *str, STB_TexteditState *stat
    if (state->cursor > n) state->cursor = n;
 }
 
-// delete characters while updating undo
+/**
+ * @brief Deletes a range of characters from the text and records the operation for undo.
+ *
+ * Removes `len` characters starting at position `where` in the text, updates the undo state, and resets the preferred x-position for vertical cursor movement.
+ */
 static void stb_textedit_delete(STB_TEXTEDIT_STRING *str, STB_TexteditState *state, int where, int len)
 {
    stb_text_makeundo_delete(str, state, where, len);
@@ -591,7 +624,11 @@ static void stb_textedit_delete(STB_TEXTEDIT_STRING *str, STB_TexteditState *sta
    state->has_preferred_x = 0;
 }
 
-// delete the section
+/**
+ * @brief Deletes the currently selected text in the editor.
+ *
+ * If a selection exists, removes the selected range and updates the cursor and selection endpoints to the start of the deleted region. Clears the preferred horizontal cursor position.
+ */
 static void stb_textedit_delete_selection(STB_TEXTEDIT_STRING *str, STB_TexteditState *state)
 {
    stb_textedit_clamp(str, state);
@@ -607,7 +644,11 @@ static void stb_textedit_delete_selection(STB_TEXTEDIT_STRING *str, STB_Textedit
    }
 }
 
-// canoncialize the selection so start <= end
+/**
+ * @brief Ensures the selection range is ordered from start to end.
+ *
+ * Swaps the selection start and end positions if necessary so that select_start is less than or equal to select_end.
+ */
 static void stb_textedit_sortselection(STB_TexteditState *state)
 {
    if (state->select_end < state->select_start) {
@@ -617,7 +658,11 @@ static void stb_textedit_sortselection(STB_TexteditState *state)
    }
 }
 
-// move cursor to first character of selection
+/**
+ * @brief Moves the cursor to the start of the current selection and collapses the selection.
+ *
+ * If a selection exists, sets the cursor to the selection's starting position and removes the selection.
+ */
 static void stb_textedit_move_to_first(STB_TexteditState *state)
 {
    if (STB_TEXT_HAS_SELECTION(state)) {
@@ -628,7 +673,11 @@ static void stb_textedit_move_to_first(STB_TexteditState *state)
    }
 }
 
-// move cursor to last character of selection
+/**
+ * @brief Moves the cursor to the end of the current selection, collapsing the selection.
+ *
+ * If a selection exists, sets the cursor and selection start to the selection end, effectively removing the selection.
+ */
 static void stb_textedit_move_to_last(STB_TEXTEDIT_STRING *str, STB_TexteditState *state)
 {
    if (STB_TEXT_HAS_SELECTION(state)) {
@@ -641,12 +690,29 @@ static void stb_textedit_move_to_last(STB_TEXTEDIT_STRING *str, STB_TexteditStat
 }
 
 #ifdef STB_TEXTEDIT_IS_SPACE
+/**
+ * @brief Determines if the specified index is at a word boundary.
+ *
+ * A word boundary is defined as a position where the previous character is a space and the current character is not, or at the start of the string.
+ *
+ * @param str The text string to examine.
+ * @param idx The character index to check.
+ * @return 1 if idx is at a word boundary, 0 otherwise.
+ */
 static int is_word_boundary( STB_TEXTEDIT_STRING *str, int idx )
 {
    return idx > 0 ? (STB_TEXTEDIT_IS_SPACE( STB_TEXTEDIT_GETCHAR(str,idx-1) ) && !STB_TEXTEDIT_IS_SPACE( STB_TEXTEDIT_GETCHAR(str, idx) ) ) : 1;
 }
 
 #ifndef STB_TEXTEDIT_MOVEWORDLEFT
+/**
+ * @brief Moves the cursor to the start of the previous word.
+ *
+ * Given a character index, returns the index at the beginning of the previous word, or zero if at the start of the string.
+ *
+ * @param c The current character index.
+ * @return int The index at the start of the previous word.
+ */
 static int stb_textedit_move_to_word_previous( STB_TEXTEDIT_STRING *str, int c )
 {
    --c; // always move at least one character
@@ -662,6 +728,15 @@ static int stb_textedit_move_to_word_previous( STB_TEXTEDIT_STRING *str, int c )
 #endif
 
 #ifndef STB_TEXTEDIT_MOVEWORDRIGHT
+/**
+ * @brief Moves the character index to the start of the next word.
+ *
+ * Advances the given character index to the next word boundary in the string, or to the end if no further word exists.
+ *
+ * @param str The text string to search.
+ * @param c The current character index.
+ * @return int The index of the first character of the next word, or the end of the string.
+ */
 static int stb_textedit_move_to_word_next( STB_TEXTEDIT_STRING *str, int c )
 {
    const int len = STB_TEXTEDIT_STRINGLEN(str);
@@ -679,7 +754,11 @@ static int stb_textedit_move_to_word_next( STB_TEXTEDIT_STRING *str, int c )
 
 #endif
 
-// update selection and cursor to match each other
+/**
+ * @brief Synchronizes the selection range and cursor position.
+ *
+ * If there is no active selection, sets both selection start and end to the cursor position. If a selection exists, moves the cursor to the selection end.
+ */
 static void stb_textedit_prep_selection_at_cursor(STB_TexteditState *state)
 {
    if (!STB_TEXT_HAS_SELECTION(state))
@@ -688,7 +767,13 @@ static void stb_textedit_prep_selection_at_cursor(STB_TexteditState *state)
       state->cursor = state->select_end;
 }
 
-// API cut: delete selection
+/**
+ * @brief Deletes the currently selected text, if any.
+ *
+ * Removes the selected text from the string and updates the cursor and selection state. If no text is selected, no changes are made.
+ *
+ * @return int Returns 1 if text was deleted, 0 if there was no selection.
+ */
 static int stb_textedit_cut(STB_TEXTEDIT_STRING *str, STB_TexteditState *state)
 {
    if (STB_TEXT_HAS_SELECTION(state)) {
@@ -699,7 +784,15 @@ static int stb_textedit_cut(STB_TEXTEDIT_STRING *str, STB_TexteditState *state)
    return 0;
 }
 
-// API paste: replace existing selection with passed-in text
+/**
+ * @brief Replaces the current selection with the provided text.
+ *
+ * Deletes any selected text and attempts to insert the given text at the cursor position. If insertion succeeds, updates the undo state and advances the cursor. If insertion fails, the selection remains deleted but can be restored via undo.
+ *
+ * @param text Pointer to the text to insert.
+ * @param len Number of characters to insert.
+ * @return int Returns 1 if the paste succeeds, 0 if insertion fails.
+ */
 static int stb_textedit_paste_internal(STB_TEXTEDIT_STRING *str, STB_TexteditState *state, STB_TEXTEDIT_CHARTYPE *text, int len)
 {
    // if there's a selection, the paste should delete it
@@ -720,7 +813,11 @@ static int stb_textedit_paste_internal(STB_TEXTEDIT_STRING *str, STB_TexteditSta
 #define STB_TEXTEDIT_KEYTYPE int
 #endif
 
-// API key: process a keyboard input
+/**
+ * @brief Processes a keyboard input event for the text editor.
+ *
+ * Handles character insertion, deletion, cursor movement, selection, undo/redo, and navigation keys according to the current editing state. Supports both single-line and multi-line modes, word-wise navigation (if enabled), and selection modification with shift keys.
+ */
 static void stb_textedit_key(STB_TEXTEDIT_STRING *str, STB_TexteditState *state, STB_TEXTEDIT_KEYTYPE key)
 {
 retry:
@@ -1104,7 +1201,11 @@ retry:
 //
 //      Undo processing
 //
-// @OPTIMIZE: the undo/redo buffer should be circular
+/**
+ * @brief Clears the redo buffer in the undo state.
+ *
+ * Resets the redo stack pointers, effectively discarding all redo records and associated characters.
+ */
 
 static void stb_textedit_flush_redo(StbUndoState *state)
 {
@@ -1112,7 +1213,11 @@ static void stb_textedit_flush_redo(StbUndoState *state)
    state->redo_char_point = STB_TEXTEDIT_UNDOCHARCOUNT;
 }
 
-// discard the oldest entry in the undo list
+/**
+ * @brief Removes the oldest undo record from the undo stack.
+ *
+ * If the oldest undo record contains stored characters, those characters are also removed from the character buffer, and all remaining records are updated accordingly.
+ */
 static void stb_textedit_discard_undo(StbUndoState *state)
 {
    if (state->undo_point > 0) {
@@ -1134,7 +1239,11 @@ static void stb_textedit_discard_undo(StbUndoState *state)
 // discard the oldest entry in the redo list--it's bad if this
 // ever happens, but because undo & redo have to store the actual
 // characters in different cases, the redo character buffer can
-// fill up even though the undo buffer didn't
+/**
+ * @brief Discards the oldest redo record from the redo stack.
+ *
+ * Removes the oldest redo record in the undo state, adjusting character storage and record positions as needed to maintain buffer integrity.
+ */
 static void stb_textedit_discard_redo(StbUndoState *state)
 {
    int k = STB_TEXTEDIT_UNDOSTATECOUNT-1;
@@ -1158,6 +1267,14 @@ static void stb_textedit_discard_redo(StbUndoState *state)
    }
 }
 
+/**
+ * @brief Allocates a new undo record in the undo state, making space if necessary.
+ *
+ * Discards redo history and, if needed, the oldest undo records to ensure there is enough space for the new record and its associated characters. If the requested character count exceeds the buffer capacity, clears the undo state and returns NULL.
+ *
+ * @param numchars Number of characters to reserve for the undo record.
+ * @return Pointer to the newly created undo record, or NULL if the request cannot be fulfilled.
+ */
 static StbUndoRecord *stb_text_create_undo_record(StbUndoState *state, int numchars)
 {
    // any time we create a new undo record, we discard redo
@@ -1182,6 +1299,17 @@ static StbUndoRecord *stb_text_create_undo_record(StbUndoState *state, int numch
    return &state->undo_rec[state->undo_point++];
 }
 
+/**
+ * @brief Creates an undo record for a text insertion and reserves space for inserted characters.
+ *
+ * Allocates an undo record for an insertion operation at the specified position, recording the lengths of inserted and deleted text. If space is available, returns a pointer to the buffer where the inserted characters should be stored for undo purposes.
+ *
+ * @param state Pointer to the undo state structure.
+ * @param pos Position in the text where the insertion occurs.
+ * @param insert_len Number of characters inserted.
+ * @param delete_len Number of characters deleted at the insertion point.
+ * @return Pointer to the character buffer for storing inserted text, or NULL if allocation fails or no insertion occurs.
+ */
 static STB_TEXTEDIT_CHARTYPE *stb_text_createundo(StbUndoState *state, int pos, int insert_len, int delete_len)
 {
    StbUndoRecord *r = stb_text_create_undo_record(state, insert_len);
@@ -1202,6 +1330,11 @@ static STB_TEXTEDIT_CHARTYPE *stb_text_createundo(StbUndoState *state, int pos, 
    }
 }
 
+/**
+ * @brief Reverts the most recent text edit operation and updates the redo stack.
+ *
+ * Applies the last undo record to the text, restoring the previous state by deleting or reinserting characters as needed. Also creates a corresponding redo record, allowing the undone operation to be redone later. Updates the cursor position to reflect the restored state. If there is insufficient space in the undo character buffer, the redo record may not store deleted characters.
+ */
 static void stb_text_undo(STB_TEXTEDIT_STRING *str, STB_TexteditState *state)
 {
    StbUndoState *s = &state->undostate;
@@ -1270,6 +1403,11 @@ static void stb_text_undo(STB_TEXTEDIT_STRING *str, STB_TexteditState *state)
    s->redo_point--;
 }
 
+/**
+ * @brief Applies the next redo operation to the text and updates undo state.
+ *
+ * Reapplies the most recent undone edit, updating the text and cursor position, and records the inverse operation for future undo.
+ */
 static void stb_text_redo(STB_TEXTEDIT_STRING *str, STB_TexteditState *state)
 {
    StbUndoState *s = &state->undostate;
@@ -1321,11 +1459,27 @@ static void stb_text_redo(STB_TEXTEDIT_STRING *str, STB_TexteditState *state)
    s->redo_point++;
 }
 
+/**
+ * @brief Records an undo entry for a text insertion.
+ *
+ * Creates an undo record indicating that text of the specified length was inserted at the given position.
+ *
+ * @param where The position in the text where the insertion occurred.
+ * @param length The number of characters inserted.
+ */
 static void stb_text_makeundo_insert(STB_TexteditState *state, int where, int length)
 {
    stb_text_createundo(&state->undostate, where, 0, length);
 }
 
+/**
+ * @brief Records an undo entry for a text deletion operation.
+ *
+ * Saves the deleted characters and their position in the undo buffer, allowing the deletion to be undone later.
+ *
+ * @param where Index in the string where deletion begins.
+ * @param length Number of characters deleted.
+ */
 static void stb_text_makeundo_delete(STB_TEXTEDIT_STRING *str, STB_TexteditState *state, int where, int length)
 {
    int i;
@@ -1336,6 +1490,15 @@ static void stb_text_makeundo_delete(STB_TEXTEDIT_STRING *str, STB_TexteditState
    }
 }
 
+/**
+ * @brief Creates an undo record for replacing a range of text.
+ *
+ * Records the current text at the specified position and length before it is replaced, enabling undo functionality for replacement operations.
+ *
+ * @param where The starting index of the text to be replaced.
+ * @param old_length The length of the text being replaced.
+ * @param new_length The length of the new text that will replace the old text.
+ */
 static void stb_text_makeundo_replace(STB_TEXTEDIT_STRING *str, STB_TexteditState *state, int where, int old_length, int new_length)
 {
    int i;
@@ -1346,7 +1509,14 @@ static void stb_text_makeundo_replace(STB_TEXTEDIT_STRING *str, STB_TexteditStat
    }
 }
 
-// reset the state to default
+/**
+ * @brief Resets the text edit state to its default values.
+ *
+ * Initializes undo/redo buffers, cursor position, selection, and editing mode flags for a new or cleared text editing session.
+ *
+ * @param state Pointer to the text edit state structure to reset.
+ * @param is_single_line Nonzero to set single-line editing mode; zero for multi-line mode.
+ */
 static void stb_textedit_clear_state(STB_TexteditState *state, int is_single_line)
 {
    state->undostate.undo_point = 0;
@@ -1364,7 +1534,14 @@ static void stb_textedit_clear_state(STB_TexteditState *state, int is_single_lin
    state->row_count_per_page = 0;
 }
 
-// API initialize
+/**
+ * @brief Initializes the text editing state structure.
+ *
+ * Sets up the STB_TexteditState for use, configuring it for single-line or multi-line editing as specified.
+ *
+ * @param state Pointer to the text editing state to initialize.
+ * @param is_single_line Nonzero for single-line mode; zero for multi-line mode.
+ */
 static void stb_textedit_initialize_state(STB_TexteditState *state, int is_single_line)
 {
    stb_textedit_clear_state(state, is_single_line);
@@ -1375,6 +1552,15 @@ static void stb_textedit_initialize_state(STB_TexteditState *state, int is_singl
 #pragma GCC diagnostic ignored "-Wcast-qual"
 #endif
 
+/**
+ * @brief Pastes the specified text at the current cursor position or replaces the current selection.
+ *
+ * If a selection exists, it is replaced by the provided text. Otherwise, the text is inserted at the cursor.
+ *
+ * @param ctext Pointer to the text to paste.
+ * @param len Number of characters to paste.
+ * @return int Returns 1 on success, 0 if the paste operation fails.
+ */
 static int stb_textedit_paste(STB_TEXTEDIT_STRING *str, STB_TexteditState *state, STB_TEXTEDIT_CHARTYPE const *ctext, int len)
 {
    return stb_textedit_paste_internal(str, state, (STB_TEXTEDIT_CHARTYPE *) ctext, len);

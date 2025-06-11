@@ -690,25 +690,82 @@ enum
 #ifdef __cplusplus
 // in C we use implicit assignment from these void*-returning functions to T*.
 // in C++ these templates make the same code work
-template<class T> static T * stbds_arrgrowf_wrapper(T *a, size_t elemsize, size_t addlen, size_t min_cap) {
+template<class T> static /**
+ * @brief Grows a dynamic array to accommodate additional elements or a minimum capacity.
+ *
+ * Wraps `stbds_arrgrowf` to ensure the array has enough capacity for `addlen` more elements or at least `min_cap` total elements.
+ *
+ * @return Pointer to the (possibly reallocated) array with sufficient capacity.
+ */
+T * stbds_arrgrowf_wrapper(T *a, size_t elemsize, size_t addlen, size_t min_cap) {
   return (T*)stbds_arrgrowf((void *)a, elemsize, addlen, min_cap);
 }
-template<class T> static T * stbds_hmget_key_wrapper(T *a, size_t elemsize, void *key, size_t keysize, int mode) {
+template<class T> static /**
+ * @brief Retrieves a pointer to the element in a hash map matching the specified key.
+ *
+ * Returns a pointer to the element in the hash map `a` whose key matches the provided `key`, or NULL if not found. The behavior depends on the hash map's key type and memory management mode.
+ *
+ * @return Pointer to the matching element, or NULL if the key is not present.
+ */
+T * stbds_hmget_key_wrapper(T *a, size_t elemsize, void *key, size_t keysize, int mode) {
   return (T*)stbds_hmget_key((void*)a, elemsize, key, keysize, mode);
 }
-template<class T> static T * stbds_hmget_key_ts_wrapper(T *a, size_t elemsize, void *key, size_t keysize, ptrdiff_t *temp, int mode) {
+template<class T> static /**
+ * @brief Retrieves a pointer to the element in the hash map matching the specified key, with optional temporary index output.
+ *
+ * This is a type-safe wrapper for `stbds_hmget_key_ts`, allowing retrieval of a pointer to the value associated with the given key in a hash map. If the key is not found, returns NULL. Optionally outputs the index of the found element via the `temp` parameter.
+ *
+ * @param a Pointer to the hash map array.
+ * @param elemsize Size of each element in the hash map.
+ * @param key Pointer to the key to search for.
+ * @param keysize Size of the key.
+ * @param temp Optional pointer to a `ptrdiff_t` to receive the index of the found element, or -1 if not found.
+ * @param mode Hash map mode (e.g., for string key handling).
+ * @return Pointer to the found element, or NULL if not found.
+ */
+T * stbds_hmget_key_ts_wrapper(T *a, size_t elemsize, void *key, size_t keysize, ptrdiff_t *temp, int mode) {
   return (T*)stbds_hmget_key_ts((void*)a, elemsize, key, keysize, temp, mode);
 }
-template<class T> static T * stbds_hmput_default_wrapper(T *a, size_t elemsize) {
+template<class T> static /**
+ * @brief Inserts a new element into the hash map, initializing it with default values.
+ *
+ * If the hash map does not exist, it is created. The new element is initialized to zero or default values as appropriate for the type.
+ *
+ * @return Pointer to the hash map, which may be reallocated.
+ */
+T * stbds_hmput_default_wrapper(T *a, size_t elemsize) {
   return (T*)stbds_hmput_default((void *)a, elemsize);
 }
-template<class T> static T * stbds_hmput_key_wrapper(T *a, size_t elemsize, void *key, size_t keysize, int mode) {
+template<class T> static /**
+ * @brief Inserts or updates a key in a hash map and returns a pointer to the value.
+ *
+ * Wraps `stbds_hmput_key` for type safety, allowing insertion or update of a key in a hash map. Returns a pointer to the value associated with the key, which may be newly inserted or updated.
+ *
+ * @return Pointer to the value associated with the key in the hash map.
+ */
+T * stbds_hmput_key_wrapper(T *a, size_t elemsize, void *key, size_t keysize, int mode) {
   return (T*)stbds_hmput_key((void*)a, elemsize, key, keysize, mode);
 }
-template<class T> static T * stbds_hmdel_key_wrapper(T *a, size_t elemsize, void *key, size_t keysize, size_t keyoffset, int mode){
+template<class T> static /**
+ * @brief Removes an entry from a hash table by key.
+ *
+ * Wraps `stbds_hmdel_key` to delete the element matching the specified key from the hash table and returns the updated table pointer, which may change if the table is resized.
+ *
+ * @return Updated pointer to the hash table after deletion.
+ */
+T * stbds_hmdel_key_wrapper(T *a, size_t elemsize, void *key, size_t keysize, size_t keyoffset, int mode){
   return (T*)stbds_hmdel_key((void*)a, elemsize, key, keysize, keyoffset, mode);
 }
-template<class T> static T * stbds_shmode_func_wrapper(T *, size_t elemsize, int mode) {
+template<class T> static /**
+ * @brief Initializes a string hash table with the specified memory management mode.
+ *
+ * Wraps `stbds_shmode_func` to allow type-safe initialization of a string hash table with the given element size and mode.
+ *
+ * @param elemsize Size of each element in the hash table.
+ * @param mode String key memory management mode (e.g., default, strdup, or arena).
+ * @return Pointer to the initialized hash table, or NULL on allocation failure.
+ */
+T * stbds_shmode_func_wrapper(T *, size_t elemsize, int mode) {
   return (T*)stbds_shmode_func(elemsize, mode);
 }
 #else
@@ -757,7 +814,17 @@ size_t stbds_rehash_items;
 //
 
 //int *prev_allocs[65536];
-//int num_prev;
+/**
+ * @brief Grows a dynamic array to accommodate additional elements or a minimum capacity.
+ *
+ * Ensures that the dynamic array has enough capacity for at least `addlen` more elements or the specified `min_cap`, whichever is greater. The capacity is increased to maintain amortized O(1) insertion performance. If the array is reallocated, metadata is initialized or preserved as needed.
+ *
+ * @param a Pointer to the dynamic array, or NULL to create a new array.
+ * @param elemsize Size of each array element in bytes.
+ * @param addlen Number of additional elements to accommodate.
+ * @param min_cap Minimum required capacity after growth.
+ * @return Pointer to the grown array, which may differ from the input pointer if reallocation occurs.
+ */
 
 void *stbds_arrgrowf(void *a, size_t elemsize, size_t addlen, size_t min_cap)
 {
@@ -797,6 +864,11 @@ void *stbds_arrgrowf(void *a, size_t elemsize, size_t addlen, size_t min_cap)
   return b;
 }
 
+/**
+ * @brief Frees the memory allocated for a dynamic array.
+ *
+ * Releases the memory used by the array and its metadata. After calling this function, the array pointer should not be used.
+ */
 void stbds_arrfreef(void *a)
 {
   STBDS_FREE(NULL, stbds_header(a));
@@ -848,6 +920,13 @@ typedef struct
 
 static size_t stbds_hash_seed=0x31415926;
 
+/**
+ * @brief Sets the seed value for hash table hashing functions.
+ *
+ * Use this to provide a custom seed for hash functions, improving security against adversarial inputs or ensuring deterministic hash behavior.
+ *
+ * @param seed The seed value to use for hashing.
+ */
 void stbds_rand_seed(size_t seed)
 {
   stbds_hash_seed = seed;
@@ -871,6 +950,14 @@ static size_t stbds_probe_position(size_t hash, size_t slot_count, size_t slot_l
   return pos;
 }
 
+/**
+ * @brief Computes the base-2 logarithm of a positive integer, rounded down.
+ *
+ * Returns the largest integer n such that 2^n <= slot_count. Assumes slot_count > 0.
+ *
+ * @param slot_count The input value for which to compute the base-2 logarithm.
+ * @return size_t The floor of log2(slot_count).
+ */
 static size_t stbds_log2(size_t slot_count)
 {
   size_t n=0;
@@ -881,6 +968,16 @@ static size_t stbds_log2(size_t slot_count)
   return n;
 }
 
+/**
+ * @brief Allocates and initializes a hash table index structure with the specified slot count.
+ *
+ * Creates a new `stbds_hash_index` for use in hash tables, initializing all buckets and metadata.
+ * If an existing index (`ot`) is provided, its string arena and hash seed are reused, and all active entries are rehashed into the new table.
+ *
+ * @param slot_count Number of slots (must be a power of two) for the hash table.
+ * @param ot Optional pointer to an existing hash index to migrate data from; may be NULL.
+ * @return Pointer to the newly allocated and initialized `stbds_hash_index` structure.
+ */
 static stbds_hash_index *stbds_make_hash_index(size_t slot_count, stbds_hash_index *ot)
 {
   stbds_hash_index *t;
@@ -1013,6 +1110,16 @@ static stbds_hash_index *stbds_make_hash_index(size_t slot_count, stbds_hash_ind
 #define STBDS_ROTATE_LEFT(val, n)   (((val) << (n)) | ((val) >> (STBDS_SIZE_T_BITS - (n))))
 #define STBDS_ROTATE_RIGHT(val, n)  (((val) >> (n)) | ((val) << (STBDS_SIZE_T_BITS - (n))))
 
+/**
+ * @brief Computes a hash value for a null-terminated string using a custom mixing algorithm.
+ *
+ * The hash is initialized with the provided seed and incorporates each character of the string.
+ * The final value is mixed for better distribution, making it suitable for use in hash tables.
+ *
+ * @param str Null-terminated string to hash.
+ * @param seed Initial seed value for the hash.
+ * @return size_t Hash value for the input string.
+ */
 size_t stbds_hash_string(char *str, size_t seed)
 {
   size_t hash = seed;
@@ -1048,6 +1155,16 @@ typedef int STBDS_SIPHASH_2_4_can_only_be_used_in_64_bit_builds[sizeof(size_t) =
 #pragma warning(disable:4127) // conditional expression is constant, for do..while(0) and sizeof()==
 #endif
 
+/**
+ * @brief Computes a SipHash-derived hash for a byte sequence.
+ *
+ * Generates a platform-dependent hash value for the given memory block using a variant of SipHash, seeded for randomized output. The implementation works on both 32-bit and 64-bit architectures and is suitable for hash table key hashing.
+ *
+ * @param p Pointer to the data to hash.
+ * @param len Number of bytes to hash.
+ * @param seed Seed value for hash randomization.
+ * @return size_t Hash value for the input data.
+ */
 static size_t stbds_siphash_bytes(void *p, size_t len, size_t seed)
 {
   unsigned char *d = (unsigned char *) p;
@@ -1113,6 +1230,16 @@ static size_t stbds_siphash_bytes(void *p, size_t len, size_t seed)
 #endif
 }
 
+/**
+ * @brief Computes a hash value for a sequence of bytes with a given seed.
+ *
+ * Uses specialized fast hashing for 4- and 8-byte inputs, and SipHash for other lengths or when enabled.
+ *
+ * @param p Pointer to the data to hash.
+ * @param len Number of bytes to hash.
+ * @param seed Seed value for the hash function.
+ * @return size_t Hash value for the input data.
+ */
 size_t stbds_hash_bytes(void *p, size_t len, size_t seed)
 {
 #ifdef STBDS_SIPHASH_2_4
@@ -1200,6 +1327,20 @@ size_t stbds_hash_bytes(void *p, size_t len, size_t seed)
 #endif
 
 
+/**
+ * @brief Compares a given key with the key at a specified index in a hash table.
+ *
+ * Determines if the provided key matches the key stored at index `i` in the hash table array, using either string comparison or memory comparison based on the hash table mode.
+ *
+ * @param a Pointer to the hash table array.
+ * @param elemsize Size of each element in the array.
+ * @param key Pointer to the key to compare.
+ * @param keysize Size of the key in bytes (ignored for string keys).
+ * @param keyoffset Offset of the key within each element.
+ * @param mode Hash table mode, determines if keys are strings or raw data.
+ * @param i Index of the element in the array to compare against.
+ * @return int Nonzero if the keys are equal, zero otherwise.
+ */
 static int stbds_is_key_equal(void *a, size_t elemsize, void *key, size_t keysize, size_t keyoffset, int mode, size_t i)
 {
   if (mode >= STBDS_HM_STRING)
@@ -1213,6 +1354,14 @@ static int stbds_is_key_equal(void *a, size_t elemsize, void *key, size_t keysiz
 
 #define stbds_hash_table(a)  ((stbds_hash_index *) stbds_header(a)->hash_table)
 
+/**
+ * @brief Frees a hash table and its associated resources.
+ *
+ * Releases all memory used by the hash table, including its internal structures and, if applicable, any duplicated string keys or string arena allocations.
+ *
+ * @param a Pointer to the hash table array.
+ * @param elemsize Size of each element in the hash table.
+ */
 void stbds_hmfree_func(void *a, size_t elemsize)
 {
   if (a == NULL) return;
@@ -1229,6 +1378,19 @@ void stbds_hmfree_func(void *a, size_t elemsize)
   STBDS_FREE(NULL, stbds_header(a));
 }
 
+/**
+ * @brief Finds the slot index of a key in a hash table.
+ *
+ * Searches for the given key in the hash table and returns the slot index if found, or -1 if the key does not exist.
+ *
+ * @param a Pointer to the hash table array.
+ * @param elemsize Size of each element in the hash table.
+ * @param key Pointer to the key to search for.
+ * @param keysize Size of the key in bytes.
+ * @param keyoffset Offset of the key within the element structure.
+ * @param mode Hash table mode (e.g., string or generic key).
+ * @return ptrdiff_t Slot index of the key if found, or -1 if not found.
+ */
 static ptrdiff_t stbds_hm_find_slot(void *a, size_t elemsize, void *key, size_t keysize, size_t keyoffset, int mode)
 {
   void *raw_a = STBDS_HASH_TO_ARR(a,elemsize);
@@ -1278,6 +1440,19 @@ static ptrdiff_t stbds_hm_find_slot(void *a, size_t elemsize, void *key, size_t 
   /* NOTREACHED */
 }
 
+/**
+ * @brief Retrieves a pointer to the hash table element for a given key and stores its index.
+ *
+ * Searches the hash table for the specified key and returns a pointer to the element. The index of the found element, or a special empty value if not found, is stored in the location pointed to by `temp`. If the hash table is empty, a default element is created and returned.
+ *
+ * @param a Pointer to the hash table array.
+ * @param elemsize Size of each element in the hash table.
+ * @param key Pointer to the key to search for.
+ * @param keysize Size of the key in bytes.
+ * @param temp Pointer to a variable where the index of the found element or an empty indicator will be stored.
+ * @param mode Hash table mode (e.g., for string key handling).
+ * @return Pointer to the element in the hash table corresponding to the key, or to a default element if not found.
+ */
 void * stbds_hmget_key_ts(void *a, size_t elemsize, void *key, size_t keysize, ptrdiff_t *temp, int mode)
 {
   size_t keyoffset = 0;
@@ -1309,6 +1484,18 @@ void * stbds_hmget_key_ts(void *a, size_t elemsize, void *key, size_t keysize, p
   }
 }
 
+/**
+ * @brief Retrieves a pointer to the element in a hash table matching the specified key.
+ *
+ * Searches the hash table for an entry with the given key and returns a pointer to the element if found, or NULL if not found. The search respects the specified key size and hash table mode.
+ *
+ * @param a Pointer to the hash table array.
+ * @param elemsize Size of each element in the hash table.
+ * @param key Pointer to the key to search for.
+ * @param keysize Size of the key in bytes.
+ * @param mode Hash table mode (e.g., for string key handling).
+ * @return Pointer to the found element, or NULL if the key is not present.
+ */
 void * stbds_hmget_key(void *a, size_t elemsize, void *key, size_t keysize, int mode)
 {
   ptrdiff_t temp;
@@ -1317,6 +1504,15 @@ void * stbds_hmget_key(void *a, size_t elemsize, void *key, size_t keysize, int 
   return p;
 }
 
+/**
+ * @brief Ensures a hash table has at least one default-initialized entry.
+ *
+ * If the hash table is NULL or empty, allocates or grows it to contain a single zero-initialized element. If the table already contains entries, it is left unchanged.
+ *
+ * @param a Pointer to the hash table array, or NULL.
+ * @param elemsize Size of each element in bytes.
+ * @return Pointer to the hash table array, possibly reallocated.
+ */
 void * stbds_hmput_default(void *a, size_t elemsize)
 {
   // three cases:
@@ -1334,6 +1530,20 @@ void * stbds_hmput_default(void *a, size_t elemsize)
 
 static char *stbds_strdup(char *str);
 
+/**
+ * @brief Inserts or updates a key in a hash table, returning the updated table pointer.
+ *
+ * If the key already exists, returns a pointer to the hash table with the key's index set for further access.
+ * If the key does not exist, inserts it, growing the table if necessary, and returns the updated table pointer.
+ * For string keys, the storage mode (default, strdup, or arena) is determined by the `mode` parameter.
+ *
+ * @param a Pointer to the hash table array, or NULL to create a new table.
+ * @param elemsize Size of each element in the table.
+ * @param key Pointer to the key to insert or update.
+ * @param keysize Size of the key in bytes.
+ * @param mode Determines key handling and string storage mode.
+ * @return void* Pointer to the updated hash table array.
+ */
 void *stbds_hmput_key(void *a, size_t elemsize, void *key, size_t keysize, int mode)
 {
   size_t keyoffset=0;
@@ -1458,6 +1668,15 @@ void *stbds_hmput_key(void *a, size_t elemsize, void *key, size_t keysize, int m
   }
 }
 
+/**
+ * @brief Initializes a new string hash table with the specified element size and string key mode.
+ *
+ * Allocates and returns a pointer to a hash table suitable for string keys, configuring the memory management mode for string keys (e.g., default, strdup, or arena).
+ *
+ * @param elemsize Size of each element in the hash table.
+ * @param mode String key memory management mode.
+ * @return Pointer to the initialized hash table.
+ */
 void * stbds_shmode_func(size_t elemsize, int mode)
 {
   void *a = stbds_arrgrowf(0, elemsize, 0, 1);
@@ -1469,6 +1688,19 @@ void * stbds_shmode_func(size_t elemsize, int mode)
   return STBDS_ARR_TO_HASH(a,elemsize);
 }
 
+/**
+ * @brief Removes a key and its associated value from a hash table.
+ *
+ * Deletes the entry matching the specified key from the hash table, performing a swap-delete to maintain table integrity. If the key is not found, the table is unchanged. For string-keyed tables in strdup mode, the key memory is freed. The function may trigger table shrinking or rebuilding if usage or tombstone thresholds are crossed.
+ *
+ * @param a Pointer to the hash table array.
+ * @param elemsize Size of each element in the table.
+ * @param key Pointer to the key to remove.
+ * @param keysize Size of the key in bytes.
+ * @param keyoffset Offset of the key within the element structure.
+ * @param mode Hash table mode (e.g., integer or string key, memory management type).
+ * @return Pointer to the hash table array, which may be relocated.
+ */
 void * stbds_hmdel_key(void *a, size_t elemsize, void *key, size_t keysize, size_t keyoffset, int mode)
 {
   if (a == NULL) {
@@ -1537,6 +1769,15 @@ void * stbds_hmdel_key(void *a, size_t elemsize, void *key, size_t keysize, size
   /* NOTREACHED */
 }
 
+/**
+ * @brief Allocates and returns a duplicate of the given string.
+ *
+ * The returned string is allocated using the custom allocator defined by `STBDS_REALLOC`.
+ * The caller is responsible for freeing the returned string.
+ *
+ * @param str Null-terminated string to duplicate.
+ * @return Pointer to the newly allocated duplicate string.
+ */
 static char *stbds_strdup(char *str)
 {
   // to keep replaceable allocator simple, we don't want to use strdup.
@@ -1554,6 +1795,15 @@ static char *stbds_strdup(char *str)
 #define STBDS_STRING_ARENA_BLOCKSIZE_MAX  (1u<<20)
 #endif
 
+/**
+ * @brief Allocates and stores a copy of the given string in the provided string arena.
+ *
+ * Copies the null-terminated string `str` into memory managed by the string arena `a`, growing the arena as needed. Returns a pointer to the stored copy, which remains valid until the arena is reset or freed.
+ *
+ * @param a Pointer to the string arena used for allocation.
+ * @param str Null-terminated string to copy into the arena.
+ * @return Pointer to the copied string within the arena.
+ */
 char *stbds_stralloc(stbds_string_arena *a, char *str)
 {
   char *p;
@@ -1602,6 +1852,11 @@ char *stbds_stralloc(stbds_string_arena *a, char *str)
   return p;
 }
 
+/**
+ * @brief Frees all memory blocks in a string arena and resets its state.
+ *
+ * Releases all memory allocated for strings in the specified arena and reinitializes the arena structure for reuse.
+ */
 void stbds_strreset(stbds_string_arena *a)
 {
   stbds_string_block *x,*y;
@@ -1635,6 +1890,16 @@ typedef struct { int key,b,c,d; } stbds_struct;
 typedef struct { int key[2],b,c,d; } stbds_struct2;
 
 static char buffer[256];
+/**
+ * @brief Generates a string key in the format "test_N".
+ *
+ * Converts the given integer to a string prefixed with "test_", storing the result in a static buffer.
+ *
+ * @param n Integer to include in the key.
+ * @return Pointer to a static buffer containing the generated key string.
+ *
+ * @note The returned pointer is valid until the next call to this function and is not thread-safe.
+ */
 char *strkey(int n)
 {
 #if defined(_WIN32) && defined(__STDC_WANT_SECURE_LIB__)
@@ -1645,6 +1910,11 @@ char *strkey(int n)
    return buffer;
 }
 
+/**
+ * @brief Runs unit tests for dynamic arrays and hash tables.
+ *
+ * Executes a comprehensive suite of tests to validate the correctness of dynamic array operations, integer and string hash maps, struct-keyed hash maps, and string arena allocation. Verifies insertion, deletion, lookup, resizing, memory management, and default value behavior for all major features provided by the library.
+ */
 void stbds_unit_tests(void)
 {
 #if defined(_MSC_VER) && _MSC_VER <= 1200 && defined(__cplusplus)

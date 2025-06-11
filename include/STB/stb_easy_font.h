@@ -87,7 +87,18 @@
 //
 //    Here's sample code for old OpenGL; it's a lot more complicated
 //    to make work on modern APIs, and that's your problem.
-//
+/**
+ * @brief Renders an ASCII text string at the specified position with the given RGB color using OpenGL immediate mode.
+ *
+ * Uses stb_easy_font to generate vertex data for the text and draws it as quads. Only supports ASCII characters and does not use textures.
+ *
+ * @param x X-coordinate of the text's starting position.
+ * @param y Y-coordinate of the text's starting position.
+ * @param text Null-terminated ASCII string to render.
+ * @param r Red component of the text color (0.0 to 1.0).
+ * @param g Green component of the text color (0.0 to 1.0).
+ * @param b Blue component of the text color (0.0 to 1.0).
+ */
 void print_string(float x, float y, char *text, float r, float g, float b)
 {
   static char buffer[99999]; // ~500 chars
@@ -170,6 +181,22 @@ typedef struct
    unsigned char c[4];
 } stb_easy_font_color;
 
+/**
+ * @brief Writes quad vertex data for a set of character line segments into a vertex buffer.
+ *
+ * Generates vertex data for either horizontal or vertical line segments, representing parts of a character glyph, and appends them as quads to the provided vertex buffer if space allows. Each quad is written as four vertices with position and color information.
+ *
+ * @param x Starting x-coordinate for the segments.
+ * @param y Starting y-coordinate for the segments.
+ * @param segs Array of encoded segment data.
+ * @param num_segs Number of segments to process from the array.
+ * @param vertical Nonzero to interpret segments as vertical; zero for horizontal.
+ * @param c Color to use for all generated vertices.
+ * @param vbuf Pointer to the vertex buffer to write into.
+ * @param vbuf_size Size of the vertex buffer in bytes.
+ * @param offset Current offset in the vertex buffer in bytes; updated as vertices are written.
+ * @return int Updated offset in the vertex buffer after writing.
+ */
 static int stb_easy_font_draw_segs(float x, float y, unsigned char *segs, int num_segs, int vertical, stb_easy_font_color c, char *vbuf, int vbuf_size, int offset)
 {
     int i,j;
@@ -191,11 +218,32 @@ static int stb_easy_font_draw_segs(float x, float y, unsigned char *segs, int nu
 }
 
 static float stb_easy_font_spacing_val = 0;
+/**
+ * @brief Sets the horizontal spacing adjustment between characters.
+ *
+ * Adjusts the additional spacing applied between characters when rendering text.
+ * Positive values increase spacing; negative values (down to -1.5) decrease spacing.
+ *
+ * @param spacing Amount to adjust character spacing by, in pixels.
+ */
 static void stb_easy_font_spacing(float spacing)
 {
    stb_easy_font_spacing_val = spacing;
 }
 
+/**
+ * @brief Generates vertex buffer data for rendering ASCII text as line segment quads.
+ *
+ * Converts the given ASCII string into a series of quads representing line segments for each character, writing the resulting vertex data into the provided buffer. Supports multiline text via newline characters and allows optional per-vertex color (defaults to white if NULL). The vertex data format is interleaved floats for position (x, y, z=0) and 4 bytes for color per vertex. Each quad occupies 64 bytes. If the buffer is too small, output is truncated.
+ *
+ * @param x Horizontal starting position in pixels.
+ * @param y Vertical starting position in pixels.
+ * @param text Null-terminated ASCII string to render.
+ * @param color Optional RGBA color array (4 bytes); defaults to white if NULL.
+ * @param vertex_buffer Pointer to the output buffer for vertex data.
+ * @param vbuf_size Size of the output buffer in bytes.
+ * @return int Number of quads generated and written to the buffer.
+ */
 static int stb_easy_font_print(float x, float y, char *text, unsigned char color[4], void *vertex_buffer, int vbuf_size)
 {
     char *vbuf = (char *) vertex_buffer;
@@ -227,6 +275,14 @@ static int stb_easy_font_print(float x, float y, char *text, unsigned char color
     return (unsigned) offset/64;
 }
 
+/**
+ * @brief Calculates the width in pixels of the longest line in a multiline ASCII text string.
+ *
+ * Iterates through the input string, summing character advance widths and spacing for each line, and returns the ceiling of the maximum line width encountered.
+ *
+ * @param text Null-terminated ASCII string, may contain newline characters.
+ * @return int Width in pixels of the longest line.
+ */
 static int stb_easy_font_width(char *text)
 {
     float len = 0;
@@ -245,6 +301,14 @@ static int stb_easy_font_width(char *text)
     return (int) ceil(max_len);
 }
 
+/**
+ * @brief Calculates the pixel height of a multiline ASCII text string.
+ *
+ * Counts the number of lines in the input string, adding 12 pixels per line, and returns the total height required to display the text.
+ *
+ * @param text Null-terminated ASCII string, may contain newline characters.
+ * @return int Height in pixels needed to render all lines of the text.
+ */
 static int stb_easy_font_height(char *text)
 {
     float y = 0;

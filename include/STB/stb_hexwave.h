@@ -284,6 +284,11 @@ struct HexWave
 
 #define hexwave_clamp(v,a,b)   ((v) < (a) ? (a) : (v) > (b) ? (b) : (v))
 
+/**
+ * @brief Schedules a change to the oscillator's waveform parameters at the next cycle boundary.
+ *
+ * The new parameters are stored and will be applied atomically at the start of the next waveform cycle to ensure artifact-free morphing. Values for `peak_time` and `zero_wait` are clamped to the range [0, 1].
+ */
 STB_HEXWAVE_DEF void hexwave_change(HexWave *hex, int reflect, float peak_time, float half_height, float zero_wait)
 {
    hex->pending.reflect     = reflect;
@@ -294,6 +299,11 @@ STB_HEXWAVE_DEF void hexwave_change(HexWave *hex, int reflect, float peak_time, 
    hex->have_pending        = 1;
 }
 
+/**
+ * @brief Initializes a HexWave oscillator with specified waveform parameters.
+ *
+ * Sets the initial waveform shape and resets the oscillator state for audio generation. Parameters are clamped as needed to ensure valid waveform configuration.
+ */
 STB_HEXWAVE_DEF void hexwave_create(HexWave *hex, int reflect, float peak_time, float half_height, float zero_wait)
 {
    memset(hex, 0, sizeof(*hex));
@@ -312,6 +322,16 @@ static struct
    float *blamp;
 } hexblep;
 
+/**
+ * @brief Adds an oversampled BLEP or BLAMP correction to the output buffer.
+ *
+ * Linearly interpolates between oversampled correction table entries based on the time since a waveform transition, scaling and summing the result into the output buffer.
+ *
+ * @param output Buffer to which the correction is added.
+ * @param time_since_transition Time offset since the discontinuity, normalized to [0,1).
+ * @param scale Amplitude scaling factor for the correction.
+ * @param data Pointer to the oversampled BLEP or BLAMP table data.
+ */
 static void hex_add_oversampled_bleplike(float *output, float time_since_transition, float scale, float *data)
 {
    float *d1,*d2;
@@ -330,11 +350,29 @@ static void hex_add_oversampled_bleplike(float *output, float time_since_transit
       output[i] += scale * (d1[i] + (d2[i]-d1[i])*lerpweight);
 }
 
+/**
+ * @brief Applies a bandlimited step (BLEP) correction to the output buffer at a discontinuity.
+ *
+ * @param output Pointer to the output buffer where the BLEP correction will be added.
+ * @param time_since_transition Time since the discontinuity occurred, in normalized phase units.
+ * @param scale Amplitude scaling factor for the BLEP correction.
+ *
+ * This function adds a BLEP correction to smooth out discontinuities in the waveform, reducing aliasing artifacts.
+ */
 static void hex_blep (float *output, float time_since_transition, float scale)
 {
    hex_add_oversampled_bleplike(output, time_since_transition, scale, hexblep.blep);
 }
 
+/**
+ * @brief Applies a bandlimited ramp (BLAMP) correction to the output buffer.
+ *
+ * Adds a BLAMP correction at a specified time offset to reduce aliasing from slope discontinuities in the waveform.
+ *
+ * @param output Pointer to the output buffer where the correction will be added.
+ * @param time_since_transition Time offset since the slope discontinuity, in normalized phase units.
+ * @param scale Amplitude scaling factor for the correction.
+ */
 static void hex_blamp(float *output, float time_since_transition, float scale)
 {
    hex_add_oversampled_bleplike(output, time_since_transition, scale, hexblep.blamp);
@@ -346,7 +384,15 @@ typedef struct
 } hexvert;
 
 // each half of the waveform needs 4 vertices to represent 3 line
-// segments, plus 1 more for wraparound
+/**
+ * @brief Computes the vertices and slopes for the waveform's line segments based on current parameters.
+ *
+ * Populates an array of 9 vertices representing the time, value, and slope of each segment in a single waveform cycle, including wraparound for continuity. Handles waveform reflection, zero-wait, and peak time parameters, and ensures minimum segment length to prevent numerical instability. Slopes are calculated for each segment, and the final vertex wraps to the start for seamless cycling.
+ *
+ * @param vert Array of 9 vertices to be filled with time, value, and slope data.
+ * @param hex Pointer to the oscillator state containing current waveform parameters.
+ * @param dt Phase increment per sample, used to determine minimum segment length.
+ */
 static void hexwave_generate_linesegs(hexvert vert[9], HexWave *hex, float dt)
 {
    int j;
@@ -415,6 +461,16 @@ static void hexwave_generate_linesegs(hexvert vert[9], HexWave *hex, float dt)
    vert[8].s = vert[0].s;
 }
 
+/**
+ * @brief Generates bandlimited audio samples for a HexWave oscillator.
+ *
+ * Fills the output buffer with a specified number of floating-point audio samples, producing a waveform defined by the current HexWave parameters and frequency. Applies BLEP and BLAMP corrections to eliminate aliasing at discontinuities and slope changes. Handles frequency and waveform parameter changes smoothly, ensuring artifact-free transitions. Maintains internal phase and overlap buffer state for seamless sample generation across calls.
+ *
+ * @param output Pointer to the buffer where generated audio samples will be written.
+ * @param num_samples Number of samples to generate.
+ * @param hex Pointer to the HexWave oscillator state.
+ * @param freq Oscillator frequency, normalized by the sample rate (cycles per sample).
+ */
 STB_HEXWAVE_DEF void hexwave_generate_samples(float *output, int num_samples, HexWave *hex, float freq)
 {
    hexvert vert[9];
@@ -543,6 +599,11 @@ STB_HEXWAVE_DEF void hexwave_generate_samples(float *output, int num_samples, He
    hex->t = t;
 }
 
+/**
+ * @brief Releases internal BLEP and BLAMP buffers if allocated.
+ *
+ * If no user buffer was provided during initialization, this function frees the internally allocated BLEP and BLAMP tables. If a user buffer was supplied, no action is taken.
+ */
 STB_HEXWAVE_DEF void hexwave_shutdown(float *user_buffer)
 {
    #ifndef STB_HEXWAVE_NO_ALLOCATION
@@ -553,7 +614,15 @@ STB_HEXWAVE_DEF void hexwave_shutdown(float *user_buffer)
    #endif
 }
 
-// buffer should be NULL or must be 4*(width*(oversample+1)*2 + 
+/**
+ * @brief Initializes BLEP and BLAMP tables for bandlimited waveform generation.
+ *
+ * Computes and prepares internal tables for BLEP (bandlimited step) and BLAMP (bandlimited ramp) corrections, used to remove aliasing artifacts from waveform discontinuities and slope changes. The tables are generated by integrating a windowed sinc function and are deinterleaved for efficient interpolation. If a user-provided buffer is supplied, it is used for all internal data; otherwise, memory is allocated internally.
+ *
+ * @param width Size of the BLEP/BLAMP table (clamped to a maximum value); larger values reduce aliasing but increase memory usage.
+ * @param oversample Number of subsample positions for interpolation; higher values reduce noise.
+ * @param user_buffer Optional buffer for internal data; if NULL, memory is allocated internally.
+ */
 STB_HEXWAVE_DEF void hexwave_init(int width, int oversample, float *user_buffer)
 {
    int halfwidth = width/2;

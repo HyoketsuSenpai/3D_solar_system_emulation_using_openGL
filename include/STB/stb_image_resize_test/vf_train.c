@@ -13,6 +13,15 @@
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "stb_image_resize2.h"  
 
+/**
+ * @brief Reads a binary file into memory with the file size prepended.
+ *
+ * Allocates a buffer large enough to hold the file contents plus an extra 4 bytes for the file size.
+ * The first element of the returned buffer contains the file size in bytes as an integer, followed by the file data.
+ *
+ * @param filename Path to the binary file to read.
+ * @return Pointer to the allocated buffer containing the file size and data, or 0 if the file cannot be opened.
+ */
 static int * file_read( char const * filename )
 {
   size_t s;
@@ -56,6 +65,15 @@ fileinfo fi[256];
 unsigned char * bitmap;
 int bitmapw, bitmaph, bitmapp;
 
+/**
+ * @brief Parses a timing file and populates the fileinfo structure at the specified index.
+ *
+ * Reads and validates the timing file, extracts metadata and timing data, and fills the corresponding fields in the global fileinfo array at the given index. Returns 1 on success, or 0 if the file cannot be read or is invalid.
+ *
+ * @param filename Path to the timing file.
+ * @param index Index in the fileinfo array to populate.
+ * @return int 1 if the file was successfully parsed and loaded, 0 otherwise.
+ */
 static int use_timing_file( char const * filename, int index )
 {
   int * base = file_read( filename );
@@ -88,6 +106,20 @@ static int use_timing_file( char const * filename, int index )
   return 1;
 }
 
+/**
+ * @brief Determines whether vertical-first filtering should be used for image resizing.
+ *
+ * Evaluates scaling factors and filter characteristics to decide if vertical-first filtering is preferable for the given input and output dimensions, filter type, and weights. Returns a boolean indicating the decision.
+ *
+ * @param weights_table Table of weights used for classification.
+ * @param ox Output width.
+ * @param oy Output height.
+ * @param ix Input width.
+ * @param iy Input height.
+ * @param filter Filter type index.
+ * @param v_info Optional pointer to receive additional vertical-first decision info.
+ * @return int Nonzero if vertical-first filtering should be used; zero otherwise.
+ */
 static int vert_first( float weights_table[STBIR_RESIZE_CLASSIFICATIONS][4], int ox, int oy, int ix, int iy, int filter, STBIR__V_FIRST_INFO * v_info )
 {
   float h_scale=(float)ox/(float)(ix);
@@ -102,6 +134,11 @@ static int vert_first( float weights_table[STBIR_RESIZE_CLASSIFICATIONS][4], int
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+/**
+ * @brief Allocates and initializes the bitmap buffer for visualizing timing data.
+ *
+ * Calculates the required bitmap dimensions to arrange all timing files in a tiled layout with spacing, assigns each file's tile position, and allocates a zero-initialized RGB bitmap buffer sized to fit all tiles.
+ */
 static void alloc_bitmap()
 {
   int findex;
@@ -146,6 +183,15 @@ static void alloc_bitmap()
   memset( bitmap, 0, bitmapp * bitmaph );
 }
 
+/**
+ * @brief Builds a bitmap visualization for a timing file and channel count.
+ *
+ * Colors each pixel to indicate whether the vertical-first filtering decision, as determined by the provided weights, matches the optimal timing for that configuration. Correct decisions are colored by classification; incorrect decisions are colored by error magnitude and classification.
+ *
+ * @param weights Table of weights used to determine vertical-first filtering.
+ * @param do_channel_count_index Index of the channel count to visualize.
+ * @param findex Index of the timing file to visualize.
+ */
 static void build_bitmap( float weights[STBIR_RESIZE_CLASSIFICATIONS][4], int do_channel_count_index, int findex )
 {
   static int colors[STBIR_RESIZE_CLASSIFICATIONS];
@@ -227,6 +273,14 @@ static void build_bitmap( float weights[STBIR_RESIZE_CLASSIFICATIONS][4], int do
   }
 }
 
+/**
+ * @brief Builds a comparative bitmap visualizing timing differences between two timing files for a specific channel count.
+ *
+ * Colors each pixel to indicate which timing file performs better for the vertical-first filtering decision, with color intensity representing the magnitude of the timing difference.
+ *
+ * @param weights Table of weights used for vertical-first decision classification.
+ * @param do_channel_count_index Index of the channel count to compare.
+ */
 static void build_comp_bitmap( float weights[STBIR_RESIZE_CLASSIFICATIONS][4], int do_channel_count_index )
 {
   int * ts0;
@@ -301,12 +355,27 @@ static void build_comp_bitmap( float weights[STBIR_RESIZE_CLASSIFICATIONS][4], i
   }
 }
 
+/**
+ * @brief Writes the current bitmap visualization to a PNG file named "results.png".
+ *
+ * The bitmap is saved in BGR format with the current width and height.
+ */
 static void write_bitmap()
 {
   stbi_write_png( "results.png", bitmapp / 3, bitmaph, 3|STB_IMAGE_BGR, bitmap, bitmapp );
 }
 
 
+/**
+ * @brief Calculates error metrics for vertical-first filtering decisions across timing files.
+ *
+ * For a given set of weights and a specific channel count, this function iterates through all loaded timing files and their input rectangles, comparing the actual timing data for vertical-first and horizontal-first filtering. It accumulates the total count and sum of timing errors for each classification where the vertical-first decision does not match the optimal timing.
+ *
+ * @param weights_table Table of weights used to determine vertical-first filtering decisions.
+ * @param curtot Output array to receive the count of errors per classification.
+ * @param curerr Output array to receive the sum of timing errors per classification.
+ * @param do_channel_count_index Index specifying which channel count to evaluate.
+ */
 static void calc_errors( float weights_table[STBIR_RESIZE_CLASSIFICATIONS][4], int * curtot, double * curerr, int do_channel_count_index )
 {
   int th, findex;
@@ -381,6 +450,14 @@ static void calc_errors( float weights_table[STBIR_RESIZE_CLASSIFICATIONS][4], i
 #define TRIESPERWEIGHT 32
 #define MAXRANGE ((TRIESPERWEIGHT+1) * (TRIESPERWEIGHT+1) * (TRIESPERWEIGHT+1) * (TRIESPERWEIGHT+1) - 1)
 
+/**
+ * @brief Converts an integer index into four normalized float weights.
+ *
+ * Decomposes the given integer range into four components, each mapped to a float in the range [0, 1], and stores them in the provided weights array.
+ *
+ * @param weights Output array to receive four float weights.
+ * @param range Integer index representing a unique combination of four weights.
+ */
 static void expand_to_floats( float * weights, int range )
 {
   weights[0] = (float)( range % (TRIESPERWEIGHT+1) ) / (float)TRIESPERWEIGHT;
@@ -389,6 +466,15 @@ static void expand_to_floats( float * weights, int range )
   weights[3] = (float)( range/(TRIESPERWEIGHT+1)/(TRIESPERWEIGHT+1)/(TRIESPERWEIGHT+1) % (TRIESPERWEIGHT+1) ) / (float)TRIESPERWEIGHT;
 }
 
+/**
+ * @brief Converts a discrete weight index into a formatted string representation.
+ *
+ * Decomposes the integer `range` into four weight components and formats them as a string
+ * showing their values relative to the maximum allowed (`TRIESPERWEIGHT`).
+ *
+ * @param range Integer encoding four weight values.
+ * @return Pointer to a static string representing the weights in the format "[ w0/max w1/max w2/max w3/max ]".
+ */
 static char const * expand_to_string( int range )
 {
   static char str[128];
@@ -401,6 +487,16 @@ static char const * expand_to_string( int range )
   return str;
 }
 
+/**
+ * @brief Prints the weights and error statistics for each classification of a given channel count.
+ *
+ * Outputs the channel index, weight values, error counts, and error sums for each classification to the console.
+ *
+ * @param weights Array of weight values for each classification.
+ * @param channel_count_index Index of the channel count being reported.
+ * @param tots Array of error counts per classification.
+ * @param errs Array of error sums per classification.
+ */
 static void print_weights( float weights[STBIR_RESIZE_CLASSIFICATIONS][4], int channel_count_index, int * tots, double * errs )
 {
   int th;
@@ -417,6 +513,14 @@ static int windowranges[ 16 ];
 static int windowstatus = 0;
 static DWORD trainstart = 0;
 
+/**
+ * @brief Optimizes weight parameters for vertical-first resizing for a specific channel count.
+ *
+ * Performs an exhaustive search over all possible discrete weight combinations for the given channel count, evaluating each combination against timing data to minimize classification errors. Updates the provided output array with the best weights found. Periodically updates the visualization bitmap during the search. The process can be cancelled via a global status flag.
+ *
+ * @param best_output_weights Output array to receive the best weights for each classification.
+ * @param channel_count_index Index specifying which channel count to optimize.
+ */
 static void opt_channel( float best_output_weights[STBIR_RESIZE_CLASSIFICATIONS][4], int channel_count_index )
 {
   int newbest = 0;
@@ -491,6 +595,14 @@ static void opt_channel( float best_output_weights[STBIR_RESIZE_CLASSIFICATIONS]
   // if we hit here, then we tried all weights for this opt, so save them 
 }
 
+/**
+ * @brief Prints a 3D float array as a static C array declaration.
+ *
+ * Outputs the provided weights array in C source code format, using the specified variable name.
+ *
+ * @param weight The 3D array of weights to print, indexed by set, classification, and weight component.
+ * @param name The variable name to use in the generated C declaration.
+ */
 static void print_struct( float weight[5][STBIR_RESIZE_CLASSIFICATIONS][4], char const * name )
 {
   printf("\n\nstatic float %s[5][STBIR_RESIZE_CLASSIFICATIONS][4]=\n{", name );
@@ -514,6 +626,14 @@ static void print_struct( float weight[5][STBIR_RESIZE_CLASSIFICATIONS][4], char
 
 static float retrain_weights[5][STBIR_RESIZE_CLASSIFICATIONS][4];
 
+/**
+ * @brief Thread entry point for optimizing weights for a specific channel count.
+ *
+ * Casts the input parameter to a channel index and calls the optimization routine for that channel.
+ *
+ * @param p Pointer cast to the channel index to optimize.
+ * @return Always returns 0.
+ */
 static DWORD __stdcall retrain_shim( LPVOID p )
 {
   int chanind = (int) (size_t)p;
@@ -521,6 +641,14 @@ static DWORD __stdcall retrain_shim( LPVOID p )
   return 0;
 }
 
+/**
+ * @brief Formats a duration in milliseconds as a human-readable string.
+ *
+ * Converts milliseconds to a string in "Xm Ys" format if at least one minute, or "Xs" otherwise.
+ *
+ * @param ms Duration in milliseconds.
+ * @return Pointer to a static string representing the formatted time.
+ */
 static char const * gettime( int ms )
 {
   static char time[32];
@@ -536,6 +664,17 @@ static DWORD extrawindoww, extrawindowh;
 static HINSTANCE instance;
 static int curzoom = 1;
 
+/**
+ * @brief Handles Windows messages for the training and visualization window.
+ *
+ * Processes keyboard and window events to manage training cancellation, window closure, bitmap rendering, and interactive display of timing and classification details. On paint events, draws the timing visualization bitmap, overlays training progress and status, and shows detailed information about the pixel under the mouse cursor. Supports user cancellation of training and updates the display in response to timer events.
+ *
+ * @param window Handle to the window receiving the message.
+ * @param message The Windows message identifier.
+ * @param wparam Additional message-specific information.
+ * @param lparam Additional message-specific information.
+ * @return LRESULT Result of message processing, or passes unhandled messages to the default window procedure.
+ */
 static LRESULT WINAPI WindowProc( HWND   window,
                                   UINT   message,
                                   WPARAM wparam,
@@ -727,6 +866,11 @@ static LRESULT WINAPI WindowProc( HWND   window,
   return DefWindowProc( window, message, wparam, lparam );
 }
 
+/**
+ * @brief Sets the process DPI awareness to improve scaling on high-DPI displays.
+ *
+ * Attempts to set the process DPI awareness to "system DPI aware" using the SetProcessDpiAwareness function from Shcore.dll, if available.
+ */
 static void SetHighDPI(void)
 {
   typedef HRESULT WINAPI setdpitype(int v);
@@ -739,6 +883,11 @@ static void SetHighDPI(void)
   }
 } 
 
+/**
+ * @brief Creates and displays the main application window for bitmap visualization.
+ *
+ * Registers a window class, creates a resizable window sized to fit the visualization bitmap, sets up periodic redraw via a timer, and enters the Windows message loop to handle user interaction and rendering.
+ */
 static void draw_window()
 {
   WNDCLASS wc;
@@ -802,6 +951,11 @@ static void draw_window()
   }
 }
 
+/**
+ * @brief Optimizes vertical-first resizing weights for all channel counts using multithreaded training and interactive visualization.
+ *
+ * Launches a separate training thread for each channel count to exhaustively search for optimal weights that minimize timing errors. Displays an interactive window showing training progress and allows user cancellation. After training, writes the resulting visualization bitmap and prints the optimized weights. Prints "CANCELLED!" if the process was interrupted.
+ */
 static void retrain()
 {
   HANDLE threads[ 16 ];
@@ -825,6 +979,11 @@ static void retrain()
   if ( windowstatus ) printf( "CANCELLED!\n" );
 }
 
+/**
+ * @brief Prints detailed information about each loaded timing file.
+ *
+ * Displays metadata for each timing file, including filename, CPU and SIMD type, total test time, cycles per second, tile and scaling dimensions, sample coordinates, available channel counts, and input rectangle sizes.
+ */
 static void info()
 {
   int findex;
@@ -856,6 +1015,14 @@ static void info()
   }
 }
 
+/**
+ * @brief Evaluates and visualizes current weight performance across all channel counts.
+ *
+ * Calculates error metrics for the current set of weights on all loaded timing files and channel counts. Optionally prints error statistics, builds visualization bitmaps, displays an interactive window, or writes the bitmap to a PNG file depending on the provided flags.
+ *
+ * @param do_win If nonzero, displays the interactive visualization window.
+ * @param do_bitmap If nonzero, writes the bitmap visualization to a PNG file; if zero, prints error statistics to the console.
+ */
 static void current( int do_win, int do_bitmap )
 {
   int i, findex;
@@ -889,6 +1056,11 @@ static void current( int do_win, int do_bitmap )
     write_bitmap();
 }
 
+/**
+ * @brief Compares two timing files for consistency and visualizes their performance differences.
+ *
+ * Checks that the two loaded timing files are compatible in terms of types, input rectangles, dimensions, and scaling factors. If they match, builds a comparative bitmap highlighting which file performs better for each configuration and displays the result in an interactive window. Exits with an error if the files are incompatible.
+ */
 static void compare()
 {
   int i;
@@ -926,6 +1098,14 @@ static void compare()
   draw_window();
 }
 
+/**
+ * @brief Loads multiple timing files into the global fileinfo array.
+ *
+ * Attempts to parse each provided timing file and stores the results. Exits the program if any file is missing or invalid.
+ *
+ * @param args Array of file paths to timing files.
+ * @param count Number of timing files to load.
+ */
 static void load_files( char ** args, int count )
 {
   int i;
@@ -947,6 +1127,15 @@ static void load_files( char ** args, int count )
   numfileinfo = count;
 }  
 
+/**
+ * @brief Entry point for the vertical-first training and visualization tool.
+ *
+ * Parses command-line arguments to select and execute a mode: retraining weights, displaying timing file info, checking current weights, generating a bitmap visualization, or comparing two timing files. Loads timing data files as needed and dispatches to the appropriate processing or visualization routines. Prints usage instructions and exits on invalid arguments.
+ *
+ * @param argc Number of command-line arguments.
+ * @param argv Array of command-line argument strings.
+ * @return 0 on successful execution; exits with error code on failure or invalid usage.
+ */
 int main( int argc, char ** argv )
 {
   int check;

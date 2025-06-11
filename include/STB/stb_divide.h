@@ -125,6 +125,16 @@ extern int stb_mod_eucl (int value_to_be_divided, int value_to_divide_by);
    #error "floor test requires truncating division"
    #endif
    #undef C_INTEGER_DIVISION_TRUNCATES
+   /**
+    * @brief Performs signed integer division with flooring semantics.
+    *
+    * Returns the quotient of dividing v1 by v2, rounding toward negative infinity (floor division).
+    * The result is adjusted so that the remainder has the same sign as the divisor.
+    *
+    * @param v1 Dividend.
+    * @param v2 Divisor.
+    * @return int The floored quotient of v1 divided by v2.
+    */
    int stb__div(int v1, int v2)
    {
       int q = v1/v2, r = v1%v2;
@@ -134,6 +144,15 @@ extern int stb_mod_eucl (int value_to_be_divided, int value_to_divide_by);
          return q;
    }
 
+   /**
+    * @brief Computes the modulus of two integers, ensuring the result has the same sign as the divisor.
+    *
+    * Returns the remainder of dividing v1 by v2, adjusted so that the result matches the sign of v2, consistent with mathematical modulus behavior.
+    *
+    * @param v1 Dividend.
+    * @param v2 Divisor.
+    * @return int The modulus, with the same sign as v2.
+    */
    int stb__mod(int v1, int v2)
    {
       int r = v1%v2;
@@ -144,6 +163,15 @@ extern int stb_mod_eucl (int value_to_be_divided, int value_to_divide_by);
    }
 #endif
 
+/**
+ * @brief Performs signed integer division with truncation toward zero.
+ *
+ * Returns the quotient of dividing v1 by v2, rounding the result toward zero regardless of operand signs. Handles edge cases to ensure consistent truncating division semantics across platforms.
+ *
+ * @param v1 The dividend.
+ * @param v2 The divisor.
+ * @return int The truncated quotient of v1 divided by v2.
+ */
 int stb_div_trunc(int v1, int v2)
 {
    #ifdef C_INTEGER_DIVISION_TRUNCATES
@@ -161,6 +189,15 @@ int stb_div_trunc(int v1, int v2)
    #endif
 }
 
+/**
+ * @brief Performs signed integer division with flooring semantics.
+ *
+ * Computes the quotient of dividing v1 by v2, rounding the result toward negative infinity (floor division). The result is always the largest integer less than or equal to the exact mathematical quotient, regardless of the signs of the operands. Handles edge cases and integer overflow to ensure consistent behavior across platforms.
+ *
+ * @param v1 Dividend.
+ * @param v2 Divisor.
+ * @return int The floored quotient of v1 divided by v2.
+ */
 int stb_div_floor(int v1, int v2)
 {
    #ifdef C_INTEGER_DIVISION_FLOORS
@@ -185,6 +222,15 @@ int stb_div_floor(int v1, int v2)
    #endif
 }
 
+/**
+ * @brief Performs Euclidean division of two signed integers.
+ *
+ * Computes the quotient of dividing v1 by v2 such that the remainder is always non-negative and less than the absolute value of v2. The result satisfies the identity: v1 = q * v2 + r, where 0 ≤ r < |v2|.
+ *
+ * @param v1 Dividend.
+ * @param v2 Divisor.
+ * @return int The Euclidean quotient of v1 divided by v2.
+ */
 int stb_div_eucl(int v1, int v2)
 {
    int q,r;
@@ -221,6 +267,15 @@ int stb_div_eucl(int v1, int v2)
       return q + (v2 > 0 ? -1 : 1);
 }
 
+/**
+ * @brief Computes the modulus corresponding to truncating division.
+ *
+ * Returns the remainder of dividing v1 by v2, where the result has the same sign as the dividend (v1), matching the behavior of C's `%` operator on platforms where division truncates toward zero.
+ *
+ * @param v1 The dividend.
+ * @param v2 The divisor.
+ * @return int The truncating modulus of v1 and v2.
+ */
 int stb_mod_trunc(int v1, int v2)
 {
    #ifdef C_INTEGER_DIVISION_TRUNCATES
@@ -242,6 +297,15 @@ int stb_mod_trunc(int v1, int v2)
    #endif
 }
 
+/**
+ * @brief Computes the modulus corresponding to floor division.
+ *
+ * Returns the remainder of dividing v1 by v2 such that the result has the same sign as the divisor (v2), matching the mathematical definition of modulus for floor division. The result satisfies: `v1 = q * v2 + r`, where `q = floor(v1 / v2)` and `r` is the returned value.
+ *
+ * @param v1 Dividend.
+ * @param v2 Divisor.
+ * @return int The floor modulus of v1 and v2, with the same sign as v2.
+ */
 int stb_mod_floor(int v1, int v2)
 {
    #ifdef C_INTEGER_DIVISION_FLOORS
@@ -263,6 +327,15 @@ int stb_mod_floor(int v1, int v2)
    #endif
 }
 
+/**
+ * @brief Computes the Euclidean modulus of two signed integers.
+ *
+ * Returns the remainder of dividing v1 by v2, always yielding a non-negative result in the range [0, |v2|). The sign of the result is independent of the signs of the operands, ensuring Euclidean division semantics.
+ *
+ * @param v1 Dividend.
+ * @param v2 Divisor.
+ * @return int Non-negative remainder of v1 divided by v2, in the range [0, |v2|).
+ */
 int stb_mod_eucl(int v1, int v2)
 {
    int r = stb__mod(v1,v2);
@@ -281,6 +354,18 @@ int stb_mod_eucl(int v1, int v2)
 int show=0;
 int err=0;
 
+/**
+ * @brief Validates the correctness of a division and remainder result.
+ *
+ * Checks that the provided quotient and remainder satisfy the equation `q * b + r == a`, that the remainder is within the expected range, and that its sign matches the specified direction. Reports errors to stderr if any condition fails.
+ *
+ * @param q The computed quotient.
+ * @param r The computed remainder.
+ * @param a The dividend.
+ * @param b The divisor.
+ * @param type A string describing the division type (for error messages).
+ * @param dir Expected sign direction for the remainder (positive or negative).
+ */
 void stbdiv_check(int q, int r, int a, int b, char *type, int dir)
 {
    if ((dir > 0 && r < 0) || (dir < 0 && r > 0)) {
@@ -320,6 +405,13 @@ void test(int a, int b)
    if (show) printf("(%+11d,%+2d)\n", q,r); stbdiv_check(q,r,a,b, "euclidean",1);
 }
 
+/**
+ * @brief Runs and validates all division and modulus variants for given operands.
+ *
+ * Computes truncating, flooring, and Euclidean division and modulus for the provided integers, checks their correctness, and optionally prints the results for debugging or demonstration purposes.
+ *
+ * Intended for use in the test harness to verify the behavior of all division and modulus functions with specific input values.
+ */
 void testh(int a, int b)
 {
    int q,r;
@@ -332,6 +424,13 @@ void testh(int a, int b)
    if (show) printf("   (%08x,%08x)\n ", q,r);
 }
 
+/**
+ * @brief Runs a suite of tests to verify the correctness of all division and modulus functions.
+ *
+ * Executes a series of test cases covering various combinations of positive and negative dividends and divisors, including edge cases such as `INT_MIN` and `INT_MAX`. Returns 1 if any test fails, otherwise returns 0.
+ *
+ * @return int 1 if any test fails, 0 if all tests pass.
+ */
 int main(int argc, char **argv)
 {
    if (argc > 1) show=1;

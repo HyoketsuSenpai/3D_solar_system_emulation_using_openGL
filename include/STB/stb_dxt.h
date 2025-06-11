@@ -161,12 +161,29 @@ static const unsigned char stb__OMatch6[256][2] = {
    { 61, 62 }, { 62, 61 }, { 62, 62 }, { 62, 62 }, { 62, 63 }, { 63, 62 }, { 63, 63 }, { 63, 63 },
 };
 
+/**
+ * @brief Multiplies two 8-bit integers with rounding and normalization.
+ *
+ * Performs (a * b + 128) / 255 with rounding, commonly used for color channel scaling.
+ *
+ * @param a First 8-bit integer (0-255).
+ * @param b Second 8-bit integer (0-255).
+ * @return int Result of the normalized multiplication, in the range 0-255.
+ */
 static int stb__Mul8Bit(int a, int b)
 {
   int t = a*b + 128;
   return (t + (t >> 8)) >> 8;
 }
 
+/**
+ * @brief Converts a 16-bit 5-6-5 RGB value to 8-bit per channel RGB.
+ *
+ * Expands a 16-bit RGB value (5 bits red, 6 bits green, 5 bits blue) into an array of 8-bit RGB values. The output array's fourth element is set to 0.
+ *
+ * @param out Pointer to an array where the resulting 8-bit RGB values will be stored.
+ * @param v 16-bit input value in 5-6-5 RGB format.
+ */
 static void stb__From16Bit(unsigned char *out, unsigned short v)
 {
    int rv = (v & 0xf800) >> 11;
@@ -180,12 +197,28 @@ static void stb__From16Bit(unsigned char *out, unsigned short v)
    out[3] = 0;
 }
 
+/**
+ * @brief Converts 8-bit RGB values to a 16-bit 5-6-5 packed format.
+ *
+ * @param r Red channel value (0-255).
+ * @param g Green channel value (0-255).
+ * @param b Blue channel value (0-255).
+ * @return 16-bit value encoding the RGB color in 5-6-5 format.
+ */
 static unsigned short stb__As16Bit(int r, int g, int b)
 {
    return (unsigned short)((stb__Mul8Bit(r,31) << 11) + (stb__Mul8Bit(g,63) << 5) + stb__Mul8Bit(b,31));
 }
 
-// linear interpolation at 1/3 point between a and b, using desired rounding type
+/**
+ * @brief Computes the value at one-third of the way from a to b using integer arithmetic.
+ *
+ * Performs linear interpolation between two integers, returning the value at the 1/3 position between a and b. The interpolation uses either standard rounding or an optional rounding bias, depending on compile-time configuration.
+ *
+ * @param a The starting integer value.
+ * @param b The ending integer value.
+ * @return int The interpolated value at 1/3 between a and b.
+ */
 static int stb__Lerp13(int a, int b)
 {
 #ifdef STB_DXT_USE_ROUNDING_BIAS
@@ -198,7 +231,15 @@ static int stb__Lerp13(int a, int b)
 #endif
 }
 
-// lerp RGB color
+/**
+ * @brief Computes the linear interpolation at 1/3 between two RGB colors.
+ *
+ * Sets the output RGB triplet to the value 1/3 of the way from p1 to p2 for each color channel.
+ *
+ * @param out Pointer to the output RGB array (3 bytes).
+ * @param p1 Pointer to the first input RGB color (3 bytes).
+ * @param p2 Pointer to the second input RGB color (3 bytes).
+ */
 static void stb__Lerp13RGB(unsigned char *out, unsigned char *p1, unsigned char *p2)
 {
    out[0] = (unsigned char)stb__Lerp13(p1[0], p2[0]);
@@ -206,7 +247,15 @@ static void stb__Lerp13RGB(unsigned char *out, unsigned char *p1, unsigned char 
    out[2] = (unsigned char)stb__Lerp13(p1[2], p2[2]);
 }
 
-/****************************************************************************/
+/**
+ * @brief Computes the four interpolated colors for a DXT color block from two 16-bit endpoints.
+ *
+ * Fills the `color` array with the two endpoint colors and their two interpolated values, as required for DXT1/DXT5 block encoding.
+ *
+ * @param color Output array of 16 bytes to receive four RGB colors (each 4 bytes, only first 3 used per color).
+ * @param c0 First 16-bit color endpoint in 5-6-5 RGB format.
+ * @param c1 Second 16-bit color endpoint in 5-6-5 RGB format.
+ */
 
 static void stb__EvalColors(unsigned char *color,unsigned short c0,unsigned short c1)
 {
@@ -216,7 +265,15 @@ static void stb__EvalColors(unsigned char *color,unsigned short c0,unsigned shor
    stb__Lerp13RGB(color+12, color+4, color+0);
 }
 
-// The color matching function
+/**
+ * @brief Assigns each pixel in a 4x4 color block to the closest of four interpolated colors and encodes the assignments as a 32-bit mask.
+ *
+ * Projects each pixel's color onto the axis defined by two endpoint colors, then selects the nearest of four possible interpolated colors for each pixel. The resulting 2-bit indices for all 16 pixels are packed into a 32-bit mask, suitable for DXT1/DXT5 block encoding.
+ *
+ * @param block Pointer to 16 RGBA pixels (4x4 block, 4 bytes per pixel).
+ * @param color Pointer to four RGBA colors (the two endpoints and two interpolated colors, 4 bytes each).
+ * @return 32-bit mask encoding the color index (0-3) for each pixel in the block.
+ */
 static unsigned int stb__MatchColorsBlock(unsigned char *block, unsigned char *color)
 {
    unsigned int mask = 0;
@@ -259,7 +316,18 @@ static unsigned int stb__MatchColorsBlock(unsigned char *block, unsigned char *c
    return mask;
 }
 
-// The color optimization function. (Clever code, part 1)
+/**
+ * @brief Finds optimal 16-bit color endpoints for a 4x4 color block using PCA.
+ *
+ * Analyzes the color distribution of a 4x4 block and computes two 16-bit RGB endpoints
+ * that best represent the block for DXT compression. Uses principal component analysis
+ * to determine the principal axis of color variation, then selects the two most extreme
+ * colors along this axis as endpoints.
+ *
+ * @param block Pointer to 16 RGBA pixels (4 bytes per pixel).
+ * @param pmax16 Output pointer for the 16-bit RGB endpoint with the highest projection.
+ * @param pmin16 Output pointer for the 16-bit RGB endpoint with the lowest projection.
+ */
 static void stb__OptimizeColorsBlock(unsigned char *block, unsigned short *pmax16, unsigned short *pmin16)
 {
   int mind,maxd;
@@ -378,6 +446,14 @@ static const float stb__midpoints6[64] = {
    0.772549f, 0.788235f, 0.803922f, 0.819608f, 0.835294f, 0.850980f, 0.866667f, 0.882353f, 0.898039f, 0.913725f, 0.929412f, 0.945098f, 0.960784f, 0.976471f, 0.992157f, 1.0f
 };
 
+/**
+ * @brief Quantizes a floating-point value in [0,1] to a 5-bit integer with rounding.
+ *
+ * Clamps the input to the [0,1] range, scales to 5 bits (0–31), and applies midpoint-based rounding.
+ *
+ * @param x Floating-point value to quantize.
+ * @return 5-bit quantized value as an unsigned short.
+ */
 static unsigned short stb__Quantize5(float x)
 {
    unsigned short q;
@@ -387,6 +463,14 @@ static unsigned short stb__Quantize5(float x)
    return q;
 }
 
+/**
+ * @brief Quantizes a floating-point value in [0,1] to a 6-bit integer with rounding.
+ *
+ * Clamps the input to the [0,1] range, scales to 6 bits, and applies midpoint rounding for optimal quantization.
+ *
+ * @param x Input value to quantize.
+ * @return Quantized 6-bit value as an unsigned short (range 0–63).
+ */
 static unsigned short stb__Quantize6(float x)
 {
    unsigned short q;
@@ -398,7 +482,17 @@ static unsigned short stb__Quantize6(float x)
 
 // The refinement function. (Clever code, part 2)
 // Tries to optimize colors to suit block contents better.
-// (By solving a least squares system via normal equations+Cramer's rule)
+/**
+ * @brief Refines DXT color block endpoints using least squares optimization.
+ *
+ * Given a 4x4 block of RGB pixels and a mask assigning each pixel to one of four interpolated colors, this function updates the 16-bit endpoint colors to minimize the squared error between the original and reconstructed colors. If all pixels are assigned the same index, it selects endpoints based on the average color. Otherwise, it solves a least squares system to find optimal endpoints and quantizes them to DXT format.
+ *
+ * @param block Pointer to 16 RGBA pixels (4 bytes per pixel).
+ * @param pmax16 Pointer to the current maximum endpoint (input/output).
+ * @param pmin16 Pointer to the current minimum endpoint (input/output).
+ * @param mask 32-bit mask encoding color indices for each pixel.
+ * @return int Nonzero if the endpoints were changed; zero if unchanged.
+ */
 static int stb__RefineBlock(unsigned char *block, unsigned short *pmax16, unsigned short *pmin16, unsigned int mask)
 {
    static const int w1Tab[4] = { 3,0,2,1 };
@@ -475,7 +569,15 @@ static int stb__RefineBlock(unsigned char *block, unsigned short *pmax16, unsign
    return oldMin != min16 || oldMax != max16;
 }
 
-// Color block compression
+/**
+ * @brief Compresses a 4x4 block of RGB pixels into a DXT1 color block.
+ *
+ * Compresses a 4x4 block of 8-bit RGB pixels into the 8-byte DXT1 color block format, using principal component analysis and optional refinement for improved quality. Handles constant color blocks as a special case for optimal encoding.
+ *
+ * @param dest Pointer to the output buffer for the 8-byte compressed DXT1 color block.
+ * @param block Pointer to the input 4x4 block of RGB pixels (16 pixels, 3 bytes each).
+ * @param mode Compression mode; use STB_DXT_HIGHQUAL for higher quality with additional refinement.
+ */
 static void stb__CompressColorBlock(unsigned char *dest, unsigned char *block, int mode)
 {
    unsigned int mask;
@@ -543,7 +645,15 @@ static void stb__CompressColorBlock(unsigned char *dest, unsigned char *block, i
   dest[7] = (unsigned char) (mask >> 24);
 }
 
-// Alpha block compression (this is easy for a change)
+/**
+ * @brief Compresses a 4x4 block of alpha values into DXT5 alpha format.
+ *
+ * Finds the minimum and maximum alpha values in the block, encodes them, and computes optimal 3-bit indices for each pixel to represent the alpha channel efficiently. The compressed 8-byte alpha block is written to the destination buffer.
+ *
+ * @param dest Pointer to an 8-byte buffer where the compressed alpha block will be written.
+ * @param src Pointer to the source alpha values. Each pixel's alpha is accessed with the given stride.
+ * @param stride Byte offset between consecutive alpha values in the source block.
+ */
 static void stb__CompressAlphaBlock(unsigned char *dest,unsigned char *src, int stride)
 {
    int i,dist,bias,dist4,dist2,bits,mask;
@@ -596,6 +706,16 @@ static void stb__CompressAlphaBlock(unsigned char *dest,unsigned char *src, int 
    }
 }
 
+/**
+ * @brief Compresses a 4x4 block of RGBA pixels into DXT1 or DXT5 format.
+ *
+ * Compresses a 4x4 block of pixels from RGBA input into either DXT1 (no alpha) or DXT5 (with alpha) format, depending on the `alpha` flag. The `mode` parameter selects between normal and high-quality compression. The compressed block is written to `dest` (8 bytes for DXT1, 16 bytes for DXT5).
+ *
+ * @param dest Pointer to the output buffer for the compressed block.
+ * @param src Pointer to the input RGBA pixel data (16 pixels, 4 bytes per pixel).
+ * @param alpha Nonzero to enable alpha channel compression (DXT5), zero for DXT1.
+ * @param mode Compression mode: 0 for normal, 2 for high quality.
+ */
 void stb_compress_dxt_block(unsigned char *dest, const unsigned char *src, int alpha, int mode)
 {
    unsigned char data[16][4];
@@ -614,11 +734,27 @@ void stb_compress_dxt_block(unsigned char *dest, const unsigned char *src, int a
    stb__CompressColorBlock(dest,(unsigned char*) src,mode);
 }
 
+/**
+ * @brief Compresses a 4x4 single-channel block into BC4 format.
+ *
+ * Compresses a 4x4 block of single-channel (red) data into an 8-byte BC4 compressed block.
+ *
+ * @param dest Pointer to the output buffer for the compressed BC4 block (must be at least 8 bytes).
+ * @param src Pointer to the input block of 16 bytes, each representing a single-channel value.
+ */
 void stb_compress_bc4_block(unsigned char *dest, const unsigned char *src)
 {
    stb__CompressAlphaBlock(dest,(unsigned char*) src, 1);
 }
 
+/**
+ * @brief Compresses a 4x4 two-channel (red-green) block into BC5 format.
+ *
+ * The input block must contain 16 pixels, each with two channels (red and green), stored as interleaved bytes (RG RG RG ...). The function compresses the red and green channels separately using BC4 compression and writes the resulting 16 bytes to `dest` in BC5 format.
+ *
+ * @param dest Pointer to a buffer where the 16-byte BC5 compressed block will be written.
+ * @param src Pointer to the input block of 32 bytes (16 pixels × 2 channels).
+ */
 void stb_compress_bc5_block(unsigned char *dest, const unsigned char *src)
 {
    stb__CompressAlphaBlock(dest,(unsigned char*) src,2);
@@ -631,6 +767,13 @@ void stb_compress_bc5_block(unsigned char *dest, const unsigned char *src)
 #ifdef STB_DXT_GENERATE_TABLES
 #include <stdio.h>
 
+/**
+ * @brief Generates and prints optimal endpoint lookup tables for DXT/BC compression.
+ *
+ * This utility function computes and outputs C arrays for the optimal 5-bit and 6-bit endpoint quantization tables used in DXT/BC texture compression. The tables map 8-bit input values to the best matching quantized endpoints, minimizing interpolation error according to the DXT specification. The output is printed as C code for inclusion in the compression library.
+ *
+ * @return int Returns 0 upon successful completion.
+ */
 int main()
 {
    int i, j;

@@ -176,18 +176,44 @@ static unsigned char stb__perlin_randtab_grad_idx[512] =
     9, 0, 11, 5, 10, 3, 2, 3, 5, 9, 7, 9, 8, 4, 6, 5,
 };
 
+/**
+ * @brief Performs linear interpolation between two values.
+ *
+ * @param a The start value.
+ * @param b The end value.
+ * @param t Interpolation factor between 0 and 1.
+ * @return Interpolated value between a and b.
+ */
 static float stb__perlin_lerp(float a, float b, float t)
 {
    return a + (b-a) * t;
 }
 
+/**
+ * @brief Computes the largest integer less than or equal to the given float.
+ *
+ * Equivalent to the mathematical floor operation, but implemented for speed.
+ *
+ * @param a Input floating-point value.
+ * @return int The largest integer not greater than a.
+ */
 static int stb__perlin_fastfloor(float a)
 {
     int ai = (int) a;
     return (a < ai) ? ai-1 : ai;
 }
 
-// different grad function from Perlin's, but easy to modify to match reference
+/**
+ * @brief Computes the dot product of a selected gradient vector and a 3D offset.
+ *
+ * Selects a gradient vector from a fixed set based on grad_idx and returns its dot product with the vector (x, y, z).
+ *
+ * @param grad_idx Index into the gradient basis table (0–11).
+ * @param x X component of the offset vector.
+ * @param y Y component of the offset vector.
+ * @param z Z component of the offset vector.
+ * @return Dot product of the chosen gradient vector and (x, y, z).
+ */
 static float stb__perlin_grad(int grad_idx, float x, float y, float z)
 {
    static float basis[12][4] =
@@ -210,6 +236,20 @@ static float stb__perlin_grad(int grad_idx, float x, float y, float z)
    return grad[0]*x + grad[1]*y + grad[2]*z;
 }
 
+/**
+ * @brief Computes 3D Perlin noise at a given point with optional axis wrapping and seed.
+ *
+ * Calculates the Perlin noise value at coordinates (x, y, z), supporting wrapping on each axis (if wrap values are powers of two) and a seed for noise variation. Used internally by public Perlin noise functions.
+ *
+ * @param x X coordinate in 3D space.
+ * @param y Y coordinate in 3D space.
+ * @param z Z coordinate in 3D space.
+ * @param x_wrap Wrapping interval for the X axis (power of two or zero for no wrapping).
+ * @param y_wrap Wrapping interval for the Y axis (power of two or zero for no wrapping).
+ * @param z_wrap Wrapping interval for the Z axis (power of two or zero for no wrapping).
+ * @param seed Seed value (only the lowest 8 bits are used) to select a noise variation.
+ * @return float Perlin noise value at the specified coordinates.
+ */
 float stb_perlin_noise3_internal(float x, float y, float z, int x_wrap, int y_wrap, int z_wrap, unsigned char seed)
 {
    float u,v,w;
@@ -262,16 +302,51 @@ float stb_perlin_noise3_internal(float x, float y, float z, int x_wrap, int y_wr
    return stb__perlin_lerp(n0,n1,u);
 }
 
+/**
+ * @brief Computes 3D Perlin noise at the specified coordinates with optional axis wrapping.
+ *
+ * Generates continuous Perlin noise at position (x, y, z). Wrapping can be enabled on each axis by specifying a power-of-two value for x_wrap, y_wrap, or z_wrap (or zero for no wrapping), allowing seamless tiling.
+ *
+ * @return Perlin noise value in the range [-1, 1].
+ */
 float stb_perlin_noise3(float x, float y, float z, int x_wrap, int y_wrap, int z_wrap)
 {
     return stb_perlin_noise3_internal(x,y,z,x_wrap,y_wrap,z_wrap,0);
 }
 
+/**
+ * @brief Computes 3D Perlin noise at the given coordinates with optional wrapping and a custom seed.
+ *
+ * Generates continuous Perlin noise at position (x, y, z), allowing for seamless tiling along each axis if wrapping values are specified (must be powers of two or zero). The seed parameter selects among different noise variations; only the lowest 8 bits are used.
+ *
+ * @param x X coordinate in 3D space.
+ * @param y Y coordinate in 3D space.
+ * @param z Z coordinate in 3D space.
+ * @param x_wrap Period of repetition along the X axis (power of two or zero for no wrapping).
+ * @param y_wrap Period of repetition along the Y axis (power of two or zero for no wrapping).
+ * @param z_wrap Period of repetition along the Z axis (power of two or zero for no wrapping).
+ * @param seed Seed value for noise variation (only the lowest 8 bits are used).
+ * @return Perlin noise value at the specified coordinates.
+ */
 float stb_perlin_noise3_seed(float x, float y, float z, int x_wrap, int y_wrap, int z_wrap, int seed)
 {
     return stb_perlin_noise3_internal(x,y,z,x_wrap,y_wrap,z_wrap, (unsigned char) seed);
 }
 
+/**
+ * @brief Generates 3D ridge fractal noise by summing multiple octaves of Perlin noise.
+ *
+ * Produces a ridged, multi-frequency noise pattern by inverting and squaring the absolute value of Perlin noise at each octave, then accumulating the result with frequency and amplitude scaling. The `offset` parameter controls the ridge sharpness, while `lacunarity` and `gain` adjust frequency and amplitude progression across octaves.
+ *
+ * @param x X coordinate in 3D space.
+ * @param y Y coordinate in 3D space.
+ * @param z Z coordinate in 3D space.
+ * @param lacunarity Frequency multiplier between octaves.
+ * @param gain Amplitude multiplier between octaves.
+ * @param offset Ridge offset; higher values produce sharper ridges.
+ * @param octaves Number of noise octaves to sum.
+ * @return float The computed ridge noise value.
+ */
 float stb_perlin_ridge_noise3(float x, float y, float z, float lacunarity, float gain, float offset, int octaves)
 {
    int i;
@@ -292,6 +367,19 @@ float stb_perlin_ridge_noise3(float x, float y, float z, float lacunarity, float
    return sum;
 }
 
+/**
+ * @brief Generates 3D fractal Brownian motion (fBm) noise by summing multiple octaves of Perlin noise.
+ *
+ * Combines several layers of Perlin noise at increasing frequencies and decreasing amplitudes to produce natural-looking fractal noise.
+ *
+ * @param x X coordinate in 3D space.
+ * @param y Y coordinate in 3D space.
+ * @param z Z coordinate in 3D space.
+ * @param lacunarity Frequency multiplier between octaves.
+ * @param gain Amplitude multiplier between octaves.
+ * @param octaves Number of noise layers to sum.
+ * @return float The resulting fBm noise value.
+ */
 float stb_perlin_fbm_noise3(float x, float y, float z, float lacunarity, float gain, int octaves)
 {
    int i;
@@ -307,6 +395,19 @@ float stb_perlin_fbm_noise3(float x, float y, float z, float lacunarity, float g
    return sum;
 }
 
+/**
+ * @brief Generates 3D turbulence noise by summing absolute values of multiple octaves of Perlin noise.
+ *
+ * Computes turbulence noise at the given 3D coordinates by accumulating the absolute value of Perlin noise across several octaves, with each octave scaled by the specified lacunarity (frequency multiplier) and gain (amplitude multiplier).
+ *
+ * @param x X coordinate in 3D space.
+ * @param y Y coordinate in 3D space.
+ * @param z Z coordinate in 3D space.
+ * @param lacunarity Frequency multiplier applied at each octave.
+ * @param gain Amplitude multiplier applied at each octave.
+ * @param octaves Number of noise octaves to sum.
+ * @return float The resulting turbulence noise value.
+ */
 float stb_perlin_turbulence_noise3(float x, float y, float z, float lacunarity, float gain, int octaves)
 {
    int i;
@@ -323,6 +424,20 @@ float stb_perlin_turbulence_noise3(float x, float y, float z, float lacunarity, 
    return sum;
 }
 
+/**
+ * @brief Computes 3D Perlin noise at the given coordinates with non-power-of-two wrapping and a seed.
+ *
+ * Generates continuous Perlin noise at position (x, y, z), allowing each axis to wrap at arbitrary (non-power-of-two) intervals. The seed parameter selects among different noise variations.
+ *
+ * @param x X coordinate in 3D space.
+ * @param y Y coordinate in 3D space.
+ * @param z Z coordinate in 3D space.
+ * @param x_wrap Wrapping interval for the X axis (0 for no wrapping).
+ * @param y_wrap Wrapping interval for the Y axis (0 for no wrapping).
+ * @param z_wrap Wrapping interval for the Z axis (0 for no wrapping).
+ * @param seed Seed value (only the lowest 8 bits are used) to vary the noise pattern.
+ * @return float Perlin noise value at the specified coordinates, typically in the range [-1, 1].
+ */
 float stb_perlin_noise3_wrap_nonpow2(float x, float y, float z, int x_wrap, int y_wrap, int z_wrap, unsigned char seed)
 {
    float u,v,w;

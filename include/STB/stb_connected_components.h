@@ -269,6 +269,13 @@ struct st_stbcc_grid
    stbcc__cluster cluster[STBCC__CLUSTER_COUNT_Y][STBCC__CLUSTER_COUNT_X]; //  1K x 4.5KB = 4.5MB
 };
 
+/**
+ * @brief Determines if two grid cells are reachable from each other.
+ *
+ * Checks whether the cells at (x1, y1) and (x2, y2) belong to the same connected component of traversable cells.
+ *
+ * @return 1 if the two cells are connected, 0 otherwise.
+ */
 int stbcc_query_grid_node_connection(stbcc_grid *g, int x1, int y1, int x2, int y2)
 {
    stbcc__global_clumpid label1, label2;
@@ -288,11 +295,27 @@ int stbcc_query_grid_node_connection(stbcc_grid *g, int x1, int y1, int x2, int 
    return 0;
 }
 
+/**
+ * @brief Checks if the specified grid cell is traversable.
+ *
+ * @param x The x-coordinate of the cell.
+ * @param y The y-coordinate of the cell.
+ * @return Non-zero if the cell at (x, y) is traversable; zero if it is solid.
+ */
 int stbcc_query_grid_open(stbcc_grid *g, int x, int y)
 {
    return STBCC__MAP_OPEN(g, x, y) != 0;
 }
 
+/**
+ * @brief Returns a unique global identifier for the connected component containing the specified cell.
+ *
+ * If the cell at (x, y) is traversable, returns a unique ID representing its global connected component. If the cell is solid, returns `STBCC_NULL_UNIQUE_ID`.
+ *
+ * @param x X-coordinate of the cell.
+ * @param y Y-coordinate of the cell.
+ * @return Unique global ID for the cell's connected component, or `STBCC_NULL_UNIQUE_ID` if the cell is solid.
+ */
 unsigned int stbcc_get_unique_id(stbcc_grid *g, int x, int y)
 {
    stbcc__clumpid c = g->clump_for_node[y][x];
@@ -318,6 +341,14 @@ static void stbcc__build_clumps_for_cluster(stbcc_grid *g, int cx, int cy);
 static void stbcc__remove_connections_to_adjacent_cluster(stbcc_grid *g, int cx, int cy, int dx, int dy);
 static void stbcc__add_connections_to_adjacent_cluster(stbcc_grid *g, int cx, int cy, int dx, int dy);
 
+/**
+ * @brief Finds the root global label of a clump using path compression.
+ *
+ * Recursively locates the representative global clump label for the given clump and updates intermediate clumps to point directly to the root for efficiency.
+ *
+ * @param n The global clump ID to find the root for.
+ * @return The root global clump ID representing the connected component.
+ */
 static stbcc__global_clumpid stbcc__clump_find(stbcc_grid *g, stbcc__global_clumpid n)
 {
    stbcc__global_clumpid q;
@@ -338,6 +369,11 @@ typedef struct
    unsigned int clump_index;
 } stbcc__unpacked_clumpid;
 
+/**
+ * @brief Merges the global connected components of two clumps.
+ *
+ * Updates the global label of the first clump to match the second, effectively uniting their connected components in the global union-find structure.
+ */
 static void stbcc__clump_union(stbcc_grid *g, stbcc__unpacked_clumpid m, int x, int y, int idx)
 {
    stbcc__clump *mc = &g->cluster[m.cluster_y][m.cluster_x].clump[m.clump_index];
@@ -351,6 +387,11 @@ static void stbcc__clump_union(stbcc_grid *g, stbcc__unpacked_clumpid m, int x, 
    g->cluster[mp.f.cluster_y][mp.f.cluster_x].clump[mp.f.clump_index].global_label = np;
 }
 
+/**
+ * @brief Computes global connected components for all clumps across the grid.
+ *
+ * Initializes each clump's global label, then unions clumps that are adjacent across cluster boundaries to form global connected components. Performs path compression to finalize component labels.
+ */
 static void stbcc__build_connected_components_for_clumps(stbcc_grid *g)
 {
    int i,j,k,h;
@@ -404,6 +445,14 @@ static void stbcc__build_connected_components_for_clumps(stbcc_grid *g)
    }
 }
 
+/**
+ * @brief Builds adjacency lists for all edge clumps in a cluster.
+ *
+ * Scans the edges of the specified cluster to identify and record connections between clumps in this cluster and clumps in adjacent clusters. Allocates adjacency slots for each edge clump based on the number of connections and available capacity. Ensures that adjacency information is up to date for efficient global connectivity computation.
+ *
+ * @param cx X-coordinate of the cluster within the grid.
+ * @param cy Y-coordinate of the cluster within the grid.
+ */
 static void stbcc__build_all_connections_for_cluster(stbcc_grid *g, int cx, int cy)
 {
    // in this particular case, we are fully non-incremental. that means we
@@ -516,6 +565,12 @@ static void stbcc__build_all_connections_for_cluster(stbcc_grid *g, int cx, int 
    assert(g->cluster[cy][cx].rebuild_adjacency == 0);
 }
 
+/**
+ * @brief Adds adjacency connections from a cluster to its neighbor and rebuilds adjacency if needed.
+ *
+ * For the cluster at (cx, cy), adds connections to the adjacent cluster in the (dx, dy) direction.
+ * If the cluster's adjacency data is marked for rebuild, recomputes all adjacency connections for that cluster.
+ */
 static void stbcc__add_connections_to_adjacent_cluster_with_rebuild(stbcc_grid *g, int cx, int cy, int dx, int dy)
 {
    if (cx >= 0 && cx < g->cw && cy >= 0 && cy < g->ch) {
@@ -525,6 +580,11 @@ static void stbcc__add_connections_to_adjacent_cluster_with_rebuild(stbcc_grid *
    }
 }
 
+/**
+ * @brief Updates the traversability state of a single grid cell.
+ *
+ * Changes the cell at (x, y) to be traversable if `solid` is zero, or solid if non-zero. Recomputes local and global connectivity for the affected cluster and its neighbors. If not in batch update mode, global connected components are rebuilt immediately.
+ */
 void stbcc_update_grid(stbcc_grid *g, int x, int y, int solid)
 {
    int cx,cy;
@@ -566,12 +626,23 @@ void stbcc_update_grid(stbcc_grid *g, int x, int y, int solid)
    #endif
 }
 
+/**
+ * @brief Begins a batch update session for the grid.
+ *
+ * Defers global connected component recomputation until `stbcc_update_batch_end` is called.
+ * During a batch, queries are disallowed and multiple cell updates can be performed efficiently.
+ */
 void stbcc_update_batch_begin(stbcc_grid *g)
 {
    assert(!g->in_batched_update);
    g->in_batched_update = 1;
 }
 
+/**
+ * @brief Ends a batch update and rebuilds global connected components.
+ *
+ * Call this after a series of cell updates wrapped by stbcc_update_batch_begin(). Recomputes global connectivity for the grid. Queries are allowed again after this call.
+ */
 void stbcc_update_batch_end(stbcc_grid *g)
 {
    assert(g->in_batched_update);
@@ -579,11 +650,26 @@ void stbcc_update_batch_end(stbcc_grid *g)
    stbcc__build_connected_components_for_clumps(g); // @OPTIMIZE: only do this if update was non-empty
 }
 
+/**
+ * @brief Returns the size in bytes required to store a grid data structure.
+ *
+ * @return Size in bytes of the `stbcc_grid` structure.
+ */
 size_t stbcc_grid_sizeof(void)
 {
    return sizeof(stbcc_grid);
 }
 
+/**
+ * @brief Initializes the grid data structure from a map of traversable and solid cells.
+ *
+ * Sets up the internal representation of the grid, partitions it into clusters, computes local connected components (clumps) within each cluster, builds adjacency information between clusters, and establishes global connected components for reachability queries. The input map uses 0 for traversable cells and non-zero for solid cells. The grid dimensions must be multiples of the cluster size, and the width must be a multiple of 8.
+ *
+ * @param g Pointer to the grid data structure to initialize.
+ * @param map Pointer to the input map array, row-major, with 0 for traversable and non-zero for solid cells.
+ * @param w Width of the grid in cells.
+ * @param h Height of the grid in cells.
+ */
 void stbcc_init_grid(stbcc_grid *g, unsigned char *map, int w, int h)
 {
    int i,j,k;
@@ -629,6 +715,11 @@ void stbcc_init_grid(stbcc_grid *g, unsigned char *map, int w, int h)
 }
 
 
+/**
+ * @brief Adds an adjacency connection between clumps in neighboring clusters.
+ *
+ * Registers a connection from the clump containing cell (x1, y1) to the clump containing cell (x2, y2), where the two cells are in adjacent clusters. If the adjacency list for the clump is full, marks the cluster for adjacency rebuild.
+ */
 static void stbcc__add_clump_connection(stbcc_grid *g, int x1, int y1, int x2, int y2)
 {
    stbcc__cluster *cluster;
@@ -666,6 +757,11 @@ static void stbcc__add_clump_connection(stbcc_grid *g, int x1, int y1, int x2, i
    }
 }
 
+/**
+ * @brief Removes the adjacency connection between two clumps in neighboring clusters.
+ *
+ * Given two grid coordinates in adjacent clusters, removes the adjacency entry from the clump at (x1, y1) that points to the clump at (x2, y2). Asserts if the connection does not exist.
+ */
 static void stbcc__remove_clump_connection(stbcc_grid *g, int x1, int y1, int x2, int y2)
 {
    stbcc__cluster *cluster;
@@ -708,6 +804,16 @@ static void stbcc__remove_clump_connection(stbcc_grid *g, int x1, int y1, int x2
       assert(0);
 }
 
+/**
+ * @brief Adds adjacency connections between clumps on the edge of a cluster and its neighboring cluster.
+ *
+ * For a given cluster at (cx, cy) and a direction (dx, dy), scans the shared edge with the adjacent cluster and adds connections between traversable clumps that are directly connected across the boundary. Skips processing if the cluster is out of bounds or marked for adjacency rebuild.
+ *
+ * @param cx X index of the source cluster.
+ * @param cy Y index of the source cluster.
+ * @param dx X offset to the neighboring cluster (must be -1, 0, or 1; only one nonzero).
+ * @param dy Y offset to the neighboring cluster (must be -1, 0, or 1; only one nonzero).
+ */
 static void stbcc__add_connections_to_adjacent_cluster(stbcc_grid *g, int cx, int cy, int dx, int dy)
 {
    unsigned char connected[STBCC__MAX_EDGE_CLUMPS_PER_CLUSTER][STBCC__MAX_EDGE_CLUMPS_PER_CLUSTER/8] = { { 0 } };
@@ -772,6 +878,13 @@ static void stbcc__add_connections_to_adjacent_cluster(stbcc_grid *g, int cx, in
    }
 }
 
+/**
+ * @brief Removes adjacency connections between clumps on the edge of a cluster and its neighboring cluster.
+ *
+ * For the cluster at (cx, cy), removes all adjacency connections to the neighboring cluster in the direction (dx, dy). Only affects clumps connected across the shared edge between the two clusters.
+ *
+ * Does nothing if the specified cluster or its neighbor is out of bounds.
+ */
 static void stbcc__remove_connections_to_adjacent_cluster(stbcc_grid *g, int cx, int cy, int dx, int dy)
 {
    unsigned char disconnected[STBCC__MAX_EDGE_CLUMPS_PER_CLUSTER][STBCC__MAX_EDGE_CLUMPS_PER_CLUSTER/8] = { { 0 } };
@@ -830,6 +943,16 @@ static void stbcc__remove_connections_to_adjacent_cluster(stbcc_grid *g, int cx,
    }
 }
 
+/**
+ * @brief Finds the root parent of a cell within a cluster using path compression.
+ *
+ * Performs a union-find operation to locate the representative parent of the cell at (x, y) in the cluster's disjoint set forest, updating parent pointers along the path for efficiency.
+ *
+ * @param cbi Pointer to the cluster build info containing the parent array.
+ * @param x X-coordinate of the cell within the cluster.
+ * @param y Y-coordinate of the cell within the cluster.
+ * @return The coordinates of the root parent cell representing the connected component.
+ */
 static stbcc__tinypoint stbcc__incluster_find(stbcc__cluster_build_info *cbi, int x, int y)
 {
    stbcc__tinypoint p,q;
@@ -841,6 +964,11 @@ static stbcc__tinypoint stbcc__incluster_find(stbcc__cluster_build_info *cbi, in
    return q;
 }
 
+/**
+ * @brief Unions two cells within a cluster in the in-cluster union-find structure.
+ *
+ * Merges the sets containing the cells at (x1, y1) and (x2, y2) by updating the parent of one root to point to the other.
+ */
 static void stbcc__incluster_union(stbcc__cluster_build_info *cbi, int x1, int y1, int x2, int y2)
 {
    stbcc__tinypoint p = stbcc__incluster_find(cbi, x1,y1);
@@ -852,6 +980,16 @@ static void stbcc__incluster_union(stbcc__cluster_build_info *cbi, int x1, int y
    cbi->parent[p.y][p.x] = q;
 }
 
+/**
+ * @brief Sets the root of the union-find tree for two cells in a cluster.
+ *
+ * Updates the parent pointers in the cluster build info so that both the cell at (p.x, p.y) and the cell at (x, y) point to (x, y) as their root.
+ *
+ * @param cbi Pointer to the cluster build info structure.
+ * @param x X-coordinate of the new root cell.
+ * @param y Y-coordinate of the new root cell.
+ * @param p Coordinates of the other cell to update.
+ */
 static void stbcc__switch_root(stbcc__cluster_build_info *cbi, int x, int y, stbcc__tinypoint p)
 {
    cbi->parent[p.y][p.x].x = x;
@@ -860,6 +998,18 @@ static void stbcc__switch_root(stbcc__cluster_build_info *cbi, int x, int y, stb
    cbi->parent[y][x].y = y;
 }
 
+/**
+ * @brief Builds connected components ("clumps") for a single cluster in the grid.
+ *
+ * Identifies all orthogonally connected traversable regions within the specified cluster,
+ * assigning each a unique clump ID. Edge clumps (those touching the cluster boundary) are
+ * labeled first to optimize adjacency computations. Updates the cluster's clump metadata,
+ * resets adjacency information, and assigns global labels to interior clumps that cannot
+ * connect to other clusters.
+ *
+ * @param cx X index of the cluster within the grid.
+ * @param cy Y index of the cluster within the grid.
+ */
 static void stbcc__build_clumps_for_cluster(stbcc_grid *g, int cx, int cy)
 {
    stbcc__cluster *c;

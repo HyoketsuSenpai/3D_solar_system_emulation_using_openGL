@@ -20,6 +20,12 @@ typedef unsigned int U32;
 typedef unsigned long long U64;
 
 #include <time.h>
+/**
+ * @brief Returns the current time in milliseconds since an unspecified epoch.
+ *
+ * Uses a monotonic clock to provide millisecond-precision timing, suitable for measuring elapsed time intervals.
+ * @return Current time in milliseconds as a 32-bit unsigned integer.
+ */
 static int get_milliseconds()
 {
   struct timespec ts;
@@ -53,6 +59,17 @@ static int get_milliseconds()
 #define HEADER 32
 
 
+/**
+ * @brief Writes a buffer to a file in binary mode.
+ *
+ * Opens the specified file for binary writing and writes the entire buffer to it.
+ * Returns 1 on success, or 0 if the file cannot be opened or the write is incomplete.
+ *
+ * @param filename Path to the output file.
+ * @param buffer Pointer to the data to write.
+ * @param size Number of bytes to write from the buffer.
+ * @return int 1 if the write succeeds, 0 otherwise.
+ */
 static int file_write( const char *filename, void * buffer, size_t size ) 
 {
   FILE * f = fopen( filename, "wb" );
@@ -62,6 +79,25 @@ static int file_write( const char *filename, void * buffer, size_t size )
   return 1;
 }
 
+/**
+ * @brief Performs an image resize operation and returns the minimum measured clock cycles.
+ *
+ * Initializes a resize context for the given input and output image buffers, sets edge modes and filters, and builds samplers. Repeatedly performs the resize operation up to 16 times, measuring the sum of two profiling clock counters for each run. Returns the lowest clock cycle count observed. Triggers a breakpoint if the resize operation fails.
+ *
+ * @param o Output image buffer.
+ * @param ox Output image width.
+ * @param oy Output image height.
+ * @param op Output image stride (bytes per row).
+ * @param i Input image buffer.
+ * @param ix Input image width.
+ * @param iy Input image height.
+ * @param ip Input image stride (bytes per row).
+ * @param buf Temporary buffer for the resize operation.
+ * @param type Channel type or format.
+ * @param edg Edge mode for resizing.
+ * @param flt Filter type for resizing.
+ * @return int64 Minimum clock cycles measured for the resize operation.
+ */
 int64 nresize( void * o, int ox, int oy, int op, void * i, int ix, int iy, int ip, int buf, int type, int edg, int flt )
 {
   STBIR_RESIZE resize;
@@ -104,6 +140,15 @@ static const int sizes[INSIZES]={63,126,252,520,772};
 static const int types[TYPESCOUNT]={STBIR_1CHANNEL,STBIR_2CHANNEL,STBIR_RGB,STBIR_4CHANNEL,STBIR_RGBA};
 static const int effective[TYPESCOUNT]={1,2,3,4,7};
 
+/**
+ * @brief Entry point for the image resizing benchmark utility.
+ *
+ * Parses command-line arguments to configure the benchmarking parameters, allocates input and output buffers, and iterates over multiple input sizes, channel types, and output dimensions. For each configuration, performs vertical-first and horizontal-first image resizes using the `stb_image_resize2` library, measures the best timing in CPU cycles, and records the results. Aggregates timing data and metadata into a binary file specified by the user.
+ *
+ * Expects five command-line arguments: number of horizontal samples, number of vertical samples, horizontal scale increment, vertical scale increment, and output filename.
+ *
+ * Prints progress and status messages, and returns 0 on successful completion.
+ */
 int main( int argc, char ** argv )
 {
   unsigned char * input;

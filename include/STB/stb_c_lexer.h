@@ -269,7 +269,17 @@ typedef long       stb__clex_int;
 #undef N
 #define N(a)
 
-// API function
+/**
+ * @brief Initializes the lexer with the input stream and string storage.
+ *
+ * Sets up the lexer state to begin parsing from the specified input stream, with optional end pointer and a buffer for storing string and identifier tokens.
+ *
+ * @param lexer Pointer to the lexer state structure to initialize.
+ * @param input_stream Pointer to the start of the input text to be lexed.
+ * @param input_stream_end Pointer to one past the end of the input text, or NULL to indicate null-terminated input.
+ * @param string_store Buffer for storing string and identifier token contents.
+ * @param store_length Length of the string storage buffer in bytes.
+ */
 void stb_c_lexer_init(stb_lexer *lexer, const char *input_stream, const char *input_stream_end, char *string_store, int store_length)
 {
    lexer->input_stream = (char *) input_stream;
@@ -279,7 +289,14 @@ void stb_c_lexer_init(stb_lexer *lexer, const char *input_stream, const char *in
    lexer->string_storage_len = store_length;
 }
 
-// API function
+/**
+ * @brief Computes the line number and character offset for a given position in the input stream.
+ *
+ * Calculates the 1-based line number and 0-based character offset within the line for the specified pointer in the input stream, storing the result in the provided location structure.
+ *
+ * @param where Pointer within the input stream whose location is to be determined.
+ * @param loc Pointer to a stb_lex_location struct to receive the line and offset.
+ */
 void stb_c_lexer_get_location(const stb_lexer *lexer, const char *where, stb_lex_location *loc)
 {
    char *p = lexer->input_stream;
@@ -299,7 +316,16 @@ void stb_c_lexer_get_location(const stb_lexer *lexer, const char *where, stb_lex
    loc->line_offset = char_offset;
 }
 
-// main helper function for returning a parsed token
+/**
+ * @brief Sets the lexer state for a recognized token and advances the parse pointer.
+ *
+ * Updates the lexer with the token type, token start and end positions, and moves the parse pointer past the token.
+ *
+ * @param token Token identifier to assign.
+ * @param start Pointer to the first character of the token in the input stream.
+ * @param end Pointer to the last character of the token in the input stream.
+ * @return int Always returns 1 to indicate a token was set.
+ */
 static int stb__clex_token(stb_lexer *lexer, int token, char *start, char *end)
 {
    lexer->token = token;
@@ -309,18 +335,39 @@ static int stb__clex_token(stb_lexer *lexer, int token, char *start, char *end)
    return 1;
 }
 
-// helper function for returning eof
+/**
+ * @brief Sets the lexer token to end-of-file and returns 0.
+ *
+ * Marks the lexer as having reached the end of input.
+ *
+ * @return 0 Always returns zero to indicate EOF.
+ */
 static int stb__clex_eof(stb_lexer *lexer)
 {
    lexer->token = CLEX_eof;
    return 0;
 }
 
+/**
+ * @brief Determines if a character is considered whitespace.
+ *
+ * Checks if the given character is a space, tab, carriage return, newline, or form feed.
+ *
+ * @param x Character to check.
+ * @return Non-zero if the character is whitespace; zero otherwise.
+ */
 static int stb__clex_iswhite(int x)
 {
    return x == ' ' || x == '\t' || x == '\r' || x == '\n' || x == '\f';
 }
 
+/**
+ * @brief Finds the first occurrence of a character in a string.
+ *
+ * @param str The null-terminated string to search.
+ * @param ch The character to locate.
+ * @return Pointer to the first occurrence of ch in str, or NULL if not found.
+ */
 static const char *stb__strchr(const char *str, int ch)
 {
    for (; *str; ++str)
@@ -329,7 +376,18 @@ static const char *stb__strchr(const char *str, int ch)
    return 0;
 }
 
-// parse suffixes at the end of a number
+/**
+ * @brief Parses and validates suffix letters following a numeric literal.
+ *
+ * Checks that all suffix characters after a number are allowed by the provided suffix set. If valid, stores the suffix in the lexer's string buffer; otherwise, sets a parse error token.
+ *
+ * @param lexer Lexer state object.
+ * @param tokenid Token ID to assign if suffixes are valid.
+ * @param start Pointer to the start of the numeric literal.
+ * @param cur Pointer to the first suffix character.
+ * @param suffixes Null-terminated string of valid suffix characters.
+ * @return The resulting token ID, or CLEX_parse_error on invalid suffix or buffer overflow.
+ */
 static int stb__clex_parse_suffixes(stb_lexer *lexer, long tokenid, char *start, char *cur, const char *suffixes)
 {
    #ifdef STB__clex_parse_suffixes
@@ -350,6 +408,15 @@ static int stb__clex_parse_suffixes(stb_lexer *lexer, long tokenid, char *start,
 }
 
 #ifndef STB__CLEX_use_stdlib
+/**
+ * @brief Computes the power of a double-precision base raised to an unsigned integer exponent.
+ *
+ * Efficiently calculates base^exponent using exponentiation by squaring.
+ *
+ * @param base The base value.
+ * @param exponent The exponent value (non-negative).
+ * @return double The result of raising base to the power of exponent.
+ */
 static double stb__clex_pow(double base, unsigned int exponent)
 {
    double value=1;
@@ -361,6 +428,15 @@ static double stb__clex_pow(double base, unsigned int exponent)
    return value;
 }
 
+/**
+ * @brief Parses a floating-point literal from a string.
+ *
+ * Supports decimal and, if enabled, hexadecimal floating-point formats, including optional fractional and exponent parts. Advances the output pointer to the character following the parsed number. Returns 0 and resets the output pointer if parsing fails (e.g., missing exponent in hex float).
+ *
+ * @param p Pointer to the start of the numeric string.
+ * @param q Output pointer set to the position after the parsed float.
+ * @return Parsed floating-point value, or 0 on error.
+ */
 static double stb__clex_parse_float(char *p, char **q)
 {
    char *s = p;
@@ -445,6 +521,15 @@ static double stb__clex_parse_float(char *p, char **q)
 }
 #endif
 
+/**
+ * @brief Parses a character literal, handling escape sequences.
+ *
+ * Parses a character at the given pointer, interpreting standard C escape sequences (e.g., `\n`, `\t`, `\\`, `\'`, `\"`). Updates the output pointer to the position after the parsed character. Returns the character code, or -1 for unsupported or incomplete escape sequences (such as hex or Unicode escapes).
+ *
+ * @param p Pointer to the start of the character or escape sequence.
+ * @param q Output pointer set to the position after the parsed character.
+ * @return Parsed character code, or -1 if the escape sequence is unsupported.
+ */
 static int stb__clex_parse_char(char *p, char **q)
 {
    if (*p == '\\') {
@@ -466,6 +551,16 @@ static int stb__clex_parse_char(char *p, char **q)
    return (unsigned char) *p;
 }
 
+/**
+ * @brief Parses a string or character literal from the input stream.
+ *
+ * Handles escape sequences and stores the resulting string in the lexer's string storage buffer. Returns a token of the specified type or a parse error if the string is malformed or exceeds storage capacity.
+ *
+ * @param lexer Pointer to the lexer state.
+ * @param p Pointer to the start of the string or character literal (including the opening quote).
+ * @param type Token type to assign (e.g., CLEX_dqstring or CLEX_sqstring).
+ * @return int Token type on success, or CLEX_parse_error on failure.
+ */
 static int stb__clex_parse_string(stb_lexer *lexer, char *p, int type)
 {
    char *start = p;
@@ -495,6 +590,13 @@ static int stb__clex_parse_string(stb_lexer *lexer, char *p, int type)
    return stb__clex_token(lexer, type, start, p);
 }
 
+/**
+ * @brief Parses and returns the next token from the input stream.
+ *
+ * Skips whitespace and comments, then identifies and extracts the next token from the input stream managed by the lexer. Recognizes identifiers, numeric literals (decimal, octal, hexadecimal, floating-point), string and character literals, operators (including multi-character operators), and punctuation according to the configured lexer options. Sets relevant fields in the lexer structure for the parsed token, such as token type, numeric value, and string content. Returns zero on end-of-file, or a non-zero value for a valid token. Returns a parse error token for malformed or incomplete input.
+ *
+ * @return int Non-zero if a token was parsed successfully, or zero on end-of-file.
+ */
 int stb_c_lexer_get_token(stb_lexer *lexer)
 {
    char *p = lexer->parse_point;
@@ -805,6 +907,11 @@ int stb_c_lexer_get_token(stb_lexer *lexer)
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * @brief Prints a textual representation of the current token from the lexer.
+ *
+ * Outputs the current token held in the lexer to stdout, using a readable format for identifiers, literals, and operators. Single-character tokens are printed as characters, while multi-character tokens and literals are printed with distinguishing prefixes or delimiters.
+ */
 static void print_token(stb_lexer *lexer)
 {
    switch (lexer->token) {
@@ -855,7 +962,11 @@ of parsing
 multiline comments */
 
 /*/ comment /*/
-/**/ extern /**/
+/**
+ * @brief Dummy function used for self-test and parser validation.
+ *
+ * Declares an array of floating-point literals, including various formats, to test lexer handling of numeric constants. Also includes a printf statement for additional parsing coverage.
+ */ extern /**/
 
 void dummy(void)
 {

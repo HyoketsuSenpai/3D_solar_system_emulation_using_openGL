@@ -259,6 +259,13 @@ int stbi_write_force_png_filter = -1;
 
 static int stbi__flip_vertically_on_write = 0;
 
+/**
+ * @brief Sets whether images are vertically flipped when written.
+ *
+ * When enabled, image data will be written with the first row at the bottom of the output file, effectively flipping the image vertically.
+ *
+ * @param flag Non-zero to enable vertical flipping; zero to disable.
+ */
 STBIWDEF void stbi_flip_vertically_on_write(int flag)
 {
    stbi__flip_vertically_on_write = flag;
@@ -272,7 +279,11 @@ typedef struct
    int buf_used;
 } stbi__write_context;
 
-// initialize a callback-based context
+/**
+ * @brief Initializes a write context for output using a user-defined callback.
+ *
+ * Sets up the write context to direct output to the specified callback function and context pointer.
+ */
 static void stbi__start_write_callbacks(stbi__write_context *s, stbi_write_func *c, void *context)
 {
    s->func    = c;
@@ -281,6 +292,15 @@ static void stbi__start_write_callbacks(stbi__write_context *s, stbi_write_func 
 
 #ifndef STBI_WRITE_NO_STDIO
 
+/**
+ * @brief Writes data to a FILE stream.
+ *
+ * Writes a block of data to the specified FILE pointer provided as the context.
+ *
+ * @param context Pointer to a FILE stream.
+ * @param data Pointer to the data to write.
+ * @param size Number of bytes to write.
+ */
 static void stbi__stdio_write(void *context, void *data, int size)
 {
    fwrite(data,1,size,(FILE*) context);
@@ -295,12 +315,31 @@ static void stbi__stdio_write(void *context, void *data, int size)
 STBIW_EXTERN __declspec(dllimport) int __stdcall MultiByteToWideChar(unsigned int cp, unsigned long flags, const char *str, int cbmb, wchar_t *widestr, int cchwide);
 STBIW_EXTERN __declspec(dllimport) int __stdcall WideCharToMultiByte(unsigned int cp, unsigned long flags, const wchar_t *widestr, int cchwide, char *str, int cbmb, const char *defchar, int *used_default);
 
+/**
+ * @brief Converts a wide-character (UTF-16) string to a UTF-8 encoded string.
+ *
+ * Converts the input wide-character string to UTF-8 and stores the result in the provided buffer.
+ *
+ * @param buffer Destination buffer for the UTF-8 encoded string.
+ * @param bufferlen Size of the destination buffer in bytes.
+ * @param input Null-terminated wide-character string to convert.
+ * @return The number of bytes written to the buffer, or 0 on failure.
+ */
 STBIWDEF int stbiw_convert_wchar_to_utf8(char *buffer, size_t bufferlen, const wchar_t* input)
 {
    return WideCharToMultiByte(65001 /* UTF8 */, 0, input, -1, buffer, (int) bufferlen, NULL, NULL);
 }
 #endif
 
+/**
+ * @brief Opens a file with the specified filename and mode, supporting UTF-8 filenames on Windows.
+ *
+ * Converts UTF-8 filenames and modes to wide-character strings on Windows when enabled, ensuring compatibility with Unicode paths. Falls back to standard fopen or fopen_s on other platforms.
+ *
+ * @param filename The path to the file to open.
+ * @param mode The file access mode (e.g., "wb", "rb").
+ * @return FILE* Pointer to the opened file, or NULL on failure.
+ */
 static FILE *stbiw__fopen(char const *filename, char const *mode)
 {
    FILE *f;
@@ -329,6 +368,15 @@ static FILE *stbiw__fopen(char const *filename, char const *mode)
    return f;
 }
 
+/**
+ * @brief Initializes a write context for output to a file.
+ *
+ * Opens the specified file for binary writing and sets up the write context to use it for output.
+ *
+ * @param s Pointer to the write context to initialize.
+ * @param filename Name of the file to open for writing.
+ * @return 1 if the file was successfully opened and the context initialized, 0 otherwise.
+ */
 static int stbi__start_write_file(stbi__write_context *s, const char *filename)
 {
    FILE *f = stbiw__fopen(filename, "wb");
@@ -336,6 +384,11 @@ static int stbi__start_write_file(stbi__write_context *s, const char *filename)
    return f != NULL;
 }
 
+/**
+ * @brief Closes the file associated with the given write context.
+ *
+ * This function finalizes file output by closing the file pointer stored in the context of the write context structure.
+ */
 static void stbi__end_write_file(stbi__write_context *s)
 {
    fclose((FILE *)s->context);
@@ -346,6 +399,19 @@ static void stbi__end_write_file(stbi__write_context *s)
 typedef unsigned int stbiw_uint32;
 typedef int stb_image_write_test[sizeof(stbiw_uint32)==4 ? 1 : -1];
 
+/**
+ * @brief Writes formatted binary data to a write context using a format string and variable argument list.
+ *
+ * The format string specifies the sequence and size of values to write:
+ * - '1': writes a single byte (unsigned char)
+ * - '2': writes two bytes (little-endian)
+ * - '4': writes four bytes (little-endian)
+ * - ' ': ignored (for readability)
+ *
+ * @param s Pointer to the write context.
+ * @param fmt Format string indicating the data layout.
+ * @param v Variable argument list containing the values to write.
+ */
 static void stbiw__writefv(stbi__write_context *s, const char *fmt, va_list v)
 {
    while (*fmt) {
@@ -375,6 +441,11 @@ static void stbiw__writefv(stbi__write_context *s, const char *fmt, va_list v)
    }
 }
 
+/**
+ * @brief Writes formatted data to the output context.
+ *
+ * Formats a string using the specified format and arguments, then writes the result to the provided write context.
+ */
 static void stbiw__writef(stbi__write_context *s, const char *fmt, ...)
 {
    va_list v;
@@ -383,6 +454,11 @@ static void stbiw__writef(stbi__write_context *s, const char *fmt, ...)
    va_end(v);
 }
 
+/**
+ * @brief Flushes the internal write buffer to the output callback.
+ *
+ * If any data is buffered, writes it to the output using the provided callback and resets the buffer.
+ */
 static void stbiw__write_flush(stbi__write_context *s)
 {
    if (s->buf_used) {
@@ -391,11 +467,22 @@ static void stbiw__write_flush(stbi__write_context *s)
    }
 }
 
+/**
+ * @brief Writes a single byte to the output using the provided write context.
+ *
+ * @param s Pointer to the write context.
+ * @param c Byte value to write.
+ */
 static void stbiw__putc(stbi__write_context *s, unsigned char c)
 {
    s->func(s->context, &c, 1);
 }
 
+/**
+ * @brief Writes a single byte to the write context buffer.
+ *
+ * Flushes the buffer to the output if it is full before writing the byte.
+ */
 static void stbiw__write1(stbi__write_context *s, unsigned char a)
 {
    if ((size_t)s->buf_used + 1 > sizeof(s->buffer))
@@ -403,6 +490,11 @@ static void stbiw__write1(stbi__write_context *s, unsigned char a)
    s->buffer[s->buf_used++] = a;
 }
 
+/**
+ * @brief Writes three bytes to the write context buffer, flushing if necessary.
+ *
+ * Appends three bytes to the internal buffer of the write context. If the buffer does not have enough space, it is flushed before writing.
+ */
 static void stbiw__write3(stbi__write_context *s, unsigned char a, unsigned char b, unsigned char c)
 {
    int n;
@@ -415,6 +507,18 @@ static void stbiw__write3(stbi__write_context *s, unsigned char a, unsigned char
    s->buffer[n+2] = c;
 }
 
+/**
+ * @brief Writes a single pixel to the output context with optional alpha handling and color expansion.
+ *
+ * Depending on the number of components, writes the pixel as monochrome, RGB, or RGBA. Can expand monochrome to RGB, write or composite alpha, and adjust channel order for BGR/RGB formats.
+ *
+ * @param s Output write context.
+ * @param rgb_dir Direction for channel order (1 for RGB, -1 for BGR).
+ * @param comp Number of components in the pixel (1=mono, 2=mono+alpha, 3=RGB, 4=RGBA).
+ * @param write_alpha Controls alpha channel handling: <0 writes alpha before color, >0 writes alpha after color, 0 composites alpha over magenta background.
+ * @param expand_mono If nonzero, expands monochrome to RGB.
+ * @param d Pointer to pixel data.
+ */
 static void stbiw__write_pixel(stbi__write_context *s, int rgb_dir, int comp, int write_alpha, int expand_mono, unsigned char *d)
 {
    unsigned char bg[3] = { 255, 0, 255}, px[3];
@@ -448,6 +552,21 @@ static void stbiw__write_pixel(stbi__write_context *s, int rgb_dir, int comp, in
       stbiw__write1(s, d[comp - 1]);
 }
 
+/**
+ * @brief Writes image pixel data to the output context, handling scanline order, padding, and optional alpha or monochrome expansion.
+ *
+ * Outputs pixel rows to the specified write context, supporting vertical flipping, RGB/BGR order, scanline padding, and expansion of monochrome data to color. Flushes each scanline after writing.
+ *
+ * @param rgb_dir Direction for RGB channel order (1 for RGB, -1 for BGR).
+ * @param vdir Direction for vertical scanline traversal (1 for top-down, -1 for bottom-up).
+ * @param x Width of the image in pixels.
+ * @param y Height of the image in pixels.
+ * @param comp Number of components per pixel.
+ * @param data Pointer to the pixel data.
+ * @param write_alpha If nonzero, includes alpha channel in output.
+ * @param scanline_pad Number of padding bytes to append after each scanline.
+ * @param expand_mono If nonzero, expands single-channel data to color.
+ */
 static void stbiw__write_pixels(stbi__write_context *s, int rgb_dir, int vdir, int x, int y, int comp, void *data, int write_alpha, int scanline_pad, int expand_mono)
 {
    stbiw_uint32 zero = 0;
@@ -475,6 +594,24 @@ static void stbiw__write_pixels(stbi__write_context *s, int rgb_dir, int vdir, i
    }
 }
 
+/**
+ * @brief Writes an image file header and pixel data using a formatted header and specified image parameters.
+ *
+ * Writes a formatted file header using the provided format string and arguments, then writes pixel data from the given buffer with specified orientation, component count, and padding. Returns 1 on success, 0 if dimensions are invalid.
+ *
+ * @param s Write context for output.
+ * @param rgb_dir Direction for RGB channel ordering (1 for normal, -1 for reversed).
+ * @param vdir Vertical direction for scanline order (1 for top-down, -1 for bottom-up).
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel.
+ * @param expand_mono If nonzero, expands monochrome data to RGB.
+ * @param data Pointer to pixel data.
+ * @param alpha If nonzero, includes alpha channel in output.
+ * @param pad Number of padding bytes per scanline.
+ * @param fmt Format string for file header.
+ * @return int 1 on success, 0 if width or height is negative.
+ */
 static int stbiw__outfile(stbi__write_context *s, int rgb_dir, int vdir, int x, int y, int comp, int expand_mono, void *data, int alpha, int pad, const char *fmt, ...)
 {
    if (y < 0 || x < 0) {
@@ -489,6 +626,18 @@ static int stbiw__outfile(stbi__write_context *s, int rgb_dir, int vdir, int x, 
    }
 }
 
+/**
+ * @brief Writes BMP image data to a write context.
+ *
+ * Outputs image data in BMP format (24-bit RGB or 32-bit RGBA with alpha mask) to the specified write context. Selects the appropriate BMP header based on the number of components.
+ *
+ * @param s Pointer to the write context.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (3 for RGB, 4 for RGBA).
+ * @param data Pointer to the image pixel data.
+ * @return 1 on success, 0 on failure.
+ */
 static int stbi_write_bmp_core(stbi__write_context *s, int x, int y, int comp, const void *data)
 {
    if (comp != 4) {
@@ -509,6 +658,19 @@ static int stbi_write_bmp_core(stbi__write_context *s, int x, int y, int comp, c
    }
 }
 
+/**
+ * @brief Writes an image as a BMP file using a custom output callback.
+ *
+ * The image is written in 24-bit RGB or 32-bit RGBA format, depending on the number of components.
+ *
+ * @param func Callback function to handle output data.
+ * @param context User-defined context pointer passed to the callback.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (1 = grayscale, 3 = RGB, 4 = RGBA).
+ * @param data Pointer to the image pixel data.
+ * @return int Non-zero on success, 0 on failure.
+ */
 STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data)
 {
    stbi__write_context s = { 0 };
@@ -517,6 +679,18 @@ STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int x,
 }
 
 #ifndef STBI_WRITE_NO_STDIO
+/**
+ * @brief Writes an image to a BMP file.
+ *
+ * Saves the image data in BMP format to the specified filename. Supports 24-bit (RGB) and 32-bit (RGBA) output. The input data should be provided as an array of unsigned bytes with the specified number of components per pixel.
+ *
+ * @param filename Path to the output BMP file.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (1 for grayscale, 3 for RGB, 4 for RGBA).
+ * @param data Pointer to the image data.
+ * @return 1 on success, 0 on failure.
+ */
 STBIWDEF int stbi_write_bmp(char const *filename, int x, int y, int comp, const void *data)
 {
    stbi__write_context s = { 0 };
@@ -527,7 +701,19 @@ STBIWDEF int stbi_write_bmp(char const *filename, int x, int y, int comp, const 
    } else
       return 0;
 }
-#endif //!STBI_WRITE_NO_STDIO
+#endif /**
+ * @brief Writes TGA image data to a write context, with optional RLE compression.
+ *
+ * Supports writing grayscale, RGB, or RGBA images in TGA format to a custom write context.
+ * Handles vertical flipping and can use RLE compression if enabled via the global flag.
+ *
+ * @param s Pointer to the write context.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (1=grayscale, 2=grayscale+alpha, 3=RGB, 4=RGBA).
+ * @param data Pointer to the image pixel data.
+ * @return 1 on success, 0 on failure.
+ */
 
 static int stbi_write_tga_core(stbi__write_context *s, int x, int y, int comp, void *data)
 {
@@ -608,6 +794,17 @@ static int stbi_write_tga_core(stbi__write_context *s, int x, int y, int comp, v
    return 1;
 }
 
+/**
+ * @brief Writes a TGA image to a custom output stream using a callback.
+ *
+ * Writes an image in TGA format with the specified width, height, and number of components to a user-provided write function. Supports optional RLE compression and vertical flipping based on global settings.
+ *
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (1=grayscale, 2=gray+alpha, 3=RGB, 4=RGBA).
+ * @param data Pointer to the image pixel data.
+ * @return Non-zero on success, 0 on failure.
+ */
 STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data)
 {
    stbi__write_context s = { 0 };
@@ -616,6 +813,18 @@ STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int x,
 }
 
 #ifndef STBI_WRITE_NO_STDIO
+/**
+ * @brief Writes an image to a TGA file.
+ *
+ * Saves image data to a TGA file with the specified filename, dimensions, and number of components. Supports optional RLE compression and vertical flipping based on global settings.
+ *
+ * @param filename Output TGA file path.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (1=grayscale, 2=grayscale+alpha, 3=RGB, 4=RGBA).
+ * @param data Pointer to the image pixel data.
+ * @return int Non-zero on success, 0 on failure.
+ */
 STBIWDEF int stbi_write_tga(char const *filename, int x, int y, int comp, const void *data)
 {
    stbi__write_context s = { 0 };
@@ -636,6 +845,16 @@ STBIWDEF int stbi_write_tga(char const *filename, int x, int y, int comp, const 
 
 #ifndef STBI_WRITE_NO_STDIO
 
+/**
+ * @brief Converts linear RGB float values to Radiance RGBE format.
+ *
+ * @param rgbe Output array of 4 bytes to receive the encoded RGBE values.
+ * @param linear Input array of 3 floats representing linear RGB components.
+ *
+ * Converts a linear RGB triplet to a 4-byte RGBE (Radiance HDR) representation,
+ * suitable for storage in Radiance .hdr image files. If all components are near zero,
+ * the output is set to zero.
+ */
 static void stbiw__linear_to_rgbe(unsigned char *rgbe, float *linear)
 {
    int exponent;
@@ -653,6 +872,15 @@ static void stbiw__linear_to_rgbe(unsigned char *rgbe, float *linear)
    }
 }
 
+/**
+ * @brief Writes a run-length encoded sequence for TGA RLE compression.
+ *
+ * Outputs a run-length packet consisting of a length byte and a single repeated data byte to the write context.
+ *
+ * @param s Write context to output the data.
+ * @param length Number of times to repeat the data byte (0–127).
+ * @param databyte The byte value to be repeated in the run.
+ */
 static void stbiw__write_run_data(stbi__write_context *s, int length, unsigned char databyte)
 {
    unsigned char lengthbyte = STBIW_UCHAR(length+128);
@@ -661,6 +889,15 @@ static void stbiw__write_run_data(stbi__write_context *s, int length, unsigned c
    s->func(s->context, &databyte, 1);
 }
 
+/**
+ * @brief Writes a length-prefixed block of data to the output context.
+ *
+ * Outputs a single byte indicating the length, followed by the specified number of data bytes, using the provided write context.
+ *
+ * @param s Pointer to the write context.
+ * @param length Number of bytes to write from the data buffer (must be ≤ 128).
+ * @param data Pointer to the data buffer to write.
+ */
 static void stbiw__write_dump_data(stbi__write_context *s, int length, unsigned char *data)
 {
    unsigned char lengthbyte = STBIW_UCHAR(length);
@@ -669,6 +906,17 @@ static void stbiw__write_dump_data(stbi__write_context *s, int length, unsigned 
    s->func(s->context, data, length);
 }
 
+/**
+ * @brief Writes a single scanline of linear float RGB(A) data to an HDR (Radiance RGBE) output stream.
+ *
+ * Converts a scanline of linear float pixel data to RGBE format and writes it to the output context, using RLE compression for suitable scanline widths. Handles both grayscale and color input, and supports images with 1, 3, or 4 components.
+ *
+ * @param s Output write context.
+ * @param width Number of pixels in the scanline.
+ * @param ncomp Number of components per pixel (1 for grayscale, 3 for RGB, 4 for RGBA).
+ * @param scratch Temporary buffer for RLE encoding; must be at least width * 4 bytes.
+ * @param scanline Pointer to the input float scanline data.
+ */
 static void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, unsigned char *scratch, float *scanline)
 {
    unsigned char scanlineheader[4] = { 2, 2, 0, 0 };
@@ -758,6 +1006,18 @@ static void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int nco
    }
 }
 
+/**
+ * @brief Writes an image in Radiance HDR (RGBE) format to a custom output context.
+ *
+ * Converts linear float image data to RGBE format and writes the Radiance header and scanlines using RLE compression. Supports vertical flipping based on the global flip flag.
+ *
+ * @param s Output write context.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (must be at least 3).
+ * @param data Pointer to linear float image data, row-major order.
+ * @return 1 on success, 0 on failure (invalid parameters).
+ */
 static int stbi_write_hdr_core(stbi__write_context *s, int x, int y, int comp, float *data)
 {
    if (y <= 0 || x <= 0 || data == NULL)
@@ -784,6 +1044,19 @@ static int stbi_write_hdr_core(stbi__write_context *s, int x, int y, int comp, f
    }
 }
 
+/**
+ * @brief Writes an image in Radiance HDR format to a custom output stream.
+ *
+ * The image is written using the provided callback function, with pixel data supplied as linear float RGB(A) values.
+ *
+ * @param func Callback function for writing output data.
+ * @param context User-defined context pointer passed to the callback.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (must be 3 or 4).
+ * @param data Pointer to linear float pixel data, row-major order.
+ * @return 1 on success, 0 on failure.
+ */
 STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const float *data)
 {
    stbi__write_context s = { 0 };
@@ -791,6 +1064,18 @@ STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int x,
    return stbi_write_hdr_core(&s, x, y, comp, (float *) data);
 }
 
+/**
+ * @brief Writes an image to a file in Radiance HDR (.hdr) format.
+ *
+ * The image data must be provided as linear float RGB(A) values. The function encodes the data into the RGBE format used by Radiance HDR files.
+ *
+ * @param filename Output file path.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (must be 3 for RGB or 4 for RGBA).
+ * @param data Pointer to linear float image data, row-major order.
+ * @return 1 on success, 0 on failure.
+ */
 STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const float *data)
 {
    stbi__write_context s = { 0 };
@@ -823,6 +1108,16 @@ STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const 
 #define stbiw__sbcount(a)        ((a) ? stbiw__sbn(a) : 0)
 #define stbiw__sbfree(a)         ((a) ? STBIW_FREE(stbiw__sbraw(a)),0 : 0)
 
+/**
+ * @brief Grows a dynamic array buffer to accommodate additional elements.
+ *
+ * Expands the memory allocated for a dynamic array to ensure space for at least the specified increment of new items. Updates the array pointer and internal metadata accordingly.
+ *
+ * @param arr Pointer to the dynamic array pointer to be grown.
+ * @param increment Number of additional elements to ensure space for.
+ * @param itemsize Size in bytes of each array element.
+ * @return Pointer to the (possibly relocated) grown array, or NULL on allocation failure.
+ */
 static void *stbiw__sbgrowf(void **arr, int increment, int itemsize)
 {
    int m = *arr ? 2*stbiw__sbm(*arr)+increment : increment+1;
@@ -836,6 +1131,16 @@ static void *stbiw__sbgrowf(void **arr, int increment, int itemsize)
    return *arr;
 }
 
+/**
+ * @brief Flushes full bytes from a bit buffer to the output data buffer.
+ *
+ * Writes all complete bytes from the bit buffer to the output buffer, updating the bit buffer and bit count accordingly.
+ *
+ * @param data Output buffer to append bytes to.
+ * @param bitbuffer Pointer to the bit buffer holding pending bits.
+ * @param bitcount Pointer to the number of bits currently in the bit buffer.
+ * @return Updated output buffer pointer.
+ */
 static unsigned char *stbiw__zlib_flushf(unsigned char *data, unsigned int *bitbuffer, int *bitcount)
 {
    while (*bitcount >= 8) {
@@ -846,6 +1151,13 @@ static unsigned char *stbiw__zlib_flushf(unsigned char *data, unsigned int *bitb
    return data;
 }
 
+/**
+ * @brief Reverses the order of bits in a code of specified length.
+ *
+ * @param code The integer value whose bits are to be reversed.
+ * @param codebits The number of least significant bits to reverse.
+ * @return int The bit-reversed value of the input code for the specified number of bits.
+ */
 static int stbiw__zlib_bitrev(int code, int codebits)
 {
    int res=0;
@@ -856,6 +1168,14 @@ static int stbiw__zlib_bitrev(int code, int codebits)
    return res;
 }
 
+/**
+ * @brief Counts the number of consecutive matching bytes between two buffers, up to a maximum of 258 or the specified limit.
+ *
+ * @param a Pointer to the first buffer.
+ * @param b Pointer to the second buffer.
+ * @param limit Maximum number of bytes to compare.
+ * @return Number of consecutive matching bytes, up to 258 or the specified limit.
+ */
 static unsigned int stbiw__zlib_countm(unsigned char *a, unsigned char *b, int limit)
 {
    int i;
@@ -864,6 +1184,14 @@ static unsigned int stbiw__zlib_countm(unsigned char *a, unsigned char *b, int l
    return i;
 }
 
+/**
+ * @brief Computes a hash value for a 3-byte sequence.
+ *
+ * Generates a 32-bit hash from the first three bytes of the input data, used for fast lookup in compression algorithms.
+ *
+ * @param data Pointer to at least three bytes of input data.
+ * @return 32-bit hash value.
+ */
 static unsigned int stbiw__zhash(unsigned char *data)
 {
    stbiw_uint32 hash = data[0] + (data[1] << 8) + (data[2] << 16);
@@ -890,7 +1218,17 @@ static unsigned int stbiw__zhash(unsigned char *data)
 
 #define stbiw__ZHASH   16384
 
-#endif // STBIW_ZLIB_COMPRESS
+#endif /**
+ * @brief Compresses data using the DEFLATE algorithm and returns a zlib-compressed buffer.
+ *
+ * Compresses the input data using a built-in DEFLATE implementation (unless a user-provided compressor is defined via STBIW_ZLIB_COMPRESS) and returns a pointer to the compressed buffer. The output buffer is dynamically allocated and must be freed by the caller. The compression quality parameter controls the hash table size and affects compression ratio and speed.
+ *
+ * @param data Pointer to the input data to be compressed.
+ * @param data_len Length of the input data in bytes.
+ * @param out_len Pointer to an integer where the output buffer size will be stored.
+ * @param quality Compression quality (higher values may improve compression at the cost of speed; minimum is 5).
+ * @return Pointer to the compressed data buffer, or NULL on allocation failure.
+ */
 
 STBIWDEF unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, int *out_len, int quality)
 {
@@ -1021,6 +1359,15 @@ STBIWDEF unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, i
 #endif // STBIW_ZLIB_COMPRESS
 }
 
+/**
+ * @brief Computes the CRC32 checksum for a buffer.
+ *
+ * Calculates the CRC32 checksum of the given buffer using a standard polynomial, suitable for use in formats such as PNG.
+ *
+ * @param buffer Pointer to the input data.
+ * @param len Number of bytes in the buffer.
+ * @return The computed CRC32 checksum.
+ */
 static unsigned int stbiw__crc32(unsigned char *buffer, int len)
 {
 #ifdef STBIW_CRC32
@@ -1074,12 +1421,31 @@ static unsigned int stbiw__crc32(unsigned char *buffer, int len)
 #define stbiw__wp32(data,v) stbiw__wpng4(data, (v)>>24,(v)>>16,(v)>>8,(v));
 #define stbiw__wptag(data,s) stbiw__wpng4(data, s[0],s[1],s[2],s[3])
 
+/**
+ * @brief Writes the CRC32 checksum of a data block to the current position.
+ *
+ * Calculates the CRC32 of the preceding data block (including 4 bytes before the current pointer)
+ * and writes the checksum at the current data pointer location.
+ *
+ * @param data Pointer to the current write position; updated in place.
+ * @param len Length of the data block (excluding the 4 bytes before the pointer).
+ */
 static void stbiw__wpcrc(unsigned char **data, int len)
 {
    unsigned int crc = stbiw__crc32(*data - len - 4, len+4);
    stbiw__wp32(*data, crc);
 }
 
+/**
+ * @brief Computes the Paeth predictor for PNG filtering.
+ *
+ * Selects one of the three neighboring bytes (left, above, upper-left) that is closest to the predicted value, as used in PNG scanline filtering.
+ *
+ * @param a The left neighbor byte.
+ * @param b The above neighbor byte.
+ * @param c The upper-left neighbor byte.
+ * @return The predicted byte value.
+ */
 static unsigned char stbiw__paeth(int a, int b, int c)
 {
    int p = a + b - c, pa = abs(p-a), pb = abs(p-b), pc = abs(p-c);
@@ -1088,7 +1454,20 @@ static unsigned char stbiw__paeth(int a, int b, int c)
    return STBIW_UCHAR(c);
 }
 
-// @OPTIMIZE: provide an option that always forces left-predict or paeth predict
+/**
+ * @brief Encodes a single PNG scanline using the specified filter type.
+ *
+ * Applies the chosen PNG filter to a row of pixel data, storing the filtered result in the provided line buffer. Handles vertical flipping if enabled.
+ *
+ * @param pixels Pointer to the start of the image pixel data.
+ * @param stride_bytes Number of bytes per image row.
+ * @param width Width of the image in pixels.
+ * @param height Height of the image in pixels.
+ * @param y Row index to encode.
+ * @param n Number of components per pixel.
+ * @param filter_type PNG filter type to apply (0: None, 1: Sub, 2: Up, 3: Average, 4: Paeth).
+ * @param line_buffer Output buffer for the filtered scanline.
+ */
 static void stbiw__encode_png_line(unsigned char *pixels, int stride_bytes, int width, int height, int y, int n, int filter_type, signed char *line_buffer)
 {
    static int mapping[] = { 0,1,2,3,4 };
@@ -1125,6 +1504,19 @@ static void stbiw__encode_png_line(unsigned char *pixels, int stride_bytes, int 
    }
 }
 
+/**
+ * @brief Encodes image data as a PNG and returns it as a memory buffer.
+ *
+ * Compresses the provided pixel data into PNG format and allocates a buffer containing the complete PNG file in memory. The function selects the optimal filter for each scanline unless a filter is forced via global configuration. The caller is responsible for freeing the returned buffer.
+ *
+ * @param pixels Pointer to the image pixel data.
+ * @param stride_bytes Number of bytes per row; if zero, defaults to x * n.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param n Number of components per pixel (e.g., 1=grayscale, 2=gray+alpha, 3=RGB, 4=RGBA).
+ * @param out_len Pointer to an integer that will receive the size of the returned buffer.
+ * @return Pointer to a newly allocated buffer containing the PNG file, or NULL on failure.
+ */
 STBIWDEF unsigned char *stbi_write_png_to_mem(const unsigned char *pixels, int stride_bytes, int x, int y, int n, int *out_len)
 {
    int force_filter = stbi_write_force_png_filter;
@@ -1212,6 +1604,19 @@ STBIWDEF unsigned char *stbi_write_png_to_mem(const unsigned char *pixels, int s
 }
 
 #ifndef STBI_WRITE_NO_STDIO
+/**
+ * @brief Writes an image as a PNG file.
+ *
+ * Saves image data to a PNG file with the specified filename, dimensions, number of components, and row stride.
+ *
+ * @param filename Output file path.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (e.g., 1=grayscale, 3=RGB, 4=RGBA).
+ * @param data Pointer to the image pixel data.
+ * @param stride_bytes Number of bytes per row; if 0, defaults to x * comp.
+ * @return 1 on success, 0 on failure.
+ */
 STBIWDEF int stbi_write_png(char const *filename, int x, int y, int comp, const void *data, int stride_bytes)
 {
    FILE *f;
@@ -1228,6 +1633,20 @@ STBIWDEF int stbi_write_png(char const *filename, int x, int y, int comp, const 
 }
 #endif
 
+/**
+ * @brief Writes a PNG image to a custom output stream using a callback function.
+ *
+ * The image is encoded as PNG and the resulting data is passed to the provided callback.
+ *
+ * @param func Callback function to handle the PNG data output.
+ * @param context User-defined context pointer passed to the callback.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (e.g., 1=grayscale, 3=RGB, 4=RGBA).
+ * @param data Pointer to the image pixel data.
+ * @param stride_bytes Number of bytes per image row.
+ * @return int Non-zero on success, 0 on failure.
+ */
 STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int stride_bytes)
 {
    int len;
@@ -1250,6 +1669,16 @@ STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x,
 static const unsigned char stbiw__jpg_ZigZag[] = { 0,1,5,6,14,15,27,28,2,4,7,13,16,26,29,42,3,8,12,17,25,30,41,43,9,11,18,
       24,31,40,44,53,10,19,23,32,39,45,52,54,20,22,33,38,46,51,55,60,21,34,37,47,50,56,59,61,35,36,48,49,57,58,62,63 };
 
+/**
+ * @brief Writes a sequence of JPEG Huffman-encoded bits to the output context.
+ *
+ * Appends bits from a JPEG Huffman code to the output buffer, handling byte alignment and inserting zero bytes after 0xFF as required by the JPEG standard. Updates the bit buffer and bit count accordingly.
+ *
+ * @param s Output write context.
+ * @param bitBufP Pointer to the current bit buffer.
+ * @param bitCntP Pointer to the current bit count.
+ * @param bs Pointer to a two-element array: [0] is the bits to write, [1] is the number of bits.
+ */
 static void stbiw__jpg_writeBits(stbi__write_context *s, int *bitBufP, int *bitCntP, const unsigned short *bs) {
    int bitBuf = *bitBufP, bitCnt = *bitCntP;
    bitCnt += bs[1];
@@ -1267,6 +1696,11 @@ static void stbiw__jpg_writeBits(stbi__write_context *s, int *bitBufP, int *bitC
    *bitCntP = bitCnt;
 }
 
+/**
+ * @brief Performs an in-place 1D 8-point discrete cosine transform (DCT) for JPEG encoding.
+ *
+ * Applies the forward DCT to eight input float values, updating them in-place. This is a core step in JPEG compression, transforming spatial domain data into frequency domain coefficients.
+ */
 static void stbiw__jpg_DCT(float *d0p, float *d1p, float *d2p, float *d3p, float *d4p, float *d5p, float *d6p, float *d7p) {
    float d0 = *d0p, d1 = *d1p, d2 = *d2p, d3 = *d3p, d4 = *d4p, d5 = *d5p, d6 = *d6p, d7 = *d7p;
    float z1, z2, z3, z4, z5, z11, z13;
@@ -1315,6 +1749,15 @@ static void stbiw__jpg_DCT(float *d0p, float *d1p, float *d2p, float *d3p, float
    *d0p = d0;  *d2p = d2;  *d4p = d4;  *d6p = d6;
 }
 
+/**
+ * @brief Calculates the bit length and encoded value for a JPEG Huffman symbol.
+ *
+ * Computes the number of bits required to represent the given value for JPEG Huffman encoding,
+ * and stores the encoded value and its bit length in the provided array.
+ *
+ * @param val The integer value to encode.
+ * @param bits Output array where bits[0] receives the encoded value and bits[1] receives the bit length.
+ */
 static void stbiw__jpg_calcBits(int val, unsigned short bits[2]) {
    int tmp1 = val < 0 ? -val : val;
    val = val < 0 ? val-1 : val;
@@ -1325,6 +1768,19 @@ static void stbiw__jpg_calcBits(int val, unsigned short bits[2]) {
    bits[0] = val & ((1<<bits[1])-1);
 }
 
+/**
+ * @brief Processes an 8x8 block for JPEG encoding, performing DCT, quantization, zigzag, and Huffman encoding.
+ *
+ * Applies the discrete cosine transform (DCT) to an 8x8 block of image data, quantizes and zigzag-orders the coefficients, and writes the encoded block to the output context using the provided Huffman tables. Handles both DC and AC coefficient encoding, including run-length encoding of zeros as required by the JPEG standard.
+ *
+ * @param CDU Pointer to the input block of coefficients (modified in-place).
+ * @param du_stride Stride between rows in the input block.
+ * @param fdtbl Pointer to the quantization table.
+ * @param DC Previous DC coefficient for differential encoding.
+ * @param HTDC Huffman table for DC coefficients.
+ * @param HTAC Huffman table for AC coefficients.
+ * @return The DC coefficient of the current block, for use in differential encoding of subsequent blocks.
+ */
 static int stbiw__jpg_processDU(stbi__write_context *s, int *bitBuf, int *bitCnt, float *CDU, int du_stride, float *fdtbl, int DC, const unsigned short HTDC[256][2], const unsigned short HTAC[256][2]) {
    const unsigned short EOB[2] = { HTAC[0x00][0], HTAC[0x00][1] };
    const unsigned short M16zeroes[2] = { HTAC[0xF0][0], HTAC[0xF0][1] };
@@ -1395,6 +1851,19 @@ static int stbiw__jpg_processDU(stbi__write_context *s, int *bitBuf, int *bitCnt
    return DU[0];
 }
 
+/**
+ * @brief Encodes and writes an image as a baseline JPEG to a custom output context.
+ *
+ * Converts 8-bit RGB or grayscale image data to a baseline JPEG stream with optional chroma subsampling and configurable quality, writing the result to the provided write context. Ignores alpha channels if present.
+ *
+ * @param s Output write context for the encoded JPEG data.
+ * @param width Image width in pixels.
+ * @param height Image height in pixels.
+ * @param comp Number of components per pixel (1=grayscale, 2=grayscale+alpha, 3=RGB, 4=RGBA; alpha is ignored).
+ * @param data Pointer to image pixel data (row-major, 8-bit per channel).
+ * @param quality JPEG quality (1-100, higher is better).
+ * @return 1 on success, 0 on failure (invalid parameters).
+ */
 static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, int comp, const void* data, int quality) {
    // Constants that don't pollute global namespace
    static const unsigned char std_dc_luminance_nrcodes[] = {0,0,1,5,1,1,1,1,1,1,0,0,0,0,0,0,0};
@@ -1604,6 +2073,20 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
    return 1;
 }
 
+/**
+ * @brief Writes an image as a JPEG to a custom output callback.
+ *
+ * Encodes the provided image data in JPEG format with the specified quality and writes it using the given callback function.
+ *
+ * @param func Callback function to handle output data.
+ * @param context User-defined context pointer passed to the callback.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (e.g., 1=grayscale, 3=RGB, 4=RGBA; alpha is ignored).
+ * @param data Pointer to the image pixel data.
+ * @param quality JPEG quality (1-100).
+ * @return 1 on success, 0 on failure.
+ */
 STBIWDEF int stbi_write_jpg_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int quality)
 {
    stbi__write_context s = { 0 };
@@ -1613,6 +2096,19 @@ STBIWDEF int stbi_write_jpg_to_func(stbi_write_func *func, void *context, int x,
 
 
 #ifndef STBI_WRITE_NO_STDIO
+/**
+ * @brief Writes an image to a JPEG file.
+ *
+ * Saves the image data with the specified width, height, and number of components to a JPEG file at the given filename, using the provided quality setting. The input data should be in interleaved pixel format (e.g., RGB or RGBA).
+ *
+ * @param filename Path to the output JPEG file.
+ * @param x Image width in pixels.
+ * @param y Image height in pixels.
+ * @param comp Number of components per pixel (e.g., 3 for RGB, 4 for RGBA; alpha is ignored).
+ * @param data Pointer to the image pixel data.
+ * @param quality JPEG quality (1-100, higher is better quality and larger file).
+ * @return 1 on success, 0 on failure.
+ */
 STBIWDEF int stbi_write_jpg(char const *filename, int x, int y, int comp, const void *data, int quality)
 {
    stbi__write_context s = { 0 };
