@@ -977,7 +977,6 @@ CMakeFiles/main.dir/src/main.cpp.obj: D:/3D_solar_system_emulation_using_openGL/
   D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stddef.h \
   D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
   D:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/syslimits.h \
-  D:/mingw64/x86_64-w64-mingw32/include/GL/gl.h \
   D:/mingw64/x86_64-w64-mingw32/include/_mingw.h \
   D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h \
   D:/mingw64/x86_64-w64-mingw32/include/_mingw_off_t.h \
@@ -2387,8 +2386,6 @@ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/quaternion.hpp:
 D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/quaternion.inl:
 
 D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/type_ptr.hpp:
-
-D:/mingw64/x86_64-w64-mingw32/include/GL/gl.h:
 
 D:/3D_solar_system_emulation_using_openGL/src/Camera.h:
 

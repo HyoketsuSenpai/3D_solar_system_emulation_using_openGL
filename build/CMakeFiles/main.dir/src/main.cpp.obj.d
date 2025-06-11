@@ -161,6 +161,10 @@ CMakeFiles/main.dir/src/main.cpp.obj: \
  D:/mingw64/include/c++/14.2.0/backward/auto_ptr.h \
  D:/mingw64/include/c++/14.2.0/pstl/glue_memory_defs.h \
  D:/mingw64/include/c++/14.2.0/pstl/execution_defs.h \
+ D:/mingw64/include/c++/14.2.0/vector \
+ D:/mingw64/include/c++/14.2.0/bits/stl_vector.h \
+ D:/mingw64/include/c++/14.2.0/bits/stl_bvector.h \
+ D:/mingw64/include/c++/14.2.0/bits/vector.tcc \
  D:/3D_solar_system_emulation_using_openGL/include/glad/glad.h \
  D:/3D_solar_system_emulation_using_openGL/include/KHR/khrplatform.h \
  D:/3D_solar_system_emulation_using_openGL/include/GLFW/glfw3.h \
@@ -345,10 +349,6 @@ CMakeFiles/main.dir/src/main.cpp.obj: \
  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_transform.hpp \
  D:/3D_solar_system_emulation_using_openGL/include/glm/ext/matrix_transform.inl \
  D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/matrix_transform.inl \
- D:/mingw64/include/c++/14.2.0/vector \
- D:/mingw64/include/c++/14.2.0/bits/stl_vector.h \
- D:/mingw64/include/c++/14.2.0/bits/stl_bvector.h \
- D:/mingw64/include/c++/14.2.0/bits/vector.tcc \
  D:\3D_solar_system_emulation_using_openGL\src\Sphere.h \
  D:/3D_solar_system_emulation_using_openGL/include/stb_image.h \
  D:\3D_solar_system_emulation_using_openGL\src\Camera.h \
@@ -391,5 +391,4 @@ CMakeFiles/main.dir/src/main.cpp.obj: \
  D:/mingw64/include/c++/14.2.0/cstring \
  D:/mingw64/x86_64-w64-mingw32/include/string.h \
  D:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h \
- D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/type_ptr.inl \
- D:/mingw64/x86_64-w64-mingw32/include/GL/gl.h
+ D:/3D_solar_system_emulation_using_openGL/include/glm/gtc/type_ptr.inl

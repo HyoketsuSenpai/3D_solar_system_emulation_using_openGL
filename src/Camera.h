@@ -2,7 +2,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
-#include <GL/gl.h>
+
 
 class Camera {
 private:
@@ -31,7 +31,7 @@ public:
     float MouseSensitivity;
 
     Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(1.5f), MouseSensitivity(0.075f)
+        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(24.5f), MouseSensitivity(0.075f)
     {
         Position = position;
         WorldUp = up;
@@ -58,7 +58,7 @@ public:
             Position += Right * velocity;
     }
 
-    void ProcessMouseMovement(float xoffset, float yoffset, unsigned char constrainPitch = true)
+    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
     {
         xoffset *= MouseSensitivity;
         yoffset *= MouseSensitivity;
